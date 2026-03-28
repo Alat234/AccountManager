@@ -1,10 +1,12 @@
 import customtkinter as ctk
 import os
-import time
-from tkinter import ttk, filedialog
-from PIL import ImageGrab, Image
-from core import FileManager, DatabaseManager, STATUSES, BASE_DIR
 import tkinter as tk
+from tkinter import ttk
+
+# Імпортуємо всі наші модулі!
+from core import FileManager, DatabaseManager, STATUSES, BASE_DIR
+from ui_widgets import create_entry_with_copy, TwoFactorAuthWidget
+from modals import open_delete_modal, BatchUploadModal
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
@@ -14,7 +16,7 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Accounts Manager CRM")
-        self.geometry("1100x750")
+        self.geometry("1200x800")
 
         self.fm = FileManager()
         self.db = DatabaseManager()
@@ -23,17 +25,6 @@ class App(ctk.CTk):
         self.setup_ui()
         self.load_accounts_list()
         self.refresh_table()
-
-    def create_entry_with_copy(self, parent, width=150, font=None):
-        frame = ctk.CTkFrame(parent, fg_color="transparent")
-        entry = ctk.CTkEntry(frame, width=width, font=font)
-        entry.pack(side="left")
-
-        btn_copy = ctk.CTkButton(frame, text="📋", width=28, fg_color="#343638", hover_color="#1f538d",
-                                 command=lambda e=entry: self.copy_to_clipboard(e.get()))
-        btn_copy.pack(side="left", padx=(5, 0))
-
-        return frame, entry
 
     def copy_to_clipboard(self, text):
         if not text:
@@ -69,7 +60,6 @@ class App(ctk.CTk):
         self.right_frame.grid_columnconfigure(0, weight=1)
         self.right_frame.grid_rowconfigure(0, weight=1)
 
-        # ================= ВКЛАДКИ (TABS) =================
         self.tabview = ctk.CTkTabview(self.right_frame, command=self.on_tab_change)
         self.tabview.grid(row=0, column=0, sticky="nsew")
 
@@ -80,42 +70,58 @@ class App(ctk.CTk):
         # --- ВКЛАДКА 1: ДЕТАЛІ ---
         self.lbl_editing_status = ctk.CTkLabel(tab_main, text="⚙️ Редагування: (не вибрано)",
                                                font=ctk.CTkFont(size=22, weight="bold"), text_color="#1fa5ff")
-        self.lbl_editing_status.pack(pady=(15, 0))
+        self.lbl_editing_status.pack(pady=(10, 0))
 
         info_frame = ctk.CTkFrame(tab_main, fg_color="transparent")
         info_frame.pack(fill="x", pady=10, padx=10)
+
+        # МАГІЯ МАСШТАБУВАННЯ: Даємо 3 колонкам вагу (weight=1), щоб вони ділили екран порівну
+        info_frame.grid_columnconfigure(0, weight=1)
+        info_frame.grid_columnconfigure(1, weight=1)
+        info_frame.grid_columnconfigure(2, weight=1)
+        info_frame.grid_columnconfigure(3, weight=0)  # 2FA колонка фіксована
 
         ctk.CTkLabel(info_frame, text="Головна пошта:", text_color="gray").grid(row=0, column=0, sticky="w", padx=5)
         ctk.CTkLabel(info_frame, text="Стара пошта:", text_color="gray").grid(row=0, column=1, sticky="w", padx=5)
         ctk.CTkLabel(info_frame, text="Пароль:", text_color="gray").grid(row=0, column=2, sticky="w", padx=5)
 
-        frame_main_email, self.entry_main_email = self.create_entry_with_copy(info_frame, width=180,
-                                                                              font=ctk.CTkFont(weight="bold"))
-        frame_main_email.grid(row=1, column=0, padx=5, pady=(0, 15), sticky="w")
+        # sticky="ew" розтягує поле від краю до краю своєї колонки
+        frame_main_email, self.entry_main_email = create_entry_with_copy(info_frame, self.copy_to_clipboard,
+                                                                         font=ctk.CTkFont(weight="bold"))
+        frame_main_email.grid(row=1, column=0, padx=5, pady=(0, 15), sticky="ew")
 
-        frame_old_email, self.entry_old_email = self.create_entry_with_copy(info_frame, width=150)
-        frame_old_email.grid(row=1, column=1, padx=5, pady=(0, 15), sticky="w")
+        frame_old_email, self.entry_old_email = create_entry_with_copy(info_frame, self.copy_to_clipboard)
+        frame_old_email.grid(row=1, column=1, padx=5, pady=(0, 15), sticky="ew")
 
-        frame_pass, self.entry_pass = self.create_entry_with_copy(info_frame, width=150)
-        frame_pass.grid(row=1, column=2, padx=5, pady=(0, 15), sticky="w")
+        frame_pass, self.entry_pass = create_entry_with_copy(info_frame, self.copy_to_clipboard)
+        frame_pass.grid(row=1, column=2, padx=5, pady=(0, 15), sticky="ew")
 
         ctk.CTkLabel(info_frame, text="API Key:", text_color="gray").grid(row=2, column=0, sticky="w", padx=5)
-        ctk.CTkLabel(info_frame, text="Secret Key:", text_color="gray").grid(row=2, column=1, sticky="w", padx=5)
+        ctk.CTkLabel(info_frame, text="Secret Key (Термінал):", text_color="gray").grid(row=2, column=1, sticky="w",
+                                                                                        padx=5)
         ctk.CTkLabel(info_frame, text="Статус:", text_color="gray").grid(row=2, column=2, sticky="w", padx=5)
 
-        frame_api, self.entry_api = self.create_entry_with_copy(info_frame, width=180)
-        frame_api.grid(row=3, column=0, padx=5, pady=(0, 15), sticky="w")
+        frame_api, self.entry_api = create_entry_with_copy(info_frame, self.copy_to_clipboard)
+        frame_api.grid(row=3, column=0, padx=5, pady=(0, 15), sticky="ew")
 
-        frame_secret, self.entry_secret = self.create_entry_with_copy(info_frame, width=150)
-        frame_secret.grid(row=3, column=1, padx=5, pady=(0, 15), sticky="w")
+        frame_secret, self.entry_secret = create_entry_with_copy(info_frame, self.copy_to_clipboard)
+        frame_secret.grid(row=3, column=1, padx=5, pady=(0, 15), sticky="ew")
 
         self.status_var = ctk.StringVar(value=STATUSES[0])
-        self.opt_status = ctk.CTkOptionMenu(info_frame, values=STATUSES, variable=self.status_var, width=150)
-        self.opt_status.grid(row=3, column=2, padx=5, pady=(0, 15), sticky="w")
+        self.opt_status = ctk.CTkOptionMenu(info_frame, values=STATUSES, variable=self.status_var)
+        self.opt_status.grid(row=3, column=2, padx=5, pady=(0, 15), sticky="ew")
+
+        # 2FA Віджет (Справа)
+        self.two_fa_widget = TwoFactorAuthWidget(info_frame, self.copy_to_clipboard)
+        self.two_fa_widget.grid(row=0, column=3, rowspan=4, padx=(20, 0), sticky="nsew")
 
         # Фінанси
         fin_frame = ctk.CTkFrame(tab_main)
         fin_frame.pack(fill="x", pady=10, padx=10)
+
+        # МАГІЯ МАСШТАБУВАННЯ ДЛЯ ФІНАНСІВ
+        fin_frame.grid_columnconfigure((0, 1, 2), weight=1)
+        fin_frame.grid_columnconfigure(3, weight=0)
 
         ctk.CTkLabel(fin_frame, text="Вкладено ($):", text_color="gray").grid(row=0, column=0, sticky="w", padx=10,
                                                                               pady=(5, 0))
@@ -124,14 +130,14 @@ class App(ctk.CTk):
         ctk.CTkLabel(fin_frame, text="Баланс ($):", text_color="gray").grid(row=0, column=2, sticky="w", padx=10,
                                                                             pady=(5, 0))
 
-        self.entry_invested = ctk.CTkEntry(fin_frame, width=100)
-        self.entry_invested.grid(row=1, column=0, padx=10, pady=(0, 10))
+        self.entry_invested = ctk.CTkEntry(fin_frame)
+        self.entry_invested.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="ew")
 
-        self.entry_deposit = ctk.CTkEntry(fin_frame, width=100)
-        self.entry_deposit.grid(row=1, column=1, padx=10, pady=(0, 10))
+        self.entry_deposit = ctk.CTkEntry(fin_frame)
+        self.entry_deposit.grid(row=1, column=1, padx=10, pady=(0, 10), sticky="ew")
 
-        self.entry_balance = ctk.CTkEntry(fin_frame, width=100)
-        self.entry_balance.grid(row=1, column=2, padx=10, pady=(0, 10))
+        self.entry_balance = ctk.CTkEntry(fin_frame)
+        self.entry_balance.grid(row=1, column=2, padx=10, pady=(0, 10), sticky="ew")
 
         self.lbl_profit = ctk.CTkLabel(fin_frame, text="Прибуток: $0.0", font=ctk.CTkFont(size=18, weight="bold"))
         self.lbl_profit.grid(row=0, column=3, rowspan=2, padx=30, pady=10)
@@ -166,10 +172,7 @@ class App(ctk.CTk):
         self.lbl_status = ctk.CTkLabel(self.right_frame, text="", font=ctk.CTkFont(size=12))
         self.lbl_status.grid(row=2, column=0)
 
-        # --- РОЗУМНЕ ПЕРЕХОПЛЕННЯ КЛАВІШ (Вирішує проблему укр розкладки) ---
         self.bind("<Control-KeyPress>", self.handle_universal_shortcuts)
-
-        self.active_modal = None
 
     def on_tab_change(self):
         if self.tabview.get() == "Таблиця (База)":
@@ -221,42 +224,27 @@ class App(ctk.CTk):
         self.after(3000, lambda: self.lbl_status.configure(text=""))
 
     def handle_universal_shortcuts(self, event):
-        """Ідеально перехоплює Ctrl+C/V/X/A/Z за їхнім апаратним кодом"""
         focused = self.focus_get()
         is_text_widget = isinstance(focused, (ctk.CTkEntry, ctk.CTkTextbox, tk.Entry, tk.Text))
 
-        # Ctrl + V (Вставка) - код 86 на Windows
         if event.keycode == 86 or getattr(event, 'char', '').lower() in ['v', 'м']:
             if is_text_widget:
                 focused.event_generate("<<Paste>>")
                 return "break"
             else:
-                if self.tabview.get() != "Таблиця (База)":
-                    self.open_batch_modal()
+                if self.tabview.get() != "Таблиця (База)": self.open_batch_modal()
                 return "break"
-
-        # Ctrl + C (Копіювання) - код 67
         elif event.keycode == 67 or getattr(event, 'char', '').lower() in ['c', 'с']:
-            if is_text_widget:
-                focused.event_generate("<<Copy>>")
-                return "break"
-
-        # Ctrl + X (Вирізання) - код 88
+            if is_text_widget: focused.event_generate("<<Copy>>"); return "break"
         elif event.keycode == 88 or getattr(event, 'char', '').lower() in ['x', 'ч']:
-            if is_text_widget:
-                focused.event_generate("<<Cut>>")
-                return "break"
-
-        # Ctrl + A (Виділити все) - код 65
+            if is_text_widget: focused.event_generate("<<Cut>>"); return "break"
         elif event.keycode == 65 or getattr(event, 'char', '').lower() in ['a', 'ф']:
             if is_text_widget:
                 if isinstance(focused, (ctk.CTkEntry, tk.Entry)):
                     focused.select_range(0, 'end')
                 elif isinstance(focused, (ctk.CTkTextbox, tk.Text)):
                     focused.tag_add("sel", "1.0", "end")
-                return "break"
-
-        # Ctrl + Z (Крок назад) - код 90
+            return "break"
         elif event.keycode == 90 or getattr(event, 'char', '').lower() in ['z', 'я']:
             if is_text_widget:
                 try:
@@ -304,7 +292,7 @@ class App(ctk.CTk):
         email = dialog.get_input()
         if email:
             self.fm.create_account_folder(email, STATUSES[0])
-            self.db.add_account(email, "", "", "", "", STATUSES[0])
+            self.db.add_account(email, "", "", "", "", "", STATUSES[0])
             self.load_accounts_list()
             self.load_account_data(email)
             self.show_status(f"Акаунт {email} створено!", "green")
@@ -317,7 +305,7 @@ class App(ctk.CTk):
         conn = sqlite3.connect(self.db.db_path)
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT password, api_key, secret_key, old_email, status, text_notes, invested, deposit, balance, net_profit FROM accounts WHERE email=?",
+            "SELECT password, api_key, secret_key, two_fa_secret, old_email, status, text_notes, invested, deposit, balance, net_profit FROM accounts WHERE email=?",
             (email,))
         data = cursor.fetchone()
         conn.close()
@@ -331,22 +319,25 @@ class App(ctk.CTk):
             self.entry_api.insert(0, data[1] if data[1] else "")
             self.entry_secret.delete(0, 'end');
             self.entry_secret.insert(0, data[2] if data[2] else "")
+
+            self.two_fa_widget.set_secret(data[3] if data[3] else "")
+
             self.entry_old_email.delete(0, 'end');
-            self.entry_old_email.insert(0, data[3] if data[3] else "")
-            self.status_var.set(data[4] if data[4] else STATUSES[0])
+            self.entry_old_email.insert(0, data[4] if data[4] else "")
+            self.status_var.set(data[5] if data[5] else STATUSES[0])
 
             self.text_notes.delete("0.0", "end")
-            if data[5]: self.text_notes.insert("0.0", data[5])
+            if data[6]: self.text_notes.insert("0.0", data[6])
 
             self.entry_invested.delete(0, 'end');
-            self.entry_invested.insert(0, str(data[6]))
+            self.entry_invested.insert(0, str(data[7]))
             self.entry_deposit.delete(0, 'end');
-            self.entry_deposit.insert(0, str(data[7]))
+            self.entry_deposit.insert(0, str(data[8]))
             self.entry_balance.delete(0, 'end');
-            self.entry_balance.insert(0, str(data[8]))
+            self.entry_balance.insert(0, str(data[9]))
 
-            color = "#00ff00" if data[9] >= 0 else "#ff4444"
-            self.lbl_profit.configure(text=f"Прибуток: ${data[9]}", text_color=color)
+            color = "#00ff00" if data[10] >= 0 else "#ff4444"
+            self.lbl_profit.configure(text=f"Прибуток: ${data[10]}", text_color=color)
 
     def save_current_account(self):
         if not self.current_account: return
@@ -379,6 +370,7 @@ class App(ctk.CTk):
         password = self.entry_pass.get()
         api = self.entry_api.get()
         secret = self.entry_secret.get()
+        two_fa = self.two_fa_widget.get_secret()
         old_email = self.entry_old_email.get()
         notes = self.text_notes.get("0.0", "end").strip()
 
@@ -403,6 +395,7 @@ class App(ctk.CTk):
                           SET password=?,
                               api_key=?,
                               secret_key=?,
+                              two_fa_secret=?,
                               old_email=?,
                               status=?,
                               text_notes=?,
@@ -411,33 +404,24 @@ class App(ctk.CTk):
                               balance=?,
                               net_profit=?
                           WHERE email = ?''',
-                       (password, api, secret, old_email, status, notes, inv, dep, balance, net_profit,
+                       (password, api, secret, two_fa, old_email, status, notes, inv, dep, balance, net_profit,
                         self.current_account))
         conn.commit()
         conn.close()
 
         acc_dir = BASE_DIR / status / self.current_account
-        self.fm.update_info_file(acc_dir, self.current_account, old_email, password, api, secret)
+        self.fm.update_info_file(acc_dir, self.current_account, old_email, password, api, secret, two_fa)
 
         self.load_account_data(self.current_account)
         self.refresh_table()
         self.show_status("Зміни успішно збережено!", "green")
 
+    # ВИТЯГНУТІ ФУНКЦІЇ У ФАЙЛ MODALS.PY ВІДПРАЦЬОВУЮТЬ ТУТ:
+
     def delete_current_account(self):
         if not self.current_account: return
 
-        confirm_modal = ctk.CTkToplevel(self)
-        confirm_modal.title("Підтвердження")
-        confirm_modal.geometry("350x150")
-        confirm_modal.transient(self)
-        confirm_modal.grab_set()
-        confirm_modal.geometry(f"+{self.winfo_x() + 350}+{self.winfo_y() + 300}")
-
-        ctk.CTkLabel(confirm_modal,
-                     text=f"Видалити акаунт {self.current_account} назавжди?\n(Папка з файлами також буде видалена)",
-                     font=ctk.CTkFont(weight="bold")).pack(pady=20)
-
-        def confirm():
+        def on_confirm():
             status = self.status_var.get()
             self.fm.delete_account(self.current_account, status)
             self.db.delete_account(self.current_account)
@@ -446,161 +430,27 @@ class App(ctk.CTk):
             self.entry_main_email.delete(0, 'end')
             self.entry_pass.delete(0, 'end')
             self.text_notes.delete("0.0", "end")
+            self.two_fa_widget.set_secret("")
             self.lbl_editing_status.configure(text="⚙️ Редагування: (не вибрано)")
 
             self.load_accounts_list()
             self.refresh_table()
             self.show_status("Акаунт успішно видалено!", "green")
-            confirm_modal.destroy()
 
-        btn_frame = ctk.CTkFrame(confirm_modal, fg_color="transparent")
-        btn_frame.pack(fill="x", padx=20)
-        ctk.CTkButton(btn_frame, text="Ні, скасувати", command=confirm_modal.destroy, fg_color="gray").pack(side="left",
-                                                                                                            padx=10)
-        ctk.CTkButton(btn_frame, text="Так, видалити", command=confirm, fg_color="red", hover_color="darkred").pack(
-            side="right", padx=10)
-
-    # ================= "НАКОПИЧУВАЧ" ФАЙЛІВ ТА СКРІНІВ =================
+        open_delete_modal(self, self.current_account, on_confirm)
 
     def open_batch_modal(self):
         if not self.current_account:
             self.show_status("Спочатку виберіть акаунт зі списку!", "red")
             return
 
-        self.active_modal = ctk.CTkToplevel(self)
-        self.active_modal.title("Накопичувач файлів")
-        self.active_modal.geometry("650x600")
-        self.active_modal.transient(self)
-        self.active_modal.grab_set()
-        self.active_modal.geometry(f"+{self.winfo_x() + 200}+{self.winfo_y() + 50}")
-
-        def modal_universal_shortcuts(event):
-            focused = self.active_modal.focus_get()
-            is_text_widget = isinstance(focused, (ctk.CTkEntry, ctk.CTkTextbox, tk.Entry, tk.Text))
-
-            if event.keycode == 86 or getattr(event, 'char', '').lower() in ['v', 'м']:
-                if is_text_widget:
-                    focused.event_generate("<<Paste>>")
-                    return "break"
-                else:
-                    self.add_from_clipboard_to_modal()
-                    return "break"
-            elif event.keycode == 67 or getattr(event, 'char', '').lower() in ['c', 'с']:
-                if is_text_widget: focused.event_generate("<<Copy>>"); return "break"
-            elif event.keycode == 88 or getattr(event, 'char', '').lower() in ['x', 'ч']:
-                if is_text_widget: focused.event_generate("<<Cut>>"); return "break"
-            elif event.keycode == 65 or getattr(event, 'char', '').lower() in ['a', 'ф']:
-                if is_text_widget:
-                    if isinstance(focused, (ctk.CTkEntry, tk.Entry)):
-                        focused.select_range(0, 'end')
-                    elif isinstance(focused, (ctk.CTkTextbox, tk.Text)):
-                        focused.tag_add("sel", "1.0", "end")
-                return "break"
-
-        self.active_modal.bind("<Control-KeyPress>", modal_universal_shortcuts)
-
-        self.active_modal.entry_widgets = []
-
-        top_bar = ctk.CTkFrame(self.active_modal, fg_color="transparent")
-        top_bar.pack(fill="x", padx=10, pady=10)
-
-        ctk.CTkButton(top_bar, text="📋 Вставити скріншот", command=self.add_from_clipboard_to_modal, fg_color="#b35b04",
-                      hover_color="#d9710b").pack(side="left", padx=5)
-        ctk.CTkButton(top_bar, text="➕ Вибрати файли з ПК", command=self.add_from_file_dialog, fg_color="#1f538d").pack(
-            side="right", padx=5)
-
-        self.active_modal.lbl_warn = ctk.CTkLabel(self.active_modal, text="", text_color="red")
-        self.active_modal.lbl_warn.pack()
-
-        self.active_modal.scroll = ctk.CTkScrollableFrame(self.active_modal, width=600, height=400)
-        self.active_modal.scroll.pack(pady=5, padx=10, fill="both", expand=True)
-
-        ctk.CTkButton(self.active_modal, text="💾 Зберегти всі файли у папку акаунта", fg_color="green",
-                      hover_color="darkgreen", command=self.save_batch_action).pack(pady=15)
-
-        self.add_from_clipboard_to_modal()
-
-    def show_modal_warning(self, text):
-        self.active_modal.lbl_warn.configure(text=text)
-        self.active_modal.after(3000, lambda: self.active_modal.lbl_warn.configure(text=""))
-
-    def render_image_row(self, img, default_name):
-        frame = ctk.CTkFrame(self.active_modal.scroll, fg_color="transparent")
-        frame.pack(pady=5, fill="x")
-
-        preview_img = img.copy()
-        preview_img.thumbnail((150, 100))
-        ctk_img = ctk.CTkImage(light_image=preview_img, dark_image=preview_img, size=preview_img.size)
-
-        ctk.CTkLabel(frame, image=ctk_img, text="").pack(side="left", padx=10)
-
-        name_entry = ctk.CTkEntry(frame, width=250)
-        name_entry.insert(0, default_name)
-        name_entry.pack(side="left", padx=10)
-
-        item_data = (img, name_entry)
-        self.active_modal.entry_widgets.append(item_data)
-
-        def remove_row():
-            frame.destroy()
-            if item_data in self.active_modal.entry_widgets:
-                self.active_modal.entry_widgets.remove(item_data)
-
-        btn_delete = ctk.CTkButton(frame, text="❌", width=30, fg_color="#8b0000", hover_color="#5c0000",
-                                   command=remove_row)
-        btn_delete.pack(side="right", padx=10)
-
-    def add_from_clipboard_to_modal(self):
-        try:
-            img_data = ImageGrab.grabclipboard()
-        except Exception as e:
-            self.show_modal_warning("Помилка читання буфера обміну.")
-            return
-
-        if img_data is None:
-            self.show_modal_warning("У буфері зараз немає картинки!")
-            return
-
-        if isinstance(img_data, list):
-            for path in img_data:
-                if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.webp')):
-                    try:
-                        self.render_image_row(Image.open(path), os.path.basename(path))
-                    except:
-                        pass
-        else:
-            self.render_image_row(img_data, f"screen_{int(time.time())}.png")
-
-    def add_from_file_dialog(self):
-        file_paths = filedialog.askopenfilenames(
-            title="Виберіть зображення",
-            filetypes=[("Зображення", "*.png *.jpg *.jpeg *.webp")]
-        )
-        for path in file_paths:
-            try:
-                self.render_image_row(Image.open(path), os.path.basename(path))
-            except:
-                pass
-
-    def save_batch_action(self):
-        if not self.active_modal.entry_widgets:
-            self.show_modal_warning("Спочатку додайте файли!")
-            return
-
         status = self.status_var.get()
         acc_dir = BASE_DIR / status / self.current_account
 
-        count = 0
-        for img, entry in self.active_modal.entry_widgets:
-            name = entry.get().strip()
-            if not name.endswith(('.png', '.jpg', '.jpeg')):
-                name += ".png"
-            img.save(acc_dir / name)
-            count += 1
+        def on_success(count):
+            self.show_status(f"Успішно збережено {count} файлів!", "green")
 
-        self.show_status(f"Успішно збережено {count} файлів!", "green")
-        self.active_modal.destroy()
-        self.active_modal = None
+        BatchUploadModal(self, self.current_account, acc_dir, on_success)
 
     def open_folder(self):
         if not self.current_account: return

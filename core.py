@@ -17,20 +17,19 @@ class FileManager:
         for status in STATUSES:
             (BASE_DIR / status).mkdir(exist_ok=True)
 
-    def create_account_folder(self, email, status, password="", api_key="", secret_key="", old_email=""):
+    def create_account_folder(self, email, status, password="", api_key="", secret_key="", two_fa="", old_email=""):
         acc_dir = BASE_DIR / status / email
         acc_dir.mkdir(exist_ok=True)
-        self.update_info_file(acc_dir, email, old_email, password, api_key, secret_key)
+        self.update_info_file(acc_dir, email, old_email, password, api_key, secret_key, two_fa)
         return acc_dir
 
-    def update_info_file(self, acc_dir, email, old_email, password, api_key, secret_key):
-        """Оновлює або створює файл info.txt"""
+    def update_info_file(self, acc_dir, email, old_email, password, api_key, secret_key, two_fa):
         info_path = acc_dir / "info.txt"
         with open(info_path, "w", encoding="utf-8") as f:
-            f.write(f"Email: {email}\nOld Email: {old_email}\nPassword: {password}\nAPI Key: {api_key}\nSecret Key: {secret_key}\n")
+            f.write(f"Email: {email}\nOld Email: {old_email}\nPassword: {password}\n"
+                    f"API Key: {api_key}\nSecret Key: {secret_key}\n2FA Secret: {two_fa}\n")
 
     def rename_account(self, old_email, new_email, status):
-        """Змінює назву папки, якщо змінилася пошта"""
         old_dir = BASE_DIR / status / old_email
         new_dir = BASE_DIR / status / new_email
         if old_dir.exists():
@@ -46,7 +45,6 @@ class FileManager:
             shutil.move(str(old_dir), str(new_dir))
 
     def delete_account(self, email, status):
-        """Повністю видаляє папку акаунта"""
         acc_dir = BASE_DIR / status / email
         if acc_dir.exists():
             shutil.rmtree(str(acc_dir))
@@ -66,6 +64,7 @@ class DatabaseManager:
                 password TEXT,
                 api_key TEXT,
                 secret_key TEXT,
+                two_fa_secret TEXT,
                 old_email TEXT,
                 status TEXT,
                 text_notes TEXT,
@@ -78,20 +77,17 @@ class DatabaseManager:
         conn.commit()
         conn.close()
 
-    def add_account(self, email, password, api_key, secret_key, old_email, status):
+    def add_account(self, email, password, api_key, secret_key, two_fa, old_email, status):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         try:
-            cursor.execute('''INSERT INTO accounts (email, password, api_key, secret_key, old_email, status)
-                              VALUES (?, ?, ?, ?, ?, ?)''', (email, password, api_key, secret_key, old_email, status))
+            cursor.execute('''INSERT INTO accounts (email, password, api_key, secret_key, two_fa_secret, old_email, status)
+                              VALUES (?, ?, ?, ?, ?, ?, ?)''', (email, password, api_key, secret_key, two_fa, old_email, status))
             conn.commit()
-        except sqlite3.IntegrityError:
-            pass
-        finally:
-            conn.close()
+        except sqlite3.IntegrityError: pass
+        finally: conn.close()
 
     def rename_email(self, old_email, new_email):
-        """Оновлює головну пошту в БД"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("UPDATE accounts SET email = ? WHERE email = ?", (new_email, old_email))
@@ -99,7 +95,6 @@ class DatabaseManager:
         conn.close()
 
     def delete_account(self, email):
-        """Видаляє акаунт з БД"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM accounts WHERE email = ?", (email,))
