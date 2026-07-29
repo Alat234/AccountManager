@@ -1,0 +1,6 @@
+Email: vat5gm7cr@mozmail.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

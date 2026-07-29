@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-29T17:48:14",
+  "task_id": "8c8e8f0d00d6",
+  "account": "t***f@icloud.com",
+  "reason": "HTTPConnectionPool(host='localhost', port=58613): Read timed out. (read timeout=120)",
+  "url": "https://www.mexc.com/login?previous=%2Fuser%2Fopenapi%3F",
+  "title": "www.mexc.com"
+}

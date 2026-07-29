@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-29T18:33:36",
+  "task_id": "b4da3c1086ad",
+  "account": "t***v@icloud.com",
+  "reason": "MEXC API permissions were not set exactly: missing=[{'text': 'View Account Details', 'value': 'SPOT_ACCOUNT_R'}, {'text': 'Edit Account Info', 'value': 'SPOT_ACCOUNT_W'}, {'text': 'View Order Details', 'value': 'SPOT_DEAL_R'}, {'text': 'Trade', 'value': 'SPOT_DEAL_W'}, {'text': 'View Account Details', 'value': 'CONTRACT_ACCOUNT_R'}, {'text': 'View Order Details', 'value': 'CONTRACT_DEAL_R'}], unwanted=[]",
+  "url": "https://www.mexc.com/user/openapi",
+  "title": "Account Security User Center | MEXC Exchange"
+}

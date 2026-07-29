@@ -1,0 +1,258 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-sm MBiz__depositButton___ohrRe _HeaderDepositButton_sd0cd_7 MBiz__hasPopover___bEWIP",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 32,
+        "width": 95,
+        "x": 949,
+        "y": 8
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Deposit",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg index-module-scss-module__zPoUTq__next ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 180,
+        "x": 81,
+        "y": 327
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Next",
+      "type": "submit",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 973,
+        "y": 516
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-modal-close",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 60,
+        "width": 60,
+        "x": 699,
+        "y": 174
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input-clear-icon ant-input-clear-icon-has-suffix",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 26,
+        "width": 16,
+        "x": 670,
+        "y": 300
+      },
+      "role": "button",
+      "tag": "SPAN",
+      "text": "",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-block ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 432,
+        "x": 303,
+        "y": 361
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Submit",
+      "type": "submit",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-sm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 91,
+        "x": 949,
+        "y": 12
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "emailCode",
+      "name": "",
+      "placeholder": "Email Verification Code",
+      "rect": {
+        "height": 26,
+        "width": 346,
+        "x": 316,
+        "y": 299
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 6
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "remote-footer-container",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1023,
+        "x": 0,
+        "y": 487
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_wrapper_1fdt2_2 theme-dark",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1023,
+        "x": 0,
+        "y": 487
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1023,
+        "x": 0,
+        "y": 552
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_top_1fdt2_60",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1023,
+        "x": 0,
+        "y": 552
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_innerDrop_1fdt2_41",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 292,
+        "width": 133,
+        "x": 492,
+        "y": 593
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Affiliate Program\nReferral Program\nP2P Merchant Program\nListing Application\nInstitutional Services\nAPI Services\nPartner Links",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "User Security Center｜MEXC Exchange",
+  "url": "https://www.mexc.com/user/security/manage-google-auth"
+}

@@ -1,0 +1,6 @@
+Email: b2hy5a87r@mozmail.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

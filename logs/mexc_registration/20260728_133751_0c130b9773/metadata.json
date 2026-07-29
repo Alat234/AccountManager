@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-28T13:38:11",
+  "task_id": "439f157f7c4e",
+  "account": "v***s@icloud.com",
+  "reason": "Message: stale element reference: stale element not found in the current frame\n  (Session info: chrome=149.0.7827.54); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x7ff728de5195+cbe5]\n\tchromedriver!(No symbol) [0x7ff728b797a7]\n\tchromedriver!(No symbol) [0x7ff72877c22e]\n\tchromedriver!(No symbol) [0x7ff728783d67]\n\tchromedriver!(No symbol) [0x7ff728786c0e]\n\tchromedriver!(No symbol) [0x7ff7288244fb]\n\tchromedriver!(No symbol) [0x7ff7287fe3ba]\n\tchromedriver!(No symbol) [0x7ff7287c80ec]\n\tchromedriver!(No symbol) [0x7ff728823674]\n\tchromedriver!(No symbol) [0x7ff7287c739e]\n\tchromedriver!(No symbol) [0x7ff7287c605f]\n\tchromedriver!(No symbol) [0x7ff7287c70bc]\n\tchromedriver!GetHandleVerifier [0x7ff728e0191f+2936f]\n\tchromedriver!sqlite3_dbdata_init [0x7ff72914733c+25d3ac]\n\tchromedriver!sqlite3_dbdata_init [0x7ff729146cc4+25cd34]\n\tchromedriver!sqlite3_dbdata_init [0x7ff729143565+2595d5]\n\tchromedriver!sqlite3_dbdata_init [0x7ff729147c15+25dc85]\n\tchromedriver!(No symbol) [0x7ff728b972ce]\n\tchromedriver!(No symbol) [0x7ff728b88894]\n\tchromedriver!(No symbol) [0x7ff728b88a1e]\n\tchromedriver!(No symbol) [0x7ff728b62c7d]\n\tKERNEL32!BaseThreadInitThunk [0x7ffffa9fe957+17]\n\tntdll!RtlUserThreadStart [0x7ffffb9ead6c+2c]\n",
+  "url": "https://www.mexc.com/register",
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC"
+}

@@ -1,0 +1,28 @@
+{
+  "buttons": [],
+  "iframes": [],
+  "inputs": [],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "page-module-scss-module__yolcYW__apiDescItem page-module-scss-module__yolcYW__apiDescInvite",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 128,
+        "width": 472,
+        "x": 528,
+        "y": 263
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Dear MEXCer, in order to further increase the liquidity of the platform and enhance your trading experience, MEXC has introduced a platform market maker program with lucrative rewa",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "Account Security User Center | MEXC Exchange",
+  "url": "https://www.mexc.com/user/openapi"
+}

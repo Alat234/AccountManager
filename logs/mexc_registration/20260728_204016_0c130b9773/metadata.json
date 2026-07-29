@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-28T20:40:16",
+  "task_id": "72e88fed1aa4",
+  "account": "v***s@icloud.com",
+  "reason": "Message: invalid session id: session deleted as the browser has closed the connection\nfrom disconnected: not connected to DevTools\n  (Session info: chrome=149.0.7827.54); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x7ff7be865195+cbe5]\n\tchromedriver!(No symbol) [0x7ff7be5f97a7]\n\tchromedriver!(No symbol) [0x7ff7be1fc22e]\n\tchromedriver!(No symbol) [0x7ff7be1e6485]\n\tchromedriver!(No symbol) [0x7ff7be20c60d]\n\tchromedriver!(No symbol) [0x7ff7be2876b7]\n\tchromedriver!(No symbol) [0x7ff7be2a2b3a]\n\tchromedriver!(No symbol) [0x7ff7be24739e]\n\tchromedriver!(No symbol) [0x7ff7be24605f]\n\tchromedriver!(No symbol) [0x7ff7be2470bc]\n\tchromedriver!GetHandleVerifier [0x7ff7be88191f+2936f]\n\tchromedriver!sqlite3_dbdata_init [0x7ff7bebc733c+25d3ac]\n\tchromedriver!sqlite3_dbdata_init [0x7ff7bebc6cc4+25cd34]\n\tchromedriver!sqlite3_dbdata_init [0x7ff7bebc3565+2595d5]\n\tchromedriver!sqlite3_dbdata_init [0x7ff7bebc7c15+25dc85]\n\tchromedriver!(No symbol) [0x7ff7be6172ce]\n\tchromedriver!(No symbol) [0x7ff7be608894]\n\tchromedriver!(No symbol) [0x7ff7be608a1e]\n\tchromedriver!(No symbol) [0x7ff7be5e2c7d]\n\tKERNEL32!BaseThreadInitThunk [0x7ffffa9fe957+17]\n\tntdll!RtlUserThreadStart [0x7ffffb9ead6c+2c]\n",
+  "url": "",
+  "title": ""
+}

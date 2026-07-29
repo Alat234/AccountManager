@@ -1,0 +1,600 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-sm MBiz__depositButton___ohrRe _HeaderDepositButton_sd0cd_7 MBiz__hasPopover___bEWIP",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 32,
+        "width": 95,
+        "x": 1087,
+        "y": 14
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Deposit",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-block ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 527,
+        "x": 193,
+        "y": 340
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Create",
+      "type": "submit",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 1471,
+        "y": 544
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md _innerButton_1yohq_101 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 52,
+        "width": 136,
+        "x": 955,
+        "y": 648
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Verify Now",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-modal-close",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 60,
+        "width": 60,
+        "x": 948,
+        "y": 140
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-block ant-btn-v2-disabled ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 432,
+        "x": 552,
+        "y": 421
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Submit",
+      "type": "submit",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-sm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 91,
+        "x": 942,
+        "y": 18
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 278,
+        "y": -323
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 14
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 450,
+        "y": -323
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 14
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 261,
+        "y": -289
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 11
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 416,
+        "y": -289
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 11
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 286,
+        "y": -255
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 533,
+        "y": -255
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 278,
+        "y": -221
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 478,
+        "y": -221
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 278,
+        "y": -135
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 18
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 261,
+        "y": -101
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 416,
+        "y": -101
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 15
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 256,
+        "y": -15
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 13
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 261,
+        "y": 19
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 14
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 368,
+        "y": 19
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 11
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-status-success mx-motion-input-inner",
+      "forAttr": "",
+      "id": "memo",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 40,
+        "width": 527,
+        "x": 193,
+        "y": 93
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 7
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-checkbox-v2-input",
+      "forAttr": "",
+      "id": "agreed",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 14,
+        "width": 14,
+        "x": 193,
+        "y": 296
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "checkbox",
+      "valueLength": 2
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "emailCode",
+      "name": "",
+      "placeholder": "Email Verification Code",
+      "rect": {
+        "height": 26,
+        "width": 346,
+        "x": 565,
+        "y": 266
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "googleAuthCode",
+      "name": "",
+      "placeholder": "Authenticator Code",
+      "rect": {
+        "height": 26,
+        "width": 382,
+        "x": 565,
+        "y": 360
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "page-module-scss-module__yolcYW__apiDescItem page-module-scss-module__yolcYW__apiDescInvite",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 128,
+        "width": 528,
+        "x": 801,
+        "y": -365
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Dear MEXCer, in order to further increase the liquidity of the platform and enhance your trading experience, MEXC has introduced a platform market maker program with lucrative rewa",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "remote-footer-container",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1521,
+        "x": 0,
+        "y": 929
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_wrapper_1fdt2_2 theme-dark",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1521,
+        "x": 0,
+        "y": 929
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1521,
+        "x": 0,
+        "y": 994
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_top_1fdt2_60",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1224,
+        "x": 149,
+        "y": 994
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_innerDrop_1fdt2_41",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 252,
+        "width": 180,
+        "x": 761,
+        "y": 1035
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Affiliate Program\nReferral Program\nP2P Merchant Program\nListing Application\nInstitutional Services\nAPI Services\nPartner Links",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "Account Security User Center | MEXC Exchange",
+  "url": "https://www.mexc.com/user/openapi"
+}

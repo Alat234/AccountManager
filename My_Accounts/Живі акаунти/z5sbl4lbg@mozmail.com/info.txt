@@ -1,0 +1,6 @@
+Email: z5sbl4lbg@mozmail.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

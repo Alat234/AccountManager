@@ -1,0 +1,181 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md _editText_198rq_65",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 210,
+        "x": 942,
+        "y": 250
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "v***s@icloud.com",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-block _submit_198rq_1 global_components_sign_up_submit ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 942,
+        "y": 437
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 1471,
+        "y": 544
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-0",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 942,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-1",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 1003,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-2",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 1064,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-3",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 1125,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-4",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 1186,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "a961c103-eaa9-4217-804b-d94e4d8e9d4e-5",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 1247,
+        "y": 312
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    }
+  ],
+  "referral": [],
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC",
+  "url": "https://www.mexc.com/register"
+}

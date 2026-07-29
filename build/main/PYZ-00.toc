@@ -432,6 +432,15 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\calendar.py',
    'PYMODULE'),
+  ('certifi',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\certifi\\__init__.py',
+   'PYMODULE'),
+  ('certifi.__main__',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\certifi\\__main__.py',
+   'PYMODULE'),
+  ('certifi.core',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\certifi\\core.py',
+   'PYMODULE'),
   ('cgi',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\cgi.py',
@@ -859,6 +868,26 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\message.py',
    'PYMODULE'),
+  ('email.mime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\__init__.py',
+   'PYMODULE'),
+  ('email.mime.base',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\base.py',
+   'PYMODULE'),
+  ('email.mime.multipart',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\multipart.py',
+   'PYMODULE'),
+  ('email.mime.nonmultipart',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\nonmultipart.py',
+   'PYMODULE'),
+  ('email.mime.text',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\mime\\text.py',
+   'PYMODULE'),
   ('email.parser',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\parser.py',
@@ -874,6 +903,9 @@
   ('email.utils',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\utils.py',
+   'PYMODULE'),
+  ('email_parser',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\email_parser.py',
    'PYMODULE'),
   ('fnmatch',
    'C:\\Program '
@@ -938,6 +970,10 @@
   ('http.server',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\server.py',
+   'PYMODULE'),
+  ('imaplib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\imaplib.py',
    'PYMODULE'),
   ('importlib',
    'C:\\Program '
@@ -1062,6 +1098,9 @@
   ('mimetypes',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\mimetypes.py',
+   'PYMODULE'),
+  ('modals',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\modals.py',
    'PYMODULE'),
   ('multiprocessing',
    'C:\\Program '
@@ -1264,6 +1303,30 @@
   ('pydoc_data.topics',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pydoc_data\\topics.py',
+   'PYMODULE'),
+  ('pyotp',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\__init__.py',
+   'PYMODULE'),
+  ('pyotp.compat',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\compat.py',
+   'PYMODULE'),
+  ('pyotp.contrib',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\contrib\\__init__.py',
+   'PYMODULE'),
+  ('pyotp.contrib.steam',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\contrib\\steam.py',
+   'PYMODULE'),
+  ('pyotp.hotp',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\hotp.py',
+   'PYMODULE'),
+  ('pyotp.otp',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\otp.py',
+   'PYMODULE'),
+  ('pyotp.totp',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\totp.py',
+   'PYMODULE'),
+  ('pyotp.utils',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\.venv\\Lib\\site-packages\\pyotp\\utils.py',
    'PYMODULE'),
   ('queue',
    'C:\\Program '
@@ -1987,6 +2050,9 @@
   ('typing',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\typing.py',
+   'PYMODULE'),
+  ('ui_widgets',
+   'C:\\Users\\Влад\\PycharmProjects\\AccountsManager\\ui_widgets.py',
    'PYMODULE'),
   ('unittest',
    'C:\\Program '

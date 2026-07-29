@@ -1,0 +1,163 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 1456,
+        "y": 544
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-sm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 116,
+        "x": 1052,
+        "y": 18
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "page-module-scss-module__yolcYW__apiDescItem page-module-scss-module__yolcYW__apiDescInvite",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 128,
+        "width": 528,
+        "x": 800,
+        "y": 291
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Dear MEXCer, in order to further increase the liquidity of the platform and enhance your trading experience, MEXC has introduced a platform market maker program with lucrative rewa",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "remote-footer-container",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1521,
+        "x": 0,
+        "y": 1454
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nProducts\nMEXC 0 Fees\nSpot\nFutures\nOn-Chain\nBuy Crypto\nP2P\nConvert\nPre-Market\nRealStocks\nSpot Grid\nDCA\nCopy Trade\nDemo Trading\nEarn\nLoans",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_wrapper_1fdt2_2 theme-dark",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1521,
+        "x": 0,
+        "y": 1454
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nProducts\nMEXC 0 Fees\nSpot\nFutures\nOn-Chain\nBuy Crypto\nP2P\nConvert\nPre-Market\nRealStocks\nSpot Grid\nDCA\nCopy Trade\nDemo Trading\nEarn\nLoans",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1521,
+        "x": 0,
+        "y": 1518
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nProducts\nMEXC 0 Fees\nSpot\nFutures\nOn-Chain\nBuy Crypto\nP2P\nConvert\nPre-Market\nRealStocks\nSpot Grid\nDCA\nCopy Trade\nDemo Trading\nEarn\nLoans",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_top_1fdt2_60",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 816,
+        "x": 352,
+        "y": 1518
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nProducts\nMEXC 0 Fees\nSpot\nFutures\nOn-Chain\nBuy Crypto\nP2P\nConvert\nPre-Market\nRealStocks\nSpot Grid\nDCA\nCopy Trade\nDemo Trading\nEarn\nLoans",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_innerDrop_1fdt2_41",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 252,
+        "width": 180,
+        "x": 760,
+        "y": 1560
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Affiliate Program\nReferral Program\nP2P Merchant Program\nListing Application\nInstitutional Services\nAPI Services\nPartner Links",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "Account Security User Center | MEXC Exchange",
+  "url": "https://www.mexc.com/user/openapi"
+}

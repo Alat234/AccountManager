@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-07-29T21:59:26",
+  "task_id": "a48f1427500d",
+  "account": "t***f@icloud.com",
+  "reason": "Message: no such window: target window already closed\nfrom unknown error: web view not found\n  (Session info: chrome=144.0.7559.60)\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t0x7ff638746d35\n\t0x7ff638746ce0\n\t0x7ff638ab9cfd\n\t0x7ff638a88935\n\t0x7ff638b49e46\n\t0x7ff638b67954\n\t0x7ff638b07ef4\n\t0x7ff638b066fb\n\t0x7ff638b07bda\n\t0x7ff6391a77b6\n\t0x7ff638719533\n\t0x7ff638fb7b3b\n\t0x7ff63914eb59\n\t0x7ff638d9af03\n\t0x7ff6387ea9fe\n\t0x7ff6387ea744\n\t0x7ff6387ea4b0\n\t0x7ff6388028fd\n\t0x7fffbf71e957\n\t0x7fffc09cad6c\n",
+  "url": "",
+  "title": ""
+}
