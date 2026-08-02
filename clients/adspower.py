@@ -200,6 +200,19 @@ class AdsPowerClient:
     def _post(self, path: str, json_data: dict | None = None) -> dict | None:
         return self._request("POST", path, json_data=json_data)
 
+    @staticmethod
+    def _normalize_profile(profile: dict) -> dict:
+        normalized = dict(profile)
+        if not normalized.get("user_id") and normalized.get("profile_id"):
+            normalized["user_id"] = normalized.get("profile_id")
+        if not normalized.get("serial_number") and normalized.get("profile_no"):
+            normalized["serial_number"] = normalized.get("profile_no")
+        if not normalized.get("domain_name") and normalized.get("platform"):
+            normalized["domain_name"] = normalized.get("platform")
+        if not normalized.get("sys_app_cate_id") and normalized.get("category_id"):
+            normalized["sys_app_cate_id"] = normalized.get("category_id")
+        return normalized
+
     # ── Health ────────────────────────────────────────────────
 
     def is_running(self) -> bool:
@@ -263,13 +276,47 @@ class AdsPowerClient:
         data = self._get("/api/v1/user/list", params)
         if data is None:
             return []
-        return data.get("list", [])
+        return [self._normalize_profile(profile) for profile in data.get("list", [])]
+
+    def list_profiles_v2(
+        self,
+        *,
+        group_id: str | None = None,
+        page: int = 1,
+        limit: int = 100,
+    ) -> list[dict]:
+        body: dict = {"page": page, "limit": limit}
+        if group_id:
+            body["group_id"] = group_id
+        data = self._post("/api/v2/browser-profile/list", body)
+        if data is None:
+            return []
+        return [self._normalize_profile(profile) for profile in data.get("list", [])]
 
     def list_all_profiles(self) -> list[dict]:
+        v2_profiles = self._list_all_profiles_v2()
+        if v2_profiles:
+            return v2_profiles
+        return self._list_all_profiles_v1()
+
+    def _list_all_profiles_v1(self) -> list[dict]:
         all_profiles: list[dict] = []
         page = 1
         while True:
             batch = self.list_profiles(page=page, limit=100)
+            if not batch:
+                break
+            all_profiles.extend(batch)
+            if len(batch) < 100:
+                break
+            page += 1
+        return all_profiles
+
+    def _list_all_profiles_v2(self) -> list[dict]:
+        all_profiles: list[dict] = []
+        page = 1
+        while True:
+            batch = self.list_profiles_v2(page=page, limit=100)
             if not batch:
                 break
             all_profiles.extend(batch)

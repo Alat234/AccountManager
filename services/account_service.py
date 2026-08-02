@@ -167,10 +167,17 @@ class AccountService:
             self.db.upsert_ads_tags(remote_tags)
 
         profiles = ads.list_all_profiles()
+        profile_tag_defs = []
+        for profile in profiles:
+            _, tag_defs = self._profile_tags(profile)
+            profile_tag_defs.extend(tag_defs)
+        if profile_tag_defs:
+            self.db.upsert_ads_tags(profile_tag_defs)
+
         logger.info(
             "AdsPower sync fetched profiles=%s tags=%s",
             len(profiles),
-            len(remote_tags),
+            len(remote_tags) + len(profile_tag_defs),
         )
         stats = {
             "fetched": len(profiles),
@@ -195,9 +202,7 @@ class AccountService:
             name = self._profile_name(p)
             serial = self._profile_serial(p)
             remark = p.get("remark", "") or ""
-            tag_ids = p.get("profile_tag_ids") or []
-            if isinstance(tag_ids, str):
-                tag_ids = [tag_ids] if tag_ids else []
+            tag_ids, _ = self._profile_tags(p)
 
             acc = self.db.get_account_by_profile_id(pid)
             if acc:
@@ -330,6 +335,63 @@ class AccountService:
             return int(value)
         except (TypeError, ValueError):
             return 0
+
+    @staticmethod
+    def _profile_tags(profile: dict) -> tuple[list[str], list[dict]]:
+        tag_ids: list[str] = []
+        tag_defs: list[dict] = []
+        tag_def_ids: set[str] = set()
+
+        def add_tag(tag_id, name="", color=""):
+            clean_id = str(tag_id or "").strip()
+            clean_name = str(name or clean_id).strip()
+            if not clean_id:
+                return
+            if clean_id not in tag_ids:
+                tag_ids.append(clean_id)
+            if clean_id not in tag_def_ids:
+                tag_defs.append({"id": clean_id, "name": clean_name, "color": str(color or "")})
+                tag_def_ids.add(clean_id)
+
+        def consume_tag_value(value):
+            if isinstance(value, str):
+                for item in value.replace(",", " ").split():
+                    add_tag(item)
+            elif isinstance(value, dict):
+                tag_id = (
+                    value.get("id")
+                    or value.get("tag_id")
+                    or value.get("tagId")
+                    or value.get("tagID")
+                    or value.get("name")
+                    or value.get("tag_name")
+                    or value.get("tagName")
+                )
+                if tag_id:
+                    add_tag(
+                        tag_id,
+                        value.get("name") or value.get("tag_name") or value.get("tagName") or "",
+                        value.get("color") or value.get("tag_color") or value.get("tagColor") or "",
+                    )
+                else:
+                    for nested_key, nested_value in value.items():
+                        if "tag" in str(nested_key).lower():
+                            consume_tag_value(nested_value)
+            elif isinstance(value, (list, tuple)):
+                for item in value:
+                    consume_tag_value(item)
+
+        for key in ("profile_tag_ids", "tag_ids", "tags_id", "tag_id"):
+            consume_tag_value(profile.get(key))
+
+        for key in ("profile_tags", "user_tags", "tags", "tag"):
+            consume_tag_value(profile.get(key))
+
+        for key, value in profile.items():
+            if "tag" in str(key).lower():
+                consume_tag_value(value)
+
+        return tag_ids, tag_defs
 
     def _mark_name_conflict_if_needed(
         self,

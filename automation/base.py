@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from clients.adspower_selenium import open_adspower_selenium_driver
+from automation.recovery import ManualAssistResult, PageState
 
 if TYPE_CHECKING:
     from clients.adspower import AdsPowerClient
@@ -40,6 +42,10 @@ class BaseScenario(ABC):
         self.captcha_service = captcha_service
         self.driver: webdriver.Chrome | None = None
         self.auto_close: bool = True
+        self.progress_reporter: Callable[[str, dict], None] | None = None
+        self.manual_assist_handler: Callable[[str, set[str], PageState], ManualAssistResult] | None = None
+        self.network_recovery_handler: Callable[[str, PageState], str] | None = None
+        self._cancel_requested = threading.Event()
 
     @abstractmethod
     def run(self) -> ScenarioResult:
@@ -48,8 +54,11 @@ class BaseScenario(ABC):
     def execute(self) -> ScenarioResult:
         try:
             self._log_step("execute_start")
+            self._raise_if_cancelled()
             self._start_browser()
+            self._raise_if_cancelled()
             result = self.run()
+            self._raise_if_cancelled()
             self._log_step(
                 "execute_done",
                 success=result.success,
@@ -63,6 +72,61 @@ class BaseScenario(ABC):
         finally:
             if self.auto_close:
                 self._stop_browser()
+
+    @property
+    def cancel_event(self) -> threading.Event:
+        return self._cancel_requested
+
+    def cancel(self) -> None:
+        self._cancel_requested.set()
+        self._log_step("cancel_requested")
+        profile_id = self.account.ads_profile_id
+        if self.driver:
+            try:
+                self.driver.quit()
+            except Exception:
+                logger.debug("Selenium driver quit during cancel failed", exc_info=True)
+            self.driver = None
+        if profile_id:
+            try:
+                self.adspower.stop_browser(profile_id)
+            except Exception:
+                logger.debug("AdsPower browser stop during cancel failed", exc_info=True)
+
+    def _raise_if_cancelled(self) -> None:
+        if self._cancel_requested.is_set():
+            raise RuntimeError("Scenario cancelled by user")
+
+    def browser_is_closed(self) -> bool:
+        if self._cancel_requested.is_set():
+            return True
+        driver = self.driver
+        if driver is None:
+            return True
+        try:
+            handles = list(driver.window_handles)
+            if not handles:
+                return True
+            current_handle = driver.current_window_handle
+            return current_handle not in handles
+        except Exception as exc:
+            message = str(exc).lower()
+            if any(fragment in message for fragment in (
+                "no such window",
+                "target window already closed",
+                "web view not found",
+                "invalid session",
+                "disconnected",
+                "connection refused",
+            )):
+                return True
+            logger.debug("Browser liveness check failed", exc_info=True)
+            return False
+
+    def _raise_if_browser_closed(self) -> None:
+        if self.browser_is_closed():
+            self._cancel_requested.set()
+            raise RuntimeError("Browser tab was closed by user")
 
     def _start_browser(self) -> None:
         profile_id = self.account.ads_profile_id
@@ -120,3 +184,8 @@ class BaseScenario(ABC):
             self.account.email,
             fields,
         )
+        if self.progress_reporter:
+            try:
+                self.progress_reporter(step, fields)
+            except Exception:
+                logger.debug("Scenario progress reporter failed", exc_info=True)

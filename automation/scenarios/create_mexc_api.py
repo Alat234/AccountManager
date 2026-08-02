@@ -6,6 +6,7 @@ import time
 from collections.abc import Callable
 
 from automation.base import BaseScenario, ScenarioResult
+from automation.checkpoints import CheckpointRunner, ScenarioCheckpoint
 from automation.scenarios.mexc_browser_helpers import (
     MexcBrowserContext,
     click_get_code_if_active,
@@ -22,6 +23,7 @@ from automation.scenarios.mexc_browser_helpers import (
     clear_and_type,
 )
 from automation.scenarios.mexc_debug import MexcRegistrationDebug
+from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +49,10 @@ class CreateMexcApiScenario(BaseScenario):
         self.on_email_timeout = on_email_timeout
         self.task_id = ""
         self.auto_close = False
+        self.state_analyzer = MexcPageStateAnalyzer()
+        self.checkpoint_runner: CheckpointRunner | None = None
+        self.api_key = ""
+        self.secret_key = ""
         self.debug = MexcRegistrationDebug(
             account_email=self.account.email,
             secrets=(self.account.password, self.account.two_fa_secret),
@@ -66,7 +72,29 @@ class CreateMexcApiScenario(BaseScenario):
         self.debug.with_secrets(self.account.password, self.account.two_fa_secret)
         self.debug.step("api_create_start")
 
-        self.ctx = MexcBrowserContext(
+        self.ctx = self._build_context()
+
+        try:
+            self._run_api_checkpoints()
+        except Exception as exc:
+            self.debug.warning("api_create_failed", reason=str(exc))
+            if self.driver:
+                self.debug.save_failure_artifacts(self.driver, str(exc))
+            raise
+
+        self.debug.step("api_create_success", api_key_found=bool(self.api_key), secret_key_found=bool(self.secret_key))
+        return ScenarioResult(
+            success=True,
+            message=f"MEXC API key created for {self.debug.masked_email}",
+            data={
+                "account_email": self.account.email,
+                "api_key": self.api_key,
+                "secret_key": self.secret_key,
+            },
+        )
+
+    def _build_context(self) -> MexcBrowserContext:
+        return MexcBrowserContext(
             driver=self.driver,
             account=self.account,
             debug=self.debug,
@@ -75,37 +103,116 @@ class CreateMexcApiScenario(BaseScenario):
             task_id=self.task_id,
             on_captcha_detected=self.on_captcha_detected,
             on_email_timeout=self.on_email_timeout,
+            manual_assist_handler=self.manual_assist_handler,
+            network_recovery_handler=self.network_recovery_handler,
+            state_analyzer=self.state_analyzer,
+            cancel_event=self.cancel_event,
+            cancel_checker=self.browser_is_closed,
         )
 
-        try:
-            open_mexc_page(self.ctx, self.OPENAPI_URL, "api")
-            ensure_mexc_logged_in(self.ctx, self.OPENAPI_URL, "api")
-            handle_mexc_captcha(self.ctx, "after_login")
-            self._wait_for_api_form()
-            self._set_exact_permissions()
-            self._fill_note()
-            self._accept_risk_reminder()
-            self._click_create()
-            self._complete_security_verification()
-            api_key, secret_key = self._extract_api_keys()
-            self.debug.with_secrets(api_key, secret_key)
-            self._confirm_keys_copied()
-        except Exception as exc:
-            self.debug.warning("api_create_failed", reason=str(exc))
-            if self.driver:
-                self.debug.save_failure_artifacts(self.driver, str(exc))
-            raise
-
-        self.debug.step("api_create_success", api_key_found=bool(api_key), secret_key_found=bool(secret_key))
-        return ScenarioResult(
-            success=True,
-            message=f"MEXC API key created for {self.debug.masked_email}",
-            data={
-                "account_email": self.account.email,
-                "api_key": api_key,
-                "secret_key": secret_key,
-            },
+    def _run_api_checkpoints(self) -> None:
+        runner = CheckpointRunner(
+            driver_getter=lambda: self.driver,
+            analyzer=self.state_analyzer,
+            debug=self.debug,
+            manual_assist_handler=self.manual_assist_handler,
+            network_recovery_handler=self.network_recovery_handler,
+            captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
         )
+        self.checkpoint_runner = runner
+        runner.run(self._api_checkpoints())
+
+    def _api_checkpoints(self) -> list[ScenarioCheckpoint]:
+        form_states = {"api_form", "security_modal_email", "security_modal_totp", "api_created"}
+        security_states = {"security_modal_email", "security_modal_totp", "api_created"}
+        return [
+            ScenarioCheckpoint(
+                name="open_api_page",
+                action=self._open_api_page,
+                allowed_states={
+                    "unknown",
+                    "login",
+                    "register_completed",
+                    "twofa_completed",
+                    "network_loading",
+                    "network_error",
+                    "wrong_browser_tab",
+                },
+                done_states=form_states,
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="ensure_login",
+                action=self._ensure_logged_in,
+                allowed_states={"login", "unknown", "network_loading", "network_error"},
+                done_states=form_states,
+                recover_wrong_tab=self._open_api_page,
+                action_already_handles_captcha=True,
+            ),
+            ScenarioCheckpoint(
+                name="wait_api_form",
+                action=self._wait_for_api_form,
+                allowed_states={"api_form"},
+                done_states=security_states,
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="prepare_api_form",
+                action=self._prepare_api_form,
+                allowed_states={"api_form"},
+                done_states=security_states,
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="submit_api_create",
+                action=self._click_create,
+                allowed_states={"api_form"},
+                done_states=security_states,
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="security_verification",
+                action=self._complete_security_verification,
+                allowed_states={"security_modal_email", "security_modal_totp"},
+                done_states={"api_created"},
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="extract_api_keys",
+                action=self._extract_and_store_api_keys,
+                allowed_states={"api_created"},
+                done_states=set(),
+                recover_wrong_tab=self._open_api_page,
+            ),
+            ScenarioCheckpoint(
+                name="confirm_keys_saved",
+                action=self._confirm_keys_copied,
+                allowed_states={"api_created", "api_form", "unknown"},
+                done_states=set(),
+                recover_wrong_tab=self._open_api_page,
+                min_confidence=0.2,
+            ),
+        ]
+
+    def _open_api_page(self) -> None:
+        if self.ctx is None:
+            self.ctx = self._build_context()
+        open_mexc_page(self.ctx, self.OPENAPI_URL, "api")
+
+    def _ensure_logged_in(self) -> None:
+        if self.ctx is None:
+            self.ctx = self._build_context()
+        ensure_mexc_logged_in(self.ctx, self.OPENAPI_URL, "api")
+        handle_mexc_captcha(self.ctx, "after_login")
+
+    def _prepare_api_form(self) -> None:
+        self._set_exact_permissions()
+        self._fill_note()
+        self._accept_risk_reminder()
+
+    def _extract_and_store_api_keys(self) -> None:
+        self.api_key, self.secret_key = self._extract_api_keys()
+        self.debug.with_secrets(self.api_key, self.secret_key)
 
     def _wait_for_api_form(self) -> None:
         self.debug.step("api_form_wait_start")
@@ -113,6 +220,8 @@ class CreateMexcApiScenario(BaseScenario):
         refreshed = False
         last_state = {}
         while time.time() < deadline:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
             state = self.driver.execute_script(
                 """
                 const visible = (element) => {
@@ -174,6 +283,8 @@ class CreateMexcApiScenario(BaseScenario):
         attempts = 0
         last_seen = []
         while attempts < 20:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
             result = self.driver.execute_script(
                 """
                 const desiredValues = new Set(arguments[0]);
@@ -297,6 +408,8 @@ class CreateMexcApiScenario(BaseScenario):
         element = None
         deadline = time.time() + 30
         while time.time() < deadline and element is None:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
             element = self.driver.execute_script(
                 """
                 const visible = (element) => {
@@ -393,17 +506,42 @@ class CreateMexcApiScenario(BaseScenario):
         if self.ctx is None:
             raise RuntimeError("MEXC context is not initialized")
         self.debug.step("api_security_verification_start")
-        if not click_get_code_if_active(self.ctx, timeout=30):
-            raise RuntimeError("MEXC API Get Code button was not found or was not clickable")
+        self._raise_if_cancelled()
+        self._raise_if_browser_closed()
 
-        email_code = wait_mexc_email_code(self.ctx)
-        self.ctx.tried_email_codes.add(email_code)
-        if not self._fill_api_email_code(email_code):
-            raise RuntimeError("MEXC API email verification input was not found")
-        self.debug.step("api_email_code_filled")
+        if self._api_email_step_visible() or not self._api_totp_step_visible():
+            if not click_get_code_if_active(self.ctx, timeout=30):
+                if self._api_totp_step_visible():
+                    self.debug.step("api_email_step_already_done")
+                elif self._api_keys_created_visible():
+                    self.debug.step("api_security_verification_done", mode="already_created")
+                    return
+                else:
+                    raise RuntimeError("MEXC API Get Code button was not found or was not clickable")
+            else:
+                self._handle_captcha("api_security_after_get_code")
+
+                email_code = wait_mexc_email_code(self.ctx)
+                self.ctx.tried_email_codes.add(email_code)
+                if not self._fill_api_email_code(email_code):
+                    raise RuntimeError("MEXC API email verification input was not found")
+                self.debug.step("api_email_code_filled")
+
+                if self._api_totp_step_visible():
+                    self.debug.step("api_email_totp_combined_modal")
+                else:
+                    if not click_security_submit(self.driver, ("submit", "confirm", "next")):
+                        raise RuntimeError("MEXC API email verification Submit button was not found")
+                    self._handle_captcha("api_security_after_email_submit")
+                    time.sleep(3)
+                    if self._api_keys_created_visible() or not self._security_modal_visible():
+                        self.debug.step("api_security_verification_done", mode="email_only")
+                        return
 
         last_error = ""
         for attempt in range(1, 4):
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
             self.debug.step("api_totp_attempt_start", attempt=attempt)
             totp_code = fresh_totp_code(self.account.two_fa_secret, self.debug, "api_totp")
             totp_input = self._find_api_totp_input()
@@ -413,9 +551,10 @@ class CreateMexcApiScenario(BaseScenario):
             self.debug.step("api_totp_code_filled", attempt=attempt)
             if not click_security_submit(self.driver, ("submit", "confirm")):
                 raise RuntimeError("MEXC API security verification Submit button was not found")
+            self._handle_captcha("api_security_after_totp_submit")
             time.sleep(4)
 
-            if not self._security_modal_visible():
+            if self._api_keys_created_visible() or not self._security_modal_visible():
                 self.debug.step("api_security_verification_done", attempt=attempt)
                 return
 
@@ -438,6 +577,54 @@ class CreateMexcApiScenario(BaseScenario):
             self.driver,
             security_modal_only=True,
         )
+
+    def _api_email_step_visible(self) -> bool:
+        if self._find_security_input_by_id("emailCode") is not None:
+            return True
+        try:
+            return bool(
+                self.driver.execute_script(
+                    """
+                    const visible = (element) => {
+                        const rect = element.getBoundingClientRect();
+                        const style = window.getComputedStyle(element);
+                        return rect.width > 0 && rect.height > 0
+                            && style.visibility !== 'hidden'
+                            && style.display !== 'none'
+                            && !element.disabled;
+                    };
+                    const modal = [...document.querySelectorAll('.ant-modal-content, .ant-modal, [role="dialog"], .modal')]
+                        .filter(visible)
+                        .at(-1);
+                    const root = modal || document.body;
+                    const text = (root.innerText || root.textContent || '').toLowerCase();
+                    const inputs = [...root.querySelectorAll('input,textarea')]
+                        .filter(visible)
+                        .map((input) => [
+                            input.id,
+                            input.name,
+                            input.placeholder,
+                            input.getAttribute('aria-label'),
+                            input.closest('.ant-form-item, label, div')?.innerText
+                        ].join(' ').toLowerCase());
+                    return text.includes('email verification')
+                        || text.includes('email code')
+                        || inputs.some((value) => value.includes('email') || value.includes('mail'));
+                    """
+                )
+            )
+        except Exception:
+            return False
+
+    def _api_totp_step_visible(self) -> bool:
+        return self._find_api_totp_input() is not None
+
+    def _api_keys_created_visible(self) -> bool:
+        try:
+            state = self.state_analyzer.analyze(self.driver)
+            return state.name == "api_created" and state.confidence >= 0.72
+        except Exception:
+            return False
 
     def _find_security_input_by_id(self, element_id: str):
         try:
@@ -508,6 +695,8 @@ class CreateMexcApiScenario(BaseScenario):
         deadline = time.time() + 60
         last_snapshot = {}
         while time.time() < deadline:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
             data = self.driver.execute_script(
                 """
                 const visible = (element) => {
@@ -739,3 +928,8 @@ class CreateMexcApiScenario(BaseScenario):
             """
         )
         self.debug.step("api_confirm_copied_done", clicked=bool(clicked))
+
+    def _handle_captcha(self, phase: str) -> None:
+        if self.ctx is None:
+            raise RuntimeError("MEXC context is not initialized")
+        handle_mexc_captcha(self.ctx, phase)

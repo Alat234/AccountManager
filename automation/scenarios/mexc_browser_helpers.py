@@ -5,6 +5,7 @@ import re
 import time
 from dataclasses import dataclass, field
 from collections.abc import Callable
+from threading import Event
 
 import pyotp
 from selenium.webdriver.common.keys import Keys
@@ -13,8 +14,10 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 
 from automation.captcha import detect_captcha, wait_for_captcha_solved
+from automation.recovery import ManualAssistAction, ManualAssistController, ManualAssistResult, PageState
 from automation.scenarios.mexc_debug import MexcRegistrationDebug
 from automation.scenarios.mexc_selectors import Locator, MexcRegistrationSelectors
+from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +33,13 @@ class MexcBrowserContext:
     selectors: MexcRegistrationSelectors = field(default_factory=MexcRegistrationSelectors)
     on_captcha_detected: Callable[[str], None] | None = None
     on_email_timeout: Callable[[str], bool] | None = None
+    manual_assist_handler: Callable[[str, set[str], PageState], ManualAssistResult] | None = None
+    network_recovery_handler: Callable[[str, PageState], str] | None = None
+    state_analyzer: MexcPageStateAnalyzer = field(default_factory=MexcPageStateAnalyzer)
     email_code_not_before_ts: float | None = None
     tried_email_codes: set[str] = field(default_factory=set)
+    cancel_event: Event | None = None
+    cancel_checker: Callable[[], bool] | None = None
 
 
 def open_mexc_page(ctx: MexcBrowserContext, url: str, step_prefix: str) -> None:
@@ -53,6 +61,12 @@ def ensure_mexc_logged_in(ctx: MexcBrowserContext, return_url: str, step_prefix:
     if not getattr(ctx.account, "password", ""):
         raise RuntimeError("MEXC account is not logged in and no saved password is available")
 
+    login_step_ready(
+        ctx,
+        f"{step_prefix}_login_start",
+        allowed_states={"login", "captcha", "network_loading", "network_error", "unknown"},
+        done_states={"api_form", "security_modal_email", "security_modal_totp"},
+    )
     perform_mexc_login(ctx)
     handle_mexc_captcha(ctx, "after_login")
     ctx.driver.get(return_url)
@@ -77,7 +91,142 @@ def is_mexc_login_required(ctx: MexcBrowserContext) -> bool:
     return False
 
 
+def login_step_ready(
+    ctx: MexcBrowserContext,
+    step_name: str,
+    *,
+    allowed_states: set[str],
+    done_states: set[str],
+) -> bool:
+    state = ctx.state_analyzer.analyze(ctx.driver)
+    ctx.debug.step(
+        "login_state_check",
+        step=step_name,
+        state=state.name,
+        confidence=state.confidence,
+    )
+    if state.name == "captcha" and state.confidence >= 0.72:
+        handle_mexc_captcha(ctx, f"{step_name}_captcha")
+        return login_step_ready(ctx, step_name, allowed_states=allowed_states, done_states=done_states)
+    if state.name in done_states and state.confidence >= 0.72:
+        ctx.debug.step("login_step_already_done", step=step_name, state=state.name)
+        return True
+    if state.name in allowed_states and state.confidence >= 0.72:
+        return False
+    if state.name in ("unknown", "network_loading"):
+        state = wait_for_login_state(ctx, step_name, allowed_states | done_states, state)
+        if state.name == "captcha" and state.confidence >= 0.72:
+            handle_mexc_captcha(ctx, f"{step_name}_captcha")
+            return login_step_ready(ctx, step_name, allowed_states=allowed_states, done_states=done_states)
+        if state.name in done_states and state.confidence >= 0.72:
+            ctx.debug.step("login_step_already_done_after_wait", step=step_name, state=state.name)
+            return True
+        if state.name in allowed_states and state.confidence >= 0.72:
+            return False
+    if state.name in ("network_loading", "network_error"):
+        recover_login_network_state(ctx, step_name, state)
+        return login_step_ready(ctx, step_name, allowed_states=allowed_states, done_states=done_states)
+
+    recovered = manual_assist_for_login_step(ctx, step_name, allowed_states | done_states | {"captcha"}, state)
+    if recovered.name == "captcha" and recovered.confidence >= 0.72:
+        handle_mexc_captcha(ctx, f"{step_name}_captcha")
+        return login_step_ready(ctx, step_name, allowed_states=allowed_states, done_states=done_states)
+    if recovered.name in done_states and recovered.confidence >= 0.72:
+        ctx.debug.step("login_manual_step_already_done", step=step_name, state=recovered.name)
+        return True
+    if recovered.name in allowed_states and recovered.confidence >= 0.72:
+        return False
+    raise RuntimeError(
+        f"Unable to continue MEXC login from screen state {recovered.name} "
+        f"while preparing step {step_name}"
+    )
+
+
+def wait_for_login_state(
+    ctx: MexcBrowserContext,
+    step_name: str,
+    target_states: set[str],
+    initial_state: PageState,
+    *,
+    timeout: int = 18,
+) -> PageState:
+    ctx.debug.step(
+        "login_state_wait_for_page",
+        step=step_name,
+        state=initial_state.name,
+        confidence=initial_state.confidence,
+    )
+    deadline = time.time() + timeout
+    last_state = initial_state
+    target_states = set(target_states) | {"captcha", "network_error"}
+    while time.time() < deadline:
+        time.sleep(1.5)
+        state = ctx.state_analyzer.analyze(ctx.driver)
+        last_state = state
+        if state.name in target_states and state.confidence >= 0.72:
+            ctx.debug.step(
+                "login_state_wait_resolved",
+                step=step_name,
+                state=state.name,
+                confidence=state.confidence,
+            )
+            return state
+    return last_state
+
+
+def recover_login_network_state(ctx: MexcBrowserContext, step_name: str, state: PageState) -> None:
+    ctx.debug.warning("login_network_state_detected", step=step_name, state=state.name)
+    action = "wait"
+    if ctx.network_recovery_handler:
+        action = ctx.network_recovery_handler(step_name, state)
+    if action == "cancel":
+        raise RuntimeError("MEXC login stopped by user during network recovery")
+    if action == "refresh":
+        ctx.driver.refresh()
+        time.sleep(5)
+        return
+    time.sleep(10)
+
+
+def manual_assist_for_login_step(
+    ctx: MexcBrowserContext,
+    step_name: str,
+    allowed_states: set[str],
+    initial_state: PageState,
+) -> PageState:
+    ctx.debug.warning(
+        "login_manual_assist_required",
+        step=step_name,
+        state=initial_state.name,
+        confidence=initial_state.confidence,
+    )
+    if ctx.manual_assist_handler:
+        result = ctx.manual_assist_handler(step_name, allowed_states, initial_state)
+    else:
+        controller = ManualAssistController(ctx.state_analyzer, timeout_seconds=600)
+        result = controller.wait_for_known_state(ctx.driver, allowed_states)
+    if result.action == ManualAssistAction.RESTART:
+        raise RuntimeError("MEXC login restart requested by user")
+    if result.action == ManualAssistAction.CANCEL:
+        raise RuntimeError("MEXC login cancelled by user")
+    if result.action == ManualAssistAction.TIMEOUT:
+        raise RuntimeError("Manual assist timed out after 10 minutes")
+    ctx.debug.step(
+        "login_manual_assist_resume",
+        step=step_name,
+        state=result.state.name,
+        confidence=result.state.confidence,
+    )
+    return result.state
+
+
 def perform_mexc_login(ctx: MexcBrowserContext) -> None:
+    login_step_ready(
+        ctx,
+        "login_email",
+        allowed_states={"login", "captcha", "network_loading", "network_error", "unknown"},
+        done_states={"security_modal_email", "security_modal_totp"},
+    )
     ctx.debug.step("login_email_lookup")
     email_input = find_visible(ctx.driver, ctx.selectors.email_input, timeout=20)
     if email_input is not None:
@@ -87,17 +236,32 @@ def perform_mexc_login(ctx: MexcBrowserContext) -> None:
         ctx.debug.step("login_continue_check", clicked=clicked)
         time.sleep(2)
 
+    handle_mexc_captcha(ctx, "login_after_email")
+    login_step_ready(
+        ctx,
+        "login_password",
+        allowed_states={"login", "captcha", "network_loading", "network_error", "unknown"},
+        done_states={"security_modal_email", "security_modal_totp"},
+    )
     password_input = find_visible(ctx.driver, ctx.selectors.password_input, timeout=20)
     if password_input is None:
         raise RuntimeError("MEXC login password input was not found")
     clear_and_type(ctx.driver, password_input, ctx.account.password)
     ctx.debug.step("login_password_filled")
 
+    handle_mexc_captcha(ctx, "login_before_submit")
     if not click_by_text(ctx.driver, ("log in", "login", "continue", "next"), timeout=15):
         raise RuntimeError("MEXC login submit button was not found")
     ctx.debug.step("login_submitted")
     time.sleep(4)
 
+    handle_mexc_captcha(ctx, "login_after_submit")
+    login_step_ready(
+        ctx,
+        "login_security",
+        allowed_states={"login", "captcha", "security_modal_email", "security_modal_totp", "network_loading", "network_error", "unknown"},
+        done_states=set(),
+    )
     if is_email_code_step_visible(ctx):
         ctx.debug.step("login_email_code_step_detected")
         if click_get_code_if_active(ctx, timeout=15):
@@ -108,7 +272,9 @@ def perform_mexc_login(ctx: MexcBrowserContext) -> None:
             click_by_text(ctx.driver, ("confirm", "continue", "next", "submit"), timeout=10)
             time.sleep(4)
 
+    handle_mexc_captcha(ctx, "login_after_email_code")
     complete_login_totp_if_visible(ctx)
+    handle_mexc_captcha(ctx, "login_after_totp")
 
 
 def complete_login_totp_if_visible(ctx: MexcBrowserContext) -> bool:
@@ -139,7 +305,19 @@ def complete_login_totp_if_visible(ctx: MexcBrowserContext) -> bool:
 
 def handle_mexc_captcha(ctx: MexcBrowserContext, phase: str) -> None:
     ctx.debug.step("captcha_check", phase=phase)
-    if not detect_captcha(ctx.driver):
+    captcha_found = False
+    deadline = time.time() + 8
+    while time.time() < deadline:
+        raise_if_context_cancelled(ctx)
+        if detect_captcha(ctx.driver):
+            captcha_found = True
+            break
+        state = ctx.state_analyzer.analyze(ctx.driver)
+        if state.name == "captcha" and state.confidence >= 0.72:
+            captcha_found = True
+            break
+        time.sleep(1)
+    if not captcha_found:
         ctx.debug.step("captcha_not_detected", phase=phase)
         return
 
@@ -150,7 +328,15 @@ def handle_mexc_captcha(ctx: MexcBrowserContext, phase: str) -> None:
         ctx.captcha_service.notify(account_email=ctx.account.email, task_id=ctx.task_id)
     if ctx.on_captcha_detected:
         ctx.on_captcha_detected(ctx.account.email)
-    if not wait_for_captcha_solved(ctx.driver, timeout=180):
+
+    solved_deadline = time.time() + 180
+    while time.time() < solved_deadline:
+        raise_if_context_cancelled(ctx)
+        if not detect_captcha(ctx.driver):
+            ctx.debug.step("captcha_solved", phase=phase)
+            return
+        time.sleep(2)
+    if not wait_for_captcha_solved(ctx.driver, timeout=1):
         raise RuntimeError("CAPTCHA was not solved within 180s")
     ctx.debug.step("captcha_solved", phase=phase)
 
@@ -158,6 +344,7 @@ def handle_mexc_captcha(ctx: MexcBrowserContext, phase: str) -> None:
 def click_get_code_if_active(ctx: MexcBrowserContext, timeout: int = 10) -> bool:
     deadline = time.time() + timeout
     while time.time() < deadline:
+        raise_if_context_cancelled(ctx)
         clicked = ctx.driver.execute_script(
             """
             const visible = (element) => {
@@ -203,6 +390,15 @@ def click_get_code_if_active(ctx: MexcBrowserContext, timeout: int = 10) -> bool
     return False
 
 
+def raise_if_context_cancelled(ctx: MexcBrowserContext) -> None:
+    if ctx.cancel_event is not None and ctx.cancel_event.is_set():
+        raise RuntimeError("Scenario cancelled by user")
+    if ctx.cancel_checker is not None and ctx.cancel_checker():
+        if ctx.cancel_event is not None:
+            ctx.cancel_event.set()
+        raise RuntimeError("Browser tab was closed by user")
+
+
 def wait_mexc_email_code(ctx: MexcBrowserContext, timeout: int = 180) -> str:
     if not ctx.email_fetcher:
         raise RuntimeError("Email fetcher is not configured")
@@ -223,6 +419,8 @@ def wait_mexc_email_code(ctx: MexcBrowserContext, timeout: int = 180) -> str:
                 poll_interval=5,
                 not_before_ts=ctx.email_code_not_before_ts,
                 ignored_codes=ctx.tried_email_codes,
+                cancel_event=ctx.cancel_event,
+                cancel_checker=ctx.cancel_checker,
             )
         except RuntimeError as exc:
             if f"No MEXC verification code received within {timeout}s" not in str(exc):

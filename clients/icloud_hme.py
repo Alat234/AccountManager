@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -72,42 +73,151 @@ class ICloudHMEClient:
         self.selectors = selectors or ICloudHMESelectors()
         self.timeout = timeout
         self.driver: webdriver.Chrome | None = None
+        self.progress_callback: Callable[[str, dict], None] | None = None
+
+    def set_progress_callback(self, callback: Callable[[str, dict], None] | None) -> None:
+        self.progress_callback = callback
 
     def create_mask(self, label: str | None = None) -> str:
         logger.info("Starting iCloud HME profile %s", self.profile_id)
+        self._step("start")
         self.driver = self._open_driver()
         try:
             logger.info("Opening iCloud HME page")
+            self._prepare_single_working_tab()
+            self._step("open_icloud")
             self.driver.get(self.ICLOUD_HME_URL)
             self._wait_for_page()
+            self._step("icloud_loaded")
             known_emails = self._collect_visible_emails()
             logger.info("Found %d existing HME addresses", len(known_emails))
+            self._step("existing_addresses_detected", count=len(known_emails))
 
             logger.info("Clicking create HME address")
+            self._step("create_address_open")
             self._click_create_button()
             time.sleep(2)
 
             logger.info("Reading generated HME address")
+            self._step("generated_address_wait")
             email = self._wait_for_generated_email(exclude=known_emails)
             logger.info("Generated HME address: %s", email)
+            self._step("generated_address_ready", email=email)
 
             label_text = label or self._default_label()
             logger.info("Filling iCloud HME label: %s", label_text)
+            self._step("label_fill")
             self._fill_label(label_text)
 
             logger.info("Clicking 'Create email address' button")
+            self._step("submit_create")
             self._click_submit_button()
 
             time.sleep(2)
 
             logger.info("Confirming created HME address")
+            self._step("confirm_create")
             self._click_confirm_button()
+            self._step("completed", email=email)
             return email
         except Exception:
             logger.exception("Failed to create iCloud HME mask")
+            self._step("failed")
             raise
         finally:
             self._close_driver()
+
+    def _step(self, step: str, **fields) -> None:
+        if not self.progress_callback:
+            return
+        try:
+            self.progress_callback(step, fields)
+        except Exception:
+            logger.debug("iCloud HME progress callback failed", exc_info=True)
+
+    def _raise_if_browser_closed(self) -> None:
+        driver = self.driver
+        if driver is None:
+            raise RuntimeError("iCloud AdsPower browser is closed")
+        try:
+            handles = list(driver.window_handles)
+            if not handles:
+                raise RuntimeError("iCloud AdsPower browser tab was closed")
+            current = driver.current_window_handle
+            if current not in handles:
+                driver.switch_to.window(handles[0])
+        except RuntimeError:
+            raise
+        except WebDriverException as exc:
+            message = str(exc).lower()
+            if any(fragment in message for fragment in (
+                "no such window",
+                "target window already closed",
+                "web view not found",
+                "invalid session",
+                "disconnected",
+            )):
+                raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
+            raise
+
+    @staticmethod
+    def _is_browser_closed_exception(exc: BaseException) -> bool:
+        message = str(exc).lower()
+        return any(fragment in message for fragment in (
+            "no such window",
+            "target window already closed",
+            "web view not found",
+            "invalid session",
+            "disconnected",
+        ))
+
+    def _prepare_single_working_tab(self) -> None:
+        self._raise_if_browser_closed()
+        handles = list(self.driver.window_handles)
+        if not handles:
+            raise RuntimeError("iCloud AdsPower browser has no open tabs")
+        keep = self._select_working_tab(handles)
+        self.driver.switch_to.window(keep)
+        closed = 0
+        for handle in handles:
+            if handle == keep:
+                continue
+            try:
+                self.driver.switch_to.window(handle)
+                self.driver.close()
+                closed += 1
+            except WebDriverException:
+                logger.debug("Could not close extra iCloud AdsPower tab", exc_info=True)
+        self.driver.switch_to.window(keep)
+        if closed:
+            logger.info("Closed %d extra iCloud AdsPower tabs before HME creation", closed)
+            self._step("extra_tabs_closed", count=closed)
+
+    def _select_working_tab(self, handles: list[str]) -> str:
+        current = ""
+        try:
+            current = self.driver.current_window_handle
+        except WebDriverException:
+            current = ""
+
+        fallback = current if current in handles else handles[0]
+        for handle in handles:
+            try:
+                self.driver.switch_to.window(handle)
+                url = (self.driver.current_url or "").lower()
+                if "icloud.com" in url and ("hidemyemail" in url or "icloudplus" in url):
+                    return handle
+            except WebDriverException:
+                logger.debug("Could not inspect AdsPower tab URL", exc_info=True)
+        for handle in handles:
+            try:
+                self.driver.switch_to.window(handle)
+                url = (self.driver.current_url or "").lower()
+                if "icloud.com" in url:
+                    return handle
+            except WebDriverException:
+                logger.debug("Could not inspect AdsPower tab URL", exc_info=True)
+        return fallback
 
     def _open_driver(self) -> webdriver.Chrome:
         return open_adspower_selenium_driver(
@@ -134,20 +244,27 @@ class ICloudHMEClient:
 
     def _wait_for_hme_content(self) -> None:
         def content_ready(driver):
+            self._raise_if_browser_closed()
             text = driver.execute_script("return (document.body?.innerText || '')")
             if "@icloud.com" in text or "email address" in text.lower():
                 return True
             frames = driver.find_elements(By.CSS_SELECTOR, "iframe, frame")
             for frame in frames:
                 try:
+                    self._raise_if_browser_closed()
                     driver.switch_to.frame(frame)
                     text = driver.execute_script("return (document.body?.innerText || '')")
                     if "@icloud.com" in text or "email address" in text.lower():
                         return True
-                except WebDriverException:
+                except WebDriverException as exc:
+                    if self._is_browser_closed_exception(exc):
+                        raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                     pass
                 finally:
-                    driver.switch_to.default_content()
+                    try:
+                        driver.switch_to.default_content()
+                    except WebDriverException:
+                        pass
             return False
 
         logger.debug("Waiting for HME content to render")
@@ -162,12 +279,15 @@ class ICloudHMEClient:
         last_error: Exception | None = None
         for by, value in locators:
             try:
+                self._raise_if_browser_closed()
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 element.click()
                 return True
             except (TimeoutException, WebDriverException) as exc:
+                if self._is_browser_closed_exception(exc):
+                    raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                 last_error = exc
                 logger.debug("Selector did not match: %s=%s", by, value)
 
@@ -184,12 +304,15 @@ class ICloudHMEClient:
         frames = self.driver.find_elements(By.CSS_SELECTOR, "iframe, frame")
         for i, frame in enumerate(frames):
             try:
+                self._raise_if_browser_closed()
                 self.driver.switch_to.frame(frame)
                 text = self.driver.execute_script("return (document.body?.innerText || '')")
                 if "@icloud.com" in text:
                     logger.debug("HME content found in iframe %d", i)
                     return
-            except WebDriverException:
+            except WebDriverException as exc:
+                if self._is_browser_closed_exception(exc):
+                    raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                 pass
             self.driver.switch_to.default_content()
         logger.debug("HME content not found in any iframe, staying in main frame")
@@ -283,13 +406,19 @@ class ICloudHMEClient:
         try:
             return self._run_script_in_current_frame(script, *args, depth=0)
         finally:
-            self.driver.switch_to.default_content()
+            try:
+                self.driver.switch_to.default_content()
+            except WebDriverException:
+                pass
 
     def _run_script_in_current_frame(self, script: str, *args, depth: int) -> bool:
         try:
+            self._raise_if_browser_closed()
             if self.driver.execute_script(script, *args):
                 return True
-        except WebDriverException:
+        except WebDriverException as exc:
+            if self._is_browser_closed_exception(exc):
+                raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
             logger.debug("Deep iCloud HME script failed in frame", exc_info=True)
 
         if depth >= 4:
@@ -298,10 +427,13 @@ class ICloudHMEClient:
         frames = self.driver.find_elements(By.CSS_SELECTOR, "iframe, frame")
         for frame in frames:
             try:
+                self._raise_if_browser_closed()
                 self.driver.switch_to.frame(frame)
                 if self._run_script_in_current_frame(script, *args, depth=depth + 1):
                     return True
-            except WebDriverException:
+            except WebDriverException as exc:
+                if self._is_browser_closed_exception(exc):
+                    raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                 logger.debug("Could not inspect iCloud frame", exc_info=True)
             finally:
                 try:
@@ -322,6 +454,7 @@ class ICloudHMEClient:
         last_error: Exception | None = None
         for by, value in locators:
             try:
+                self._raise_if_browser_closed()
                 element = WebDriverWait(self.driver, 8).until(
                     EC.visibility_of_element_located((by, value))
                 )
@@ -329,6 +462,8 @@ class ICloudHMEClient:
                 element.send_keys(text)
                 return True
             except (TimeoutException, WebDriverException) as exc:
+                if self._is_browser_closed_exception(exc):
+                    raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                 last_error = exc
                 logger.debug("Label selector did not match: %s=%s", by, value)
         raise RuntimeError("iCloud HME label field was not found") from last_error
@@ -602,10 +737,13 @@ class ICloudHMEClient:
 
     def _collect_visible_texts_current_frame(self, script: str, texts: list[str], *, depth: int) -> None:
         try:
+            self._raise_if_browser_closed()
             text = self.driver.execute_script(script)
             if text:
                 texts.append(str(text))
-        except WebDriverException:
+        except WebDriverException as exc:
+            if self._is_browser_closed_exception(exc):
+                raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
             logger.debug("Could not collect iCloud text in frame", exc_info=True)
 
         if depth >= 4:
@@ -614,9 +752,12 @@ class ICloudHMEClient:
         frames = self.driver.find_elements(By.CSS_SELECTOR, "iframe, frame")
         for frame in frames:
             try:
+                self._raise_if_browser_closed()
                 self.driver.switch_to.frame(frame)
                 self._collect_visible_texts_current_frame(script, texts, depth=depth + 1)
-            except WebDriverException:
+            except WebDriverException as exc:
+                if self._is_browser_closed_exception(exc):
+                    raise RuntimeError("iCloud AdsPower browser tab was closed") from exc
                 logger.debug("Could not inspect iCloud text frame", exc_info=True)
             finally:
                 try:

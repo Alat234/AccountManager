@@ -12,8 +12,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from automation.base import BaseScenario, ScenarioResult
 from automation.captcha import detect_captcha, wait_for_captcha_solved
+from automation.checkpoints import CheckpointAlreadyComplete, CheckpointRunner, ScenarioCheckpoint
 from automation.scenarios.mexc_debug import MexcRegistrationDebug
 from automation.scenarios.mexc_selectors import Locator, MexcRegistrationSelectors
+from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +43,8 @@ class RegisterMexcScenario(BaseScenario):
         self.auto_close = False
         self.email_code_not_before_ts: float | None = None
         self.tried_email_codes: set[str] = set()
+        self.state_analyzer = MexcPageStateAnalyzer()
+        self.checkpoint_runner: CheckpointRunner | None = None
         self.debug = MexcRegistrationDebug(
             account_email=self.account.email,
             secrets=(self.referral_code, self.default_password),
@@ -55,20 +59,9 @@ class RegisterMexcScenario(BaseScenario):
         self.debug.step("start")
 
         try:
-            self._navigate_to_signup()
-            self._fill_email()
-            self._fill_referral_code()
-            self._click_continue()
-            self._handle_captcha("after_continue")
-            self._request_verification_code()
-            self._handle_captcha("after_code_request")
-            self._complete_verification_code_step()
-            self._handle_captcha("after_verification_code")
-            self._fill_password()
-            self._accept_terms_if_present()
-            self._click_signup()
-            self._handle_captcha("after_signup")
-            self._verify_registration_success()
+            self._run_registration_checkpoints()
+        except CheckpointAlreadyComplete:
+            self.debug.step("success_verification_passed", url=getattr(self.driver, "current_url", ""))
         except Exception as exc:
             self.debug.warning("failed", reason=str(exc))
             if self.driver:
@@ -81,6 +74,96 @@ class RegisterMexcScenario(BaseScenario):
             message=f"MEXC registration complete for {self.debug.masked_email}",
             data={"password": self.default_password, "account_email": self.account.email},
         )
+
+    def _run_registration_checkpoints(self) -> None:
+        runner = CheckpointRunner(
+            driver_getter=lambda: self.driver,
+            analyzer=self.state_analyzer,
+            debug=self.debug,
+            manual_assist_handler=self.manual_assist_handler,
+            network_recovery_handler=self.network_recovery_handler,
+            captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
+            default_terminal_states={"register_completed"},
+        )
+        self.checkpoint_runner = runner
+        runner.run(self._registration_checkpoints())
+
+    def _registration_checkpoints(self) -> list[ScenarioCheckpoint]:
+        terminal = {"register_completed"}
+        after_email = {"register_code", "register_password", *terminal}
+        after_code = {"register_password", *terminal}
+        return [
+            ScenarioCheckpoint(
+                name="navigate",
+                action=self._navigate_to_signup,
+                allowed_states={"unknown", "network_loading", "network_error", "wrong_browser_tab"},
+                done_states={"register_email", *after_email},
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="email",
+                action=self._fill_email,
+                allowed_states={"register_email"},
+                done_states=after_email,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="referral",
+                action=self._fill_referral_code,
+                allowed_states={"register_email"},
+                done_states=after_email,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="continue",
+                action=self._click_continue,
+                allowed_states={"register_email"},
+                done_states=after_email,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="email_code_request",
+                action=self._request_verification_code,
+                allowed_states={"register_code"},
+                done_states=after_code,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="email_code_submit",
+                action=self._complete_verification_code_step,
+                allowed_states={"register_code"},
+                done_states=after_code,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="password",
+                action=self._fill_password,
+                allowed_states={"register_password"},
+                done_states=terminal,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+            ScenarioCheckpoint(
+                name="final_submit",
+                action=self._submit_final_registration,
+                allowed_states={"register_password"},
+                done_states=terminal,
+                terminal_states=terminal,
+                recover_wrong_tab=self._navigate_to_signup,
+            ),
+        ]
+
+    def _submit_final_registration(self) -> None:
+        self._accept_terms_if_present()
+        self._click_signup()
+        self._handle_captcha("after_signup")
+        self._verify_registration_success()
 
     def _navigate_to_signup(self) -> None:
         self.debug.step("navigate_start", url="https://www.mexc.com/register")
@@ -101,17 +184,17 @@ class RegisterMexcScenario(BaseScenario):
 
     def _fill_referral_code(self) -> None:
         self.debug.step("referral_input_lookup_before_expand")
-        element = self._find_visible(self.selectors.referral_input, timeout=4)
-        if element is None:
-            self.debug.step("referral_expand_attempt")
-            self._expand_referral_code()
-            element = self._find_visible(self.selectors.referral_input, timeout=8)
+        element = self._find_visible(self.selectors.referral_input, timeout=1)
         if element is None:
             self.debug.step("referral_reveal_hidden_attempt")
             self._reveal_hidden_referral_input()
-            element = self._find_visible(self.selectors.referral_input, timeout=4)
+            element = self._find_visible(self.selectors.referral_input, timeout=2)
         if element is None:
-            element = self._find_present(self.selectors.referral_input, timeout=2)
+            self.debug.step("referral_expand_attempt")
+            self._expand_referral_code()
+            element = self._find_visible(self.selectors.referral_input, timeout=3)
+        if element is None:
+            element = self._find_present(self.selectors.referral_input, timeout=1)
             if element is None:
                 debug = self._debug_referral_elements()
                 self.debug.save_page_probe(self.driver, "referral_probe_not_found.json")
@@ -402,10 +485,50 @@ class RegisterMexcScenario(BaseScenario):
     def _click_continue(self) -> None:
         self.debug.step("continue_click_attempt")
         self.email_code_not_before_ts = time.time() - 10
-        if not self._click_optional(self.selectors.continue_button, timeout=15):
-            raise RuntimeError("Continue button was not found or is not clickable")
-        time.sleep(2)
-        self.debug.step("continue_clicked", url=self.driver.current_url)
+        last_state = None
+        for attempt in range(1, 4):
+            self._raise_if_cancelled()
+            self._blur_active_element()
+            if not self._click_optional(self.selectors.continue_button, timeout=5):
+                raise RuntimeError("Continue button was not found or is not clickable")
+            last_state = self._wait_for_continue_transition(timeout=5)
+            if last_state.name in ("register_code", "register_password", "register_completed", "captcha"):
+                self.debug.step(
+                    "continue_clicked",
+                    url=self.driver.current_url,
+                    state=last_state.name,
+                    attempt=attempt,
+                )
+                return
+            self.debug.warning(
+                "continue_no_transition",
+                attempt=attempt,
+                state=last_state.name,
+                confidence=last_state.confidence,
+            )
+            time.sleep(0.8)
+        state_name = last_state.name if last_state else "unknown"
+        raise RuntimeError(f"Continue button clicked, but registration did not advance from {state_name}")
+
+    def _wait_for_continue_transition(self, timeout: int = 5):
+        deadline = time.time() + timeout
+        last_state = self.state_analyzer.analyze(self.driver)
+        while time.time() < deadline:
+            self._raise_if_cancelled()
+            state = self.state_analyzer.analyze(self.driver)
+            last_state = state
+            if state.name in ("register_code", "register_password", "register_completed", "captcha"):
+                return state
+            if state.name in ("network_loading", "network_error", "wrong_browser_tab", "browser_closed"):
+                return state
+            time.sleep(0.5)
+        return last_state
+
+    def _blur_active_element(self) -> None:
+        try:
+            self.driver.execute_script("if (document.activeElement) document.activeElement.blur();")
+        except Exception:
+            pass
 
     def _wait_for_email_code(self) -> str:
         self.debug.step(
@@ -421,6 +544,8 @@ class RegisterMexcScenario(BaseScenario):
             poll_interval=5,
             not_before_ts=self.email_code_not_before_ts,
             ignored_codes=self.tried_email_codes,
+            cancel_event=self.cancel_event,
+            cancel_checker=self.browser_is_closed,
         )
         self.debug.step("email_code_found", code_found=True, code_length=len(code))
         return code
@@ -686,8 +811,8 @@ class RegisterMexcScenario(BaseScenario):
         self.debug.step("success_verification_start")
         deadline = time.time() + 30
         while time.time() < deadline:
-            current_url = self.driver.current_url.lower()
-            if "/register" not in current_url and "/signup" not in current_url:
+            state = self.state_analyzer.analyze(self.driver)
+            if state.name == "register_completed" and state.confidence >= 0.72:
                 self.debug.step("success_verification_passed", url=self.driver.current_url)
                 return
             error_text = self._collect_error_text()
@@ -702,7 +827,18 @@ class RegisterMexcScenario(BaseScenario):
 
     def _handle_captcha(self, phase: str) -> None:
         self.debug.step("captcha_check", phase=phase)
-        if not detect_captcha(self.driver):
+        captcha_found = False
+        deadline = time.time() + 8
+        while time.time() < deadline:
+            if detect_captcha(self.driver):
+                captcha_found = True
+                break
+            state = self.state_analyzer.analyze(self.driver)
+            if state.name == "captcha" and state.confidence >= 0.72:
+                captcha_found = True
+                break
+            time.sleep(1)
+        if not captcha_found:
             self.debug.step("captcha_not_detected", phase=phase)
             return
         logger.info("CAPTCHA detected during %s for %s", phase, self.debug.masked_email)

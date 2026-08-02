@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Callable
+from typing import Any, Callable
 
 from clients.adspower import AdsPowerClient
 from clients.icloud_hme import ICloudHMEClient
@@ -38,7 +38,10 @@ class ProfileCreationService:
         self.settings = settings
         self.icloud_client_factory = icloud_client_factory
 
-    def create_with_icloud(self) -> ProfileCreationResult:
+    def create_with_icloud(
+        self,
+        progress_callback: Callable[[str, dict[str, Any]], None] | None = None,
+    ) -> ProfileCreationResult:
         icloud_profile_id = (self.settings.get("icloud_ads_profile_id", "") or "").strip()
         if not icloud_profile_id:
             return ProfileCreationResult(
@@ -52,6 +55,8 @@ class ProfileCreationService:
         logger.info("Creating iCloud HME mask using profile %s", icloud_profile_id)
         try:
             icloud = self.icloud_client_factory(self.adspower, icloud_profile_id)
+            if hasattr(icloud, "set_progress_callback"):
+                icloud.set_progress_callback(progress_callback)
             label = (self.settings.get("icloud_hme_label", "") or "").strip() or None
             email = icloud.create_mask(label=label)
         except Exception as exc:

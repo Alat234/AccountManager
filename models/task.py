@@ -14,3 +14,9 @@ class AutomationTask:
     completed_at: datetime | None = None
     result_message: str = ""
     result_data: str = ""
+    current_step: str = ""
+    last_error: str = ""
+    retry_count: int = 0
+    recoverable: bool = False
+    requires_user_confirmation: bool = False
+    resume_data: str = ""

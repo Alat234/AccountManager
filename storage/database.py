@@ -10,6 +10,7 @@ from models.account import (
     Account,
 )
 from models.mailbox import Mailbox
+from models.operation_event import OperationEvent
 from models.task import AutomationTask
 
 
@@ -58,7 +59,27 @@ class DatabaseManager:
                 completed_at TEXT,
                 result_message TEXT DEFAULT '',
                 result_data TEXT DEFAULT '',
+                current_step TEXT DEFAULT '',
+                last_error TEXT DEFAULT '',
+                retry_count INTEGER DEFAULT 0,
+                recoverable INTEGER DEFAULT 0,
+                requires_user_confirmation INTEGER DEFAULT 0,
+                resume_data TEXT DEFAULT '',
                 FOREIGN KEY (account_email) REFERENCES accounts(email)
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS operation_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                task_id TEXT DEFAULT '',
+                account_email TEXT DEFAULT '',
+                event_type TEXT NOT NULL DEFAULT 'general',
+                level TEXT NOT NULL DEFAULT 'info',
+                title TEXT DEFAULT '',
+                message TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL,
+                read_at TEXT,
+                data TEXT DEFAULT ''
             )
         ''')
         cursor.execute('''
@@ -117,6 +138,23 @@ class DatabaseManager:
             cursor.execute("ALTER TABLE accounts ADD COLUMN ads_profile_name TEXT DEFAULT ''")
         if "ads_conflict_reason" not in columns:
             cursor.execute("ALTER TABLE accounts ADD COLUMN ads_conflict_reason TEXT DEFAULT ''")
+
+        cursor.execute("PRAGMA table_info(automation_tasks)")
+        task_columns = {row[1] for row in cursor.fetchall()}
+        if "current_step" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN current_step TEXT DEFAULT ''")
+        if "last_error" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN last_error TEXT DEFAULT ''")
+        if "retry_count" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN retry_count INTEGER DEFAULT 0")
+        if "recoverable" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN recoverable INTEGER DEFAULT 0")
+        if "requires_user_confirmation" not in task_columns:
+            cursor.execute(
+                "ALTER TABLE automation_tasks ADD COLUMN requires_user_confirmation INTEGER DEFAULT 0"
+            )
+        if "resume_data" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN resume_data TEXT DEFAULT ''")
 
     # ── Account methods (new, return dataclasses) ──
 
@@ -389,9 +427,11 @@ class DatabaseManager:
         cursor = conn.cursor()
         cursor.execute("DELETE FROM account_ads_tags WHERE account_email=?", (email,))
         for tid in tag_ids:
+            if not tid:
+                continue
             cursor.execute(
                 "INSERT OR IGNORE INTO account_ads_tags (account_email, tag_id) VALUES (?, ?)",
-                (email, tid),
+                (email, str(tid)),
             )
         conn.commit()
         conn.close()
@@ -401,9 +441,12 @@ class DatabaseManager:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT t.id, t.name, t.color
-            FROM ads_tags t
-            JOIN account_ads_tags at ON t.id = at.tag_id
+            SELECT
+                at.tag_id AS id,
+                COALESCE(NULLIF(t.name, ''), at.tag_id) AS name,
+                COALESCE(t.color, '') AS color
+            FROM account_ads_tags at
+            LEFT JOIN ads_tags t ON t.id = at.tag_id
             WHERE at.account_email = ?
         """, (email,))
         rows = cursor.fetchall()
@@ -426,9 +469,13 @@ class DatabaseManager:
         cursor.execute("SELECT * FROM accounts ORDER BY email COLLATE NOCASE")
         account_rows = cursor.fetchall()
         cursor.execute("""
-            SELECT at.account_email, t.id, t.name, t.color
+            SELECT
+                at.account_email,
+                at.tag_id AS id,
+                COALESCE(NULLIF(t.name, ''), at.tag_id) AS name,
+                COALESCE(t.color, '') AS color
             FROM account_ads_tags at
-            JOIN ads_tags t ON t.id = at.tag_id
+            LEFT JOIN ads_tags t ON t.id = at.tag_id
         """)
         tag_rows = cursor.fetchall()
         conn.close()
@@ -459,10 +506,15 @@ class DatabaseManager:
         cursor.execute(
             '''INSERT INTO automation_tasks
                (id, account_email, scenario_type, status, created_at, completed_at,
-                result_message, result_data)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+                result_message, result_data, current_step, last_error, retry_count,
+                recoverable, requires_user_confirmation, resume_data)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (task.id, task.account_email, task.scenario_type, task.status,
-             task.created_at.isoformat(), None, task.result_message, task.result_data),
+             task.created_at.isoformat(), None, task.result_message, task.result_data,
+             task.current_step, task.last_error, task.retry_count,
+             1 if task.recoverable else 0,
+             1 if task.requires_user_confirmation else 0,
+             task.resume_data),
         )
         conn.commit()
         conn.close()
@@ -472,11 +524,16 @@ class DatabaseManager:
         cursor = conn.cursor()
         cursor.execute(
             '''UPDATE automation_tasks
-               SET status=?, completed_at=?, result_message=?, result_data=?
+               SET status=?, completed_at=?, result_message=?, result_data=?,
+                   current_step=?, last_error=?, retry_count=?, recoverable=?,
+                   requires_user_confirmation=?, resume_data=?
                WHERE id=?''',
             (task.status,
              task.completed_at.isoformat() if task.completed_at else None,
-             task.result_message, task.result_data, task.id),
+             task.result_message, task.result_data, task.current_step,
+             task.last_error, task.retry_count, 1 if task.recoverable else 0,
+             1 if task.requires_user_confirmation else 0, task.resume_data,
+             task.id),
         )
         conn.commit()
         conn.close()
@@ -506,5 +563,102 @@ class DatabaseManager:
                 completed_at=completed,
                 result_message=r["result_message"] or "",
                 result_data=r["result_data"] or "",
+                current_step=r["current_step"] or "",
+                last_error=r["last_error"] or "",
+                retry_count=r["retry_count"] or 0,
+                recoverable=bool(r["recoverable"] or 0),
+                requires_user_confirmation=bool(r["requires_user_confirmation"] or 0),
+                resume_data=r["resume_data"] or "",
             ))
         return result
+
+    # Operation event methods
+
+    def add_operation_event(self, event: OperationEvent) -> int:
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            '''INSERT INTO operation_events
+               (task_id, account_email, event_type, level, title, message,
+                created_at, read_at, data)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+            (
+                event.task_id,
+                event.account_email,
+                event.event_type,
+                event.level,
+                event.title,
+                event.message,
+                event.created_at.isoformat(),
+                event.read_at.isoformat() if event.read_at else None,
+                event.data,
+            ),
+        )
+        event_id = int(cursor.lastrowid)
+        conn.commit()
+        conn.close()
+        return event_id
+
+    def get_operation_events(
+        self,
+        *,
+        account_email: str = "",
+        task_id: str = "",
+        limit: int = 100,
+    ) -> list[OperationEvent]:
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        where = []
+        params: list[object] = []
+        if account_email:
+            where.append("account_email = ?")
+            params.append(account_email)
+        if task_id:
+            where.append("task_id = ?")
+            params.append(task_id)
+        sql = "SELECT * FROM operation_events"
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        sql += " ORDER BY created_at DESC, id DESC LIMIT ?"
+        params.append(limit)
+        cursor.execute(sql, params)
+        rows = cursor.fetchall()
+        conn.close()
+        events = []
+        for r in rows:
+            read_at = datetime.fromisoformat(r["read_at"]) if r["read_at"] else None
+            events.append(OperationEvent(
+                id=r["id"],
+                task_id=r["task_id"] or "",
+                account_email=r["account_email"] or "",
+                event_type=r["event_type"] or "general",
+                level=r["level"] or "info",
+                title=r["title"] or "",
+                message=r["message"] or "",
+                created_at=datetime.fromisoformat(r["created_at"]),
+                read_at=read_at,
+                data=r["data"] or "",
+            ))
+        return events
+
+    def prune_operation_events(self, account_email: str, keep: int = 1000) -> None:
+        if not account_email:
+            return
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            '''
+            DELETE FROM operation_events
+            WHERE account_email = ?
+              AND id NOT IN (
+                  SELECT id FROM operation_events
+                  WHERE account_email = ?
+                  ORDER BY created_at DESC, id DESC
+                  LIMIT ?
+              )
+            ''',
+            (account_email, account_email, keep),
+        )
+        conn.commit()
+        conn.close()

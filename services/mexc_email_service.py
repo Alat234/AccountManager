@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 import time
+from collections.abc import Callable
+from threading import Event
 
 from email_parser import fetch_mexc_codes_all_folders
 
@@ -71,6 +73,8 @@ class MexcEmailCodeFetcher:
         poll_interval: float = 5.0,
         not_before_ts: float | None = None,
         ignored_codes: set[str] | None = None,
+        cancel_event: Event | None = None,
+        cancel_checker: Callable[[], bool] | None = None,
     ) -> str:
         logger.info(
             "MEXC email code polling started target=%s timeout=%s poll_interval=%s scan_limit=%s not_before=%s ignored_count=%s",
@@ -82,16 +86,30 @@ class MexcEmailCodeFetcher:
             len(ignored_codes or []),
         )
         deadline = time.time() + timeout
+
+        def stop_if_cancelled() -> None:
+            if cancel_event and cancel_event.is_set():
+                raise RuntimeError("Scenario cancelled by user")
+            if cancel_checker and cancel_checker():
+                if cancel_event:
+                    cancel_event.set()
+                raise RuntimeError("Browser tab was closed by user")
+
         while time.time() < deadline:
+            stop_if_cancelled()
             code = self.fetch_code(
                 target_email,
                 not_before_ts=not_before_ts,
                 ignored_codes=ignored_codes,
             )
+            stop_if_cancelled()
             if code:
                 return code
             logger.info("MEXC email code polling continues target=%s", self._mask_email(target_email))
-            time.sleep(poll_interval)
+            sleep_until = time.time() + poll_interval
+            while time.time() < sleep_until:
+                stop_if_cancelled()
+                time.sleep(max(0.01, min(0.25, sleep_until - time.time())))
         raise RuntimeError(f"No MEXC verification code received within {timeout}s")
 
     @staticmethod

@@ -13,8 +13,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from automation.base import BaseScenario, ScenarioResult
 from automation.captcha import detect_captcha, wait_for_captcha_solved
+from automation.checkpoints import CheckpointAlreadyComplete, CheckpointRunner, ScenarioCheckpoint
+from automation.scenarios.mexc_browser_helpers import MexcBrowserContext, ensure_mexc_logged_in
 from automation.scenarios.mexc_debug import MexcRegistrationDebug
 from automation.scenarios.mexc_selectors import Locator, MexcRegistrationSelectors
+from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +48,8 @@ class LinkMexc2faScenario(BaseScenario):
         self.email_code_not_before_ts: float | None = None
         self.tried_email_codes: set[str] = set()
         self.two_fa_secret = ""
+        self.state_analyzer = MexcPageStateAnalyzer()
+        self.checkpoint_runner: CheckpointRunner | None = None
         self.debug = MexcRegistrationDebug(
             account_email=self.account.email,
             secrets=(self.account.password, self.account.two_fa_secret),
@@ -61,15 +66,10 @@ class LinkMexc2faScenario(BaseScenario):
         self.debug.step("2fa_start")
 
         try:
-            self._open_security_page()
-            self._ensure_logged_in()
-            self._click_next("download_authenticator")
-            self.two_fa_secret = self._extract_two_fa_secret()
-            self.debug.with_secrets(self.two_fa_secret)
-            self._save_secret_early()
-            self._click_next("backup_key")
-            self._complete_security_verification()
-            self._verify_success()
+            self._run_2fa_checkpoints()
+        except CheckpointAlreadyComplete:
+            self.two_fa_secret = self.two_fa_secret or getattr(self.account, "two_fa_secret", "")
+            self.debug.step("2fa_success_text_detected")
         except Exception as exc:
             self.debug.warning("2fa_failed", reason=str(exc))
             if self.driver:
@@ -83,6 +83,96 @@ class LinkMexc2faScenario(BaseScenario):
             data={"two_fa_secret": self.two_fa_secret, "account_email": self.account.email},
         )
 
+    def _run_2fa_checkpoints(self) -> None:
+        runner = CheckpointRunner(
+            driver_getter=lambda: self.driver,
+            analyzer=self.state_analyzer,
+            debug=self.debug,
+            manual_assist_handler=self.manual_assist_handler,
+            network_recovery_handler=self.network_recovery_handler,
+            captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
+            default_terminal_states={"twofa_completed"},
+        )
+        self.checkpoint_runner = runner
+        runner.run(self._2fa_checkpoints())
+
+    def _2fa_checkpoints(self) -> list[ScenarioCheckpoint]:
+        terminal = {"twofa_completed"}
+        setup_states = {"twofa_intro", "twofa_secret", "security_modal_email", "security_modal_totp", *terminal}
+        security_states = {"security_modal_email", "security_modal_totp", *terminal}
+        return [
+            ScenarioCheckpoint(
+                name="open_security_page",
+                action=self._open_security_page,
+                allowed_states={
+                    "unknown",
+                    "login",
+                    "register_completed",
+                    "api_form",
+                    "network_loading",
+                    "network_error",
+                    "wrong_browser_tab",
+                },
+                done_states=setup_states,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+            ScenarioCheckpoint(
+                name="ensure_login",
+                action=self._ensure_logged_in,
+                allowed_states={"login", "unknown", "network_loading", "network_error"},
+                done_states=setup_states,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+                action_already_handles_captcha=True,
+            ),
+            ScenarioCheckpoint(
+                name="download_authenticator",
+                action=lambda: self._click_next("download_authenticator"),
+                allowed_states={"twofa_intro"},
+                done_states={"twofa_secret", *security_states},
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+            ScenarioCheckpoint(
+                name="extract_secret",
+                action=self._extract_and_save_secret,
+                allowed_states={"twofa_secret"},
+                done_states=security_states,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+            ScenarioCheckpoint(
+                name="backup_key",
+                action=lambda: self._click_next("backup_key"),
+                allowed_states={"twofa_secret"},
+                done_states=security_states,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+            ScenarioCheckpoint(
+                name="security_verification",
+                action=self._complete_security_verification,
+                allowed_states={"security_modal_email", "security_modal_totp"},
+                done_states=terminal,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+            ScenarioCheckpoint(
+                name="verify_success",
+                action=self._verify_success,
+                allowed_states={"security_modal_email", "security_modal_totp", "unknown", "twofa_secret"},
+                done_states=terminal,
+                terminal_states=terminal,
+                recover_wrong_tab=self._open_security_page,
+            ),
+        ]
+
+    def _extract_and_save_secret(self) -> None:
+        self.two_fa_secret = self._extract_two_fa_secret()
+        self.debug.with_secrets(self.two_fa_secret)
+        self._save_secret_early()
+
     def _open_security_page(self) -> None:
         self.debug.step("2fa_open_security_page", url=self.SECURITY_URL)
         self.driver.get(self.SECURITY_URL)
@@ -93,21 +183,24 @@ class LinkMexc2faScenario(BaseScenario):
         self.debug.step("2fa_page_loaded", url=self.driver.current_url, title=self.driver.title)
 
     def _ensure_logged_in(self) -> None:
-        if not self._is_login_required():
-            self.debug.step("2fa_login_not_required")
-            return
-
-        self.debug.step("2fa_login_required")
-        self._login()
-        self._handle_captcha("after_login")
-        self.driver.get(self.SECURITY_URL)
-        WebDriverWait(self.driver, 30).until(
-            lambda driver: driver.execute_script("return document.readyState") == "complete"
+        ctx = MexcBrowserContext(
+            driver=self.driver,
+            account=self.account,
+            debug=self.debug,
+            email_fetcher=self.email_fetcher,
+            captcha_service=self.captcha_service,
+            task_id=self.task_id,
+            on_captcha_detected=self.on_captcha_detected,
+            on_email_timeout=self.on_email_timeout,
+            manual_assist_handler=self.manual_assist_handler,
+            network_recovery_handler=self.network_recovery_handler,
+            state_analyzer=self.state_analyzer,
+            cancel_event=self.cancel_event,
+            cancel_checker=self.browser_is_closed,
         )
-        time.sleep(2)
-        if self._is_login_required():
-            raise RuntimeError("MEXC login did not complete; security page is still unavailable")
-        self.debug.step("2fa_login_completed")
+        ensure_mexc_logged_in(ctx, self.SECURITY_URL, "2fa")
+        self.email_code_not_before_ts = ctx.email_code_not_before_ts
+        self.tried_email_codes = ctx.tried_email_codes
 
     def _is_login_required(self) -> bool:
         current_url = (self.driver.current_url or "").lower()
@@ -202,20 +295,37 @@ class LinkMexc2faScenario(BaseScenario):
         self.on_secret_found(self.account.email, self.two_fa_secret)
         self.debug.step("2fa_secret_early_save_done")
 
+    def _ensure_two_fa_secret_available(self) -> None:
+        if self.two_fa_secret:
+            return
+        saved_secret = (getattr(self.account, "two_fa_secret", "") or "").strip()
+        if saved_secret:
+            self.two_fa_secret = saved_secret
+            self.debug.with_secrets(self.two_fa_secret)
+            self.debug.step("2fa_secret_reused_from_account", secret_length=len(self.two_fa_secret))
+            return
+        raise RuntimeError(
+            "MEXC 2FA secret key is not available. Return to the backup key step or save the secret before continuing."
+        )
+
     def _complete_security_verification(self) -> None:
         self.debug.step("2fa_security_verification_start")
+        self._ensure_two_fa_secret_available()
         if not self._click_get_code_if_active(timeout=30):
             self.debug.save_page_probe(self.driver, "2fa_get_code_not_found.json")
             raise RuntimeError("MEXC 2FA Get Code button was not found or was not clickable")
+        self._handle_captcha("2fa_security_after_get_code")
 
         email_code = self._wait_for_email_code()
         self.tried_email_codes.add(email_code)
         self._fill_email_verification_code(email_code)
         self._click_security_submit("email_code")
+        self._handle_captcha("2fa_security_after_email_submit")
         self._wait_for_email_step_to_finish()
         self._wait_for_totp_step()
         self._fill_totp_verification_code()
         self._click_security_submit("totp_code")
+        self._handle_captcha("2fa_security_after_totp_submit")
         time.sleep(4)
         self.debug.step("2fa_security_verification_submitted")
 
@@ -617,6 +727,8 @@ class LinkMexc2faScenario(BaseScenario):
                     poll_interval=5,
                     not_before_ts=self.email_code_not_before_ts,
                     ignored_codes=self.tried_email_codes,
+                    cancel_event=self.cancel_event,
+                    cancel_checker=self.browser_is_closed,
                 )
             except RuntimeError as exc:
                 if "No MEXC verification code received within 180s" not in str(exc):
@@ -880,7 +992,20 @@ class LinkMexc2faScenario(BaseScenario):
 
     def _handle_captcha(self, phase: str) -> None:
         self.debug.step("2fa_captcha_check", phase=phase)
-        if not detect_captcha(self.driver):
+        captcha_found = False
+        deadline = time.time() + 8
+        while time.time() < deadline:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
+            if detect_captcha(self.driver):
+                captcha_found = True
+                break
+            state = self.state_analyzer.analyze(self.driver)
+            if state.name == "captcha" and state.confidence >= 0.72:
+                captcha_found = True
+                break
+            time.sleep(1)
+        if not captcha_found:
             self.debug.step("2fa_captcha_not_detected", phase=phase)
             return
         logger.info("CAPTCHA detected during %s for %s", phase, self.debug.masked_email)

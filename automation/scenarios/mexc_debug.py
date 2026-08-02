@@ -6,7 +6,7 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from selenium.webdriver.remote.webdriver import WebDriver
 
@@ -29,6 +29,7 @@ class MexcRegistrationDebug:
         self.secrets = tuple(secret for secret in secrets if secret)
         self.root_dir = Path(root_dir)
         self._artifact_dir: Path | None = None
+        self.progress_reporter: Callable[[str, dict[str, Any], str], None] | None = None
 
     @staticmethod
     def mask_email(email: str) -> str:
@@ -49,6 +50,12 @@ class MexcRegistrationDebug:
     def with_secrets(self, *secrets: str) -> None:
         self.secrets = tuple(secret for secret in (*self.secrets, *secrets) if secret)
 
+    def bind_progress_reporter(
+        self,
+        reporter: Callable[[str, dict[str, Any], str], None] | None,
+    ) -> None:
+        self.progress_reporter = reporter
+
     def step(self, name: str, **fields: Any) -> None:
         safe_fields = {key: self._redact(value) for key, value in fields.items()}
         logger.info(
@@ -58,6 +65,7 @@ class MexcRegistrationDebug:
             self.task_id or "-",
             safe_fields,
         )
+        self._report(name, safe_fields, "info")
 
     def warning(self, name: str, **fields: Any) -> None:
         safe_fields = {key: self._redact(value) for key, value in fields.items()}
@@ -68,6 +76,7 @@ class MexcRegistrationDebug:
             self.task_id or "-",
             safe_fields,
         )
+        self._report(name, safe_fields, "warning")
 
     def save_failure_artifacts(self, driver: WebDriver, reason: str) -> Path:
         artifact_dir = self.artifact_dir
@@ -211,6 +220,14 @@ class MexcRegistrationDebug:
             json.dumps(self._redact(data), ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+
+    def _report(self, name: str, fields: dict[str, Any], level: str) -> None:
+        if not self.progress_reporter:
+            return
+        try:
+            self.progress_reporter(name, fields, level)
+        except Exception:
+            logger.debug("MEXC progress reporter failed", exc_info=True)
 
     def _redact(self, value: Any) -> Any:
         if isinstance(value, dict):
