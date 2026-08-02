@@ -1,0 +1,342 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg _wrapper_1oaud_9 _pressedButton_vrfeh_39 _blackButton_vrfeh_44 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 638,
+        "y": 160
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue with Google",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block _otherLoginItem_vrfeh_53 _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 638,
+        "y": 220
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue with Apple",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block ant-dropdown-trigger _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 638,
+        "y": 280
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "More Options",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg _buttonWrapperBtn_83t58_1 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 638,
+        "y": 476
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue",
+      "type": "submit",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 958,
+        "y": 516
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [
+    {
+      "className": "L5Fo6c-PQbLGe",
+      "id": "gsi_***CODE***_***CODE***",
+      "name": "",
+      "src": "https://accounts.google.com/gsi/button?theme=outline&size=large&width=600px&height=48px&click_listener=()%3D%3E%7Bl()%2Cs()%7D&is_fedcm_supported=true&client_id=643629201101-rqafcu4qpoipfcstq29i8cd0gjbeea90.apps.googleusercontent.com&iframe_id=gsi_***CODE***_***CODE***&cas=HphACy4LFPrnc0c%2B7oi%2BsKvRcnYd9AtXQeGOOXxFo64",
+      "title": "Button „Über Google anmelden“"
+    }
+  ],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "mx_sign_account_mixed_input",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 46,
+        "width": 310,
+        "x": 650,
+        "y": 379
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 704,
+        "width": 1023,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "index-module-scss-module__ZpoVbW__signPageContainer",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 704,
+        "width": 1023,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "index-module-scss-module__ZpoVbW__signBox index-module-scss-module__ZpoVbW__signBoxNotForm index-module-scss-module__ZpoVbW__signPageBox",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 704,
+        "width": 1023,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_signComponent_q25hl_1 global_componentsSignComponent global_componentsSignComponentHasForm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 656,
+        "width": 1100,
+        "x": -38,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_signForm_q25hl_15 global_componentsSignForm _signFormSignUpAccount_q25hl_23",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 624,
+        "width": 440,
+        "x": 598,
+        "y": 56
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_form_cxert_1 global_componentsForm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 544,
+        "width": 360,
+        "x": 638,
+        "y": 96
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready have an account? Log in now",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-form-item global__inviteCodeInput _inviteCodeInput_ia9k4_1 _inviteCodeInputHide_ia9k4_58 _inviteCodeInputZ_ia9k4_4",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 638,
+        "y": 438
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-row ant-form-item-row",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 638,
+        "y": 438
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-col ant-form-item-label",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 638,
+        "y": 438
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "full-sign-up-account-form_inviteCode",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 173,
+        "x": 638,
+        "y": 438
+      },
+      "role": "",
+      "tag": "LABEL",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_inviteCodeCheckLabel_ia9k4_15 _inviteCodeToggle_ia9k4_89",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 173,
+        "x": 638,
+        "y": 438
+      },
+      "role": "",
+      "tag": "SPAN",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC",
+  "url": "https://www.mexc.com/register?previous=%2F"
+}

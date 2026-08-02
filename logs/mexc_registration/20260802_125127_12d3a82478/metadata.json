@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-08-02T12:51:27",
+  "task_id": "dc0ab9bd7845",
+  "account": "w***y@icloud.com",
+  "reason": "HTTPConnectionPool(host='localhost', port=51476): Read timed out. (read timeout=120)",
+  "url": "https://www.mexc.com/register",
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC"
+}

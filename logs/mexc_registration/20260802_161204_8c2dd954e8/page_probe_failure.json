@@ -1,0 +1,315 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-sm MBiz__depositButton___ohrRe _HeaderDepositButton_sd0cd_7 MBiz__hasPopover___bEWIP",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 32,
+        "width": 95,
+        "x": 1143,
+        "y": 14
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Deposit",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 157,
+        "x": 32,
+        "y": -376
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Verify via Web",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 154,
+        "x": 206,
+        "y": -376
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Verify via App",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 197,
+        "x": 449,
+        "y": -377
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Verify via Web",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 197,
+        "x": 663,
+        "y": -377
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Verify via App",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "false",
+      "className": "ant-collapse-header",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 1176,
+        "x": 32,
+        "y": 146
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "Why is KYC verification necessary?",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "false",
+      "className": "ant-collapse-header",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 1176,
+        "x": 32,
+        "y": 199
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "How to complete personal KYC verification?",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "false",
+      "className": "ant-collapse-header",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 1176,
+        "x": 32,
+        "y": 251
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "What documents can I use to complete KYC verification?",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "false",
+      "className": "ant-collapse-header",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 1176,
+        "x": 32,
+        "y": 304
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "Why did my KYC verification fail?",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 1152,
+        "y": 398
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-sm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 23,
+        "width": 92,
+        "x": 1142,
+        "y": 18
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 0
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "remote-footer-container",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1217,
+        "x": 0,
+        "y": 488
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_wrapper_1fdt2_2 theme-dark",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 858,
+        "width": 1217,
+        "x": 0,
+        "y": 488
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1217,
+        "x": 0,
+        "y": 553
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_top_1fdt2_60",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 729,
+        "width": 1217,
+        "x": 0,
+        "y": 553
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Community\nDownload App\nScan to Download App\nAbout\nAbout MEXC\nWhy MEXC\nProof of Trust\nMEXC Verify\nMEXC Transparency Hub\nMEXC Community\nMEXC Event Map\nMEXC Ventures\nMEXC Foundation\nC",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_innerDrop_1fdt2_41",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 252,
+        "width": 165,
+        "x": 588,
+        "y": 594
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Affiliate Program\nReferral Program\nP2P Merchant Program\nListing Application\nInstitutional Services\nAPI Services\nPartner Links",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "Account Security User Center | MEXC Exchange",
+  "url": "https://www.mexc.com/user/id-auth"
+}

@@ -1,0 +1,3 @@
+{
+  "error": "InvalidSessionIdException: Message: invalid session id; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t0x7ff639f46d35\n\t0x7ff639f46ce0\n\t0x7ff63a2b9ad6\n\t0x7ff63a30594d\n\t0x7ff63a342242\n\t0x7ff63a304a55\n\t0x7ff63a33c522\n\t0x7ff63a33b787\n\t0x7ff63a279479\n\t0x7ff63a9a77b6\n\t0x7ff639f19533\n\t0x7ff63a7b7b3b\n\t0x7ff63a94eb59\n\t0x7ff63a59af03\n\t0x7ff639fea9fe\n\t0x7ff63a277be5\n\t0x7ff63a961f88\n\t0x7fffbf71e957\n\t0x7fffc09cad6c\n"
+}
