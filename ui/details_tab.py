@@ -2,9 +2,9 @@ import customtkinter as ctk
 
 from models.account import Account
 from storage.constants import (
-    ADS_TAG_COLORS,
-    ADS_TAG_DEFAULT_COLOR,
     STATUSES,
+    normalize_ads_tag_color,
+    readable_text_color,
 )
 from ui.widgets import EmailCodesWidget, TwoFactorAuthWidget, create_entry_with_copy
 
@@ -22,6 +22,8 @@ class DetailsTab:
         on_autosave=None,
         on_create_2fa=None,
         on_create_api=None,
+        on_read_latest_deposit=None,
+        on_find_deposit_screenshot=None,
         on_remark_save=None,
     ):
         self.parent = parent
@@ -29,6 +31,8 @@ class DetailsTab:
         self.on_autosave = on_autosave
         self.on_create_2fa = on_create_2fa
         self.on_create_api = on_create_api
+        self.on_read_latest_deposit = on_read_latest_deposit
+        self.on_find_deposit_screenshot = on_find_deposit_screenshot
         self.on_remark_save = on_remark_save
         self._autosave_after_id = None
         self._current_email = None
@@ -167,6 +171,24 @@ class DetailsTab:
             command=self._on_create_api,
         )
         self.btn_create_api.grid(row=0, column=2, padx=(5, 0))
+        self.btn_latest_deposit = ctk.CTkButton(
+            frame_api,
+            text="Last Deposit",
+            width=105,
+            fg_color="#2f6f52",
+            hover_color="#255842",
+            command=self._on_read_latest_deposit,
+        )
+        self.btn_latest_deposit.grid(row=0, column=3, padx=(5, 0))
+        self.btn_find_deposit_screenshot = ctk.CTkButton(
+            frame_api,
+            text="Find Screenshot",
+            width=120,
+            fg_color="#7a5c1e",
+            hover_color="#5d4617",
+            command=self._on_find_deposit_screenshot,
+        )
+        self.btn_find_deposit_screenshot.grid(row=0, column=4, padx=(5, 0))
         frame_api.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 10))
 
         frame_secret, self.entry_secret = create_entry_with_copy(access_inner, self.copy_func)
@@ -272,14 +294,13 @@ class DetailsTab:
             ).pack(side="left", padx=10, pady=7)
             return
         for tag in tags:
-            color = ADS_TAG_COLORS.get(tag.get("color", ""), ADS_TAG_DEFAULT_COLOR)
-            text_color = "#000000" if tag.get("color") == "yellow" else "white"
+            color = normalize_ads_tag_color(tag.get("color", ""))
             ctk.CTkLabel(
                 self.tags_frame,
                 text=tag.get("name", ""),
                 fg_color=color,
                 corner_radius=4,
-                text_color=text_color,
+                text_color=readable_text_color(color),
                 font=ctk.CTkFont(size=11, weight="bold"),
                 height=22,
                 padx=6,
@@ -351,9 +372,22 @@ class DetailsTab:
             if self.on_autosave:
                 self.on_autosave(silent=True)
 
+    def dispose(self):
+        self._cancel_autosave()
+        self.two_fa_widget.stop()
+        self.email_codes_widget.stop()
+
     def _on_create_api(self):
         if self.on_create_api:
             self.on_create_api()
+
+    def _on_read_latest_deposit(self):
+        if self.on_read_latest_deposit:
+            self.on_read_latest_deposit()
+
+    def _on_find_deposit_screenshot(self):
+        if self.on_find_deposit_screenshot:
+            self.on_find_deposit_screenshot()
 
     def _on_remark_save(self):
         if self.on_remark_save and self._current_email:

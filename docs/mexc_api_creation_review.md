@@ -76,3 +76,11 @@
 Основний API flow реалізований: login check, 2FA precondition, точні permissions, email verification, fresh 2FA, extraction API/secret, запис у desktop app і confirm на MEXC.
 
 Окремо додано доказову перевірку referral code через `referral_value_verified`, щоб у логах було видно не просто факт вводу, а факт прийняття значення полем.
+
+## RK Update
+
+For RK deposit screenshot search, generated MEXC API keys must include read-only
+access to deposit/withdraw history. The API creation scenario now selects the
+withdraw history read permission when MEXC exposes it as `SPOT_WITHDRAW_R` or
+`SPOT_WITHDRAW_READ`. This permission is intended for history lookup only, not
+withdrawal creation.

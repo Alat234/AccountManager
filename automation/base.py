@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from clients.adspower_selenium import open_adspower_selenium_driver
+from automation.resource_monitor import emit_resource_event
 from automation.recovery import ManualAssistResult, PageState
 
 if TYPE_CHECKING:
@@ -54,6 +55,7 @@ class BaseScenario(ABC):
     def execute(self) -> ScenarioResult:
         try:
             self._log_step("execute_start")
+            self._log_resource_event("execute_start")
             self._raise_if_cancelled()
             self._start_browser()
             self._raise_if_cancelled()
@@ -64,10 +66,12 @@ class BaseScenario(ABC):
                 success=result.success,
                 message=result.message,
             )
+            self._log_resource_event("execute_done", success=result.success)
             return result
         except Exception as e:
             logger.exception("Scenario failed for %s", self.account.email)
             self._log_step("execute_failed", error=str(e))
+            self._log_resource_event("execute_failed", error=str(e)[:500])
             return ScenarioResult(success=False, message=str(e))
         finally:
             if self.auto_close:
@@ -134,6 +138,7 @@ class BaseScenario(ABC):
             raise RuntimeError("Account has no ads_profile_id")
 
         self._log_step("browser_start_requested", profile_id=profile_id)
+        self._log_resource_event("browser_start_requested", profile_id=profile_id)
         self.driver = open_adspower_selenium_driver(
             self.adspower,
             profile_id,
@@ -145,10 +150,16 @@ class BaseScenario(ABC):
             profile_id=profile_id,
             session_id=getattr(self.driver, "session_id", ""),
         )
+        self._log_resource_event(
+            "browser_started",
+            profile_id=profile_id,
+            session_id=getattr(self.driver, "session_id", ""),
+        )
 
     def _stop_browser(self) -> None:
         profile_id = self.account.ads_profile_id
         self._log_step("browser_stop_requested", profile_id=profile_id)
+        self._log_resource_event("browser_stop_requested", profile_id=profile_id)
         if self.driver:
             try:
                 self.driver.quit()
@@ -160,6 +171,7 @@ class BaseScenario(ABC):
             self.adspower.stop_browser(profile_id)
         logger.info("Browser stopped for %s", self.account.email)
         self._log_step("browser_stopped", profile_id=profile_id)
+        self._log_resource_event("browser_stopped", profile_id=profile_id)
 
     def _take_screenshot(self) -> bytes:
         return self.driver.get_screenshot_as_png()
@@ -189,3 +201,13 @@ class BaseScenario(ABC):
                 self.progress_reporter(step, fields)
             except Exception:
                 logger.debug("Scenario progress reporter failed", exc_info=True)
+
+    def _log_resource_event(self, event: str, **fields) -> None:
+        emit_resource_event(
+            event,
+            task_id=str(getattr(self, "task_id", "") or ""),
+            scenario=type(self).__name__,
+            account_email=getattr(self.account, "email", ""),
+            driver=self.driver,
+            fields=fields,
+        )

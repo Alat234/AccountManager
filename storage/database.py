@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 
-from storage.constants import BASE_DIR
+from storage.constants import BASE_DIR, STATUS_BANNED, STATUS_LOST
 from models.account import (
     ADS_CONFLICT,
     ADS_LINKED,
@@ -252,7 +252,10 @@ class DatabaseManager:
     def get_first_email(self):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT email FROM accounts LIMIT 1")
+        cursor.execute(
+            "SELECT email FROM accounts WHERE status NOT IN (?, ?) ORDER BY email COLLATE NOCASE LIMIT 1",
+            (STATUS_BANNED, STATUS_LOST),
+        )
         row = cursor.fetchone()
         conn.close()
         return row[0] if row else None
@@ -462,11 +465,25 @@ class DatabaseManager:
         conn.close()
         return [{"id": r["id"], "name": r["name"], "color": r["color"]} for r in rows]
 
-    def get_all_accounts_with_tags(self) -> list[tuple]:
+    def get_accounts_with_tags(
+        self,
+        *,
+        archived_only: bool = False,
+        include_archive: bool = False,
+    ) -> list[tuple]:
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM accounts ORDER BY email COLLATE NOCASE")
+        sql = "SELECT * FROM accounts"
+        params: tuple[str, ...] = ()
+        if archived_only:
+            sql += " WHERE status IN (?, ?)"
+            params = (STATUS_BANNED, STATUS_LOST)
+        elif not include_archive:
+            sql += " WHERE status NOT IN (?, ?)"
+            params = (STATUS_BANNED, STATUS_LOST)
+        sql += " ORDER BY email COLLATE NOCASE"
+        cursor.execute(sql, params)
         account_rows = cursor.fetchall()
         cursor.execute("""
             SELECT
@@ -487,6 +504,9 @@ class DatabaseManager:
             )
         return [(self._row_to_account(row), tags_by_email.get(row["email"], []))
                 for row in account_rows]
+
+    def get_all_accounts_with_tags(self) -> list[tuple]:
+        return self.get_accounts_with_tags(include_archive=True)
 
     def get_ads_accounts_summary(self) -> list[tuple]:
         conn = sqlite3.connect(self.db_path)

@@ -54,9 +54,13 @@ class TwoFactorAuthWidget(ctk.CTkFrame):
         # Кеш останнього показаного стану — щоб не перемальовувати віджети щосекунди дарма
         self._last_code = None
         self._last_state = None
+        self._clock_after_id = None
         self.update_clock()
 
     def set_secret(self, secret):
+        self._cancel_clock()
+        self._last_code = None
+        self._last_state = None
         self.entry_secret.delete(0, 'end')
         if secret: self.entry_secret.insert(0, secret)
         self.update_clock()
@@ -73,6 +77,7 @@ class TwoFactorAuthWidget(ctk.CTkFrame):
             self.on_create_2fa()
 
     def update_clock(self):
+        self._clock_after_id = None
         current_secret = self.get_secret()
         if not current_secret:
             if self._last_state != "empty":
@@ -117,7 +122,23 @@ class TwoFactorAuthWidget(ctk.CTkFrame):
                     self.progress.set(0)
                     self.progress.configure(progress_color="#ff4444")
                     self.lbl_timer.configure(text="Невірний формат ключа!", text_color="#ff4444")
-        self.after(1000, self.update_clock)
+        self._schedule_clock()
+
+    def _schedule_clock(self):
+        if self._clock_after_id is None:
+            self._clock_after_id = self.after(1000, self.update_clock)
+
+    def _cancel_clock(self):
+        if self._clock_after_id is None:
+            return
+        try:
+            self.after_cancel(self._clock_after_id)
+        except Exception:
+            pass
+        self._clock_after_id = None
+
+    def stop(self):
+        self._cancel_clock()
 
 
 class EmailCodesWidget(ctk.CTkFrame):
@@ -128,6 +149,7 @@ class EmailCodesWidget(ctk.CTkFrame):
 
         self.is_fetching = False
         self.last_found_code = None  # Зберігаємо останній код, щоб не пікати двічі на одне й те саме
+        self._auto_after_id = None
 
         top_frame = ctk.CTkFrame(self, fg_color="transparent")
         top_frame.pack(fill="x", padx=10, pady=(10, 5))
@@ -155,10 +177,12 @@ class EmailCodesWidget(ctk.CTkFrame):
     def on_auto_toggle(self):
         """Обробка натискання перемикача 'Авто'"""
         if self.auto_var.get():
+            self._cancel_auto_refresh()
             self.lbl_status.configure(text="Режим очікування увімкнено...", text_color="#1fa5ff")
             if not self.is_fetching:
                 self.start_fetch_thread()
         else:
+            self._cancel_auto_refresh()
             self.lbl_status.configure(text="Авто-пошук зупинено", text_color="gray")
             self.btn_refresh.configure(state="normal")
 
@@ -257,4 +281,18 @@ class EmailCodesWidget(ctk.CTkFrame):
         # ЛОГІКА ЗУПИНКИ / ПРОДОВЖЕННЯ АВТО-ПОШУКУ
         if self.auto_var.get():
             # Запускаємо знову через 4 секунди
-            self.after(4000, self.start_fetch_thread)
+            self._cancel_auto_refresh()
+            self._auto_after_id = self.after(4000, self.start_fetch_thread)
+
+    def _cancel_auto_refresh(self):
+        if self._auto_after_id is None:
+            return
+        try:
+            self.after_cancel(self._auto_after_id)
+        except Exception:
+            pass
+        self._auto_after_id = None
+
+    def stop(self):
+        self.auto_var.set(False)
+        self._cancel_auto_refresh()

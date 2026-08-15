@@ -118,6 +118,7 @@ class CreateMexcApiScenario(BaseScenario):
             manual_assist_handler=self.manual_assist_handler,
             network_recovery_handler=self.network_recovery_handler,
             captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
+            scenario_name=type(self).__name__,
         )
         self.checkpoint_runner = runner
         runner.run(self._api_checkpoints())
@@ -276,6 +277,8 @@ class CreateMexcApiScenario(BaseScenario):
             "SPOT_ACCOUNT_W",
             "SPOT_DEAL_R",
             "SPOT_DEAL_W",
+            "SPOT_WITHDRAW_R",
+            "SPOT_WITHDRAW_READ",
             "CONTRACT_ACCOUNT_R",
             "CONTRACT_DEAL_R",
         }

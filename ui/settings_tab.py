@@ -128,20 +128,34 @@ class SettingsTab:
         if saved_password:
             self.entry_mexc_password.insert(0, saved_password)
 
+        self._label(mexc_card, "Main API Key", 3, 0)
+        self.entry_mexc_main_api_key = ctk.CTkEntry(mexc_card, show="*")
+        self.entry_mexc_main_api_key.grid(row=3, column=1, sticky="ew", padx=8, pady=6)
+        saved_main_api_key = self.settings.get("mexc_main_api_key", "")
+        if saved_main_api_key:
+            self.entry_mexc_main_api_key.insert(0, saved_main_api_key)
+
+        self._label(mexc_card, "Main Secret Key", 4, 0)
+        self.entry_mexc_main_secret_key = ctk.CTkEntry(mexc_card, show="*")
+        self.entry_mexc_main_secret_key.grid(row=4, column=1, sticky="ew", padx=8, pady=6)
+        saved_main_secret_key = self.settings.get("mexc_main_secret_key", "")
+        if saved_main_secret_key:
+            self.entry_mexc_main_secret_key.insert(0, saved_main_secret_key)
+
         self.lbl_mexc_pwd_error = ctk.CTkLabel(
             mexc_card,
             text="",
             text_color="red",
             font=ctk.CTkFont(size=11),
         )
-        self.lbl_mexc_pwd_error.grid(row=3, column=1, sticky="w", padx=8, pady=(0, 10))
+        self.lbl_mexc_pwd_error.grid(row=5, column=1, sticky="w", padx=8, pady=(0, 10))
 
         ctk.CTkButton(
             mexc_card,
             text="Зберегти MEXC",
             command=self._save_mexc_settings,
             width=150,
-        ).grid(row=1, column=2, rowspan=2, sticky="ns", padx=(8, 14), pady=6)
+        ).grid(row=1, column=2, rowspan=4, sticky="ns", padx=(8, 14), pady=6)
 
         tg_card = self._card(self.scroll, "Telegram Bot")
         tg_card.grid(row=4, column=0, sticky="ew", padx=14, pady=(0, 18))
@@ -227,6 +241,8 @@ class SettingsTab:
     def _save_mexc_settings(self):
         referral_code = self.entry_mexc_referral.get().strip()
         password = self.entry_mexc_password.get().strip()
+        main_api_key = self.entry_mexc_main_api_key.get().strip()
+        main_secret_key = self.entry_mexc_main_secret_key.get().strip()
 
         if password:
             from utils.validators import PasswordValidator
@@ -239,6 +255,8 @@ class SettingsTab:
         self.lbl_mexc_pwd_error.configure(text="")
         self.settings.set("mexc_referral_code", referral_code)
         self.settings.set("mexc_default_password", password)
+        self.settings.set("mexc_main_api_key", main_api_key)
+        self.settings.set("mexc_main_secret_key", main_secret_key)
         self.show_status("MEXC налаштування збережено!", "green")
 
     def _save_tg_settings(self):

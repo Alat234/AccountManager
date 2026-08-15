@@ -92,6 +92,7 @@ class LinkMexc2faScenario(BaseScenario):
             network_recovery_handler=self.network_recovery_handler,
             captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
             default_terminal_states={"twofa_completed"},
+            scenario_name=type(self).__name__,
         )
         self.checkpoint_runner = runner
         runner.run(self._2fa_checkpoints())
@@ -269,9 +270,11 @@ class LinkMexc2faScenario(BaseScenario):
                 .filter(visible)
                 .map((element) => element.innerText || element.textContent || '')
                 .join('\\n');
-            const matches = [...text.matchAll(/\\b[A-Z2-7]{16,64}\\b/g)]
+            const labelled = text.replace(/\\s+/g, ' ').match(/\\bkey:\\s*([A-Z2-7]{16,64})\\b/i);
+            if (labelled) return labelled[1];
+            const matches = [...text.matchAll(/\\b[A-Z2-7]{16,64}\\b/gi)]
                 .map((match) => match[0])
-                .filter((value) => !/^(DOWNLOAD|AUTHENTICATOR|SECURITY|VERIFICATION)$/.test(value));
+                .filter((value) => !/^(DOWNLOAD|AUTHENTICATOR|SECURITY|VERIFICATION)$/.test(value.toUpperCase()));
             matches.sort((left, right) => right.length - left.length);
             return matches[0] || '';
             """

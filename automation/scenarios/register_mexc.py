@@ -4,7 +4,7 @@ import logging
 import time
 from collections.abc import Callable
 
-from selenium.webdriver import ActionChains
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -84,6 +84,7 @@ class RegisterMexcScenario(BaseScenario):
             network_recovery_handler=self.network_recovery_handler,
             captcha_handler=lambda checkpoint: self._handle_captcha(f"{checkpoint}_captcha"),
             default_terminal_states={"register_completed"},
+            scenario_name=type(self).__name__,
         )
         self.checkpoint_runner = runner
         runner.run(self._registration_checkpoints())

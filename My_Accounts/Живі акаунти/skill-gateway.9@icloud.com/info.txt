@@ -1,6 +1,6 @@
 Email: skill-gateway.9@icloud.com
 Old Email: 
 Password: _Fgjksyfhsz30
-API Key: 
-Secret Key: 
-2FA Secret: 
+API Key: mx0vglUZdAspGzizy0
+Secret Key: 566bb29bd10544e2a1fcfc82e0ded6e0
+2FA Secret: 64CGZIYWNMA2VFR6

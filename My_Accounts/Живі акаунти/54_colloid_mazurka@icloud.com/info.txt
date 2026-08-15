@@ -1,6 +1,0 @@
-Email: 54_colloid_mazurka@icloud.com
-Old Email: 
-Password: 
-API Key: 
-Secret Key: 
-2FA Secret: 

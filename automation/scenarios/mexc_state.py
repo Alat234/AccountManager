@@ -86,6 +86,20 @@ class MexcPageStateAnalyzer:
                 const modalText = visibleModals
                     .map((modal) => (modal.innerText || modal.textContent || '').replace(/\\s+/g, ' ').trim().toLowerCase())
                     .join(' ');
+                const modalInputs = visibleModals.flatMap((modal) =>
+                    [...modal.querySelectorAll('input,textarea')]
+                        .filter(visible)
+                        .map((input) => [
+                            input.id,
+                            input.name,
+                            input.placeholder,
+                            input.getAttribute('aria-label'),
+                            input.getAttribute('autocomplete'),
+                            input.type,
+                            input.closest('.ant-form-item, label, div')?.innerText
+                        ].join(' ').toLowerCase())
+                );
+                const modalInputHas = (needle) => modalInputs.some((value) => value.includes(needle));
                 const loader = [...document.querySelectorAll('[class*="loading"],[class*="spin"],[aria-busy="true"]')]
                     .some(visible);
                 const url = window.location.href;
@@ -97,12 +111,16 @@ class MexcPageStateAnalyzer:
                 const accountSignals = has('assets') || has('wallet') || has('deposit')
                     || has('orders') || has('account') || has('profile') || has('overview');
                 const twofaUrl = /manage-google-auth|user\\/security/.test(urlLower);
-                const twofaSecret = /\\b[A-Z2-7]{16,64}\\b/.test(text.replace(/\\s+/g, ''));
+                const compactText = text.replace(/\\s+/g, ' ');
+                const base32Candidate = /\\b[A-Z2-7]{16,64}\\b/i.test(compactText);
+                const twofaSecret = /\\bkey:\\s*[A-Z2-7]{16,64}\\b/i.test(compactText)
+                    || (has('backup') && base32Candidate);
+                const hasSecurityModal = modalText.includes('security verification');
                 const twofaCompleted = twofaUrl && (
                     has('success') || has('enabled') || has('bound') || has('link successful')
                     || has('unbind') || has('disable google authenticator')
                 );
-                const twofaIntro = twofaUrl && !twofaSecret && !has('security verification')
+                const twofaIntro = twofaUrl && !twofaSecret && !hasSecurityModal
                     && (has('google authenticator') || has('authenticator app') || buttonHas('next'));
                 return {
                     url,
@@ -133,9 +151,12 @@ class MexcPageStateAnalyzer:
                     twofaCompleted,
                     twofaSecret: twofaUrl && twofaSecret,
                     twofaIntro,
-                    securityModalEmail: has('security verification') && (inputHas('email') || has('email verification')),
-                    securityModalTotp: has('security verification') && (
-                        inputHas('google') || inputHas('authenticator') || has('google authenticator')
+                    securityModalEmail: hasSecurityModal && (
+                        modalInputHas('email') || modalText.includes('email verification') || modalText.includes('sent to')
+                    ),
+                    securityModalTotp: hasSecurityModal && (
+                        modalInputHas('google') || modalInputHas('authenticator') || modalInputHas('totp')
+                        || modalText.includes('google authenticator') || modalText.includes('authenticator code')
                     ),
                     networkError: has('this site can') || has('err_') || has('reload') && has('network')
                 };

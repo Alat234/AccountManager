@@ -1,6 +1,0 @@
-Email: yo9h14tr5@mozmail.com
-Old Email: 
-Password: 
-API Key: 
-Secret Key: 
-2FA Secret: 

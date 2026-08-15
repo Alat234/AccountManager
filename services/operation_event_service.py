@@ -13,6 +13,8 @@ class OperationEventService:
         self.db = db
         self.keep_per_account = keep_per_account
         self._listeners: list[Callable[[OperationEvent], None]] = []
+        self._events: list[OperationEvent] = []
+        self._next_id = 1
 
     def register_listener(self, callback: Callable[[OperationEvent], None]) -> None:
         self._listeners.append(callback)
@@ -38,9 +40,11 @@ class OperationEventService:
             created_at=datetime.now(),
             data=json.dumps(data or {}, ensure_ascii=False) if data else "",
         )
-        event.id = self.db.add_operation_event(event)
+        event.id = self._next_id
+        self._next_id += 1
+        self._events.append(event)
         if account_email:
-            self.db.prune_operation_events(account_email, keep=self.keep_per_account)
+            self._prune_account_events(account_email)
         for listener in list(self._listeners):
             try:
                 listener(event)
@@ -49,7 +53,43 @@ class OperationEventService:
         return event
 
     def recent_for_account(self, account_email: str, limit: int = 100) -> list[OperationEvent]:
-        return self.db.get_operation_events(account_email=account_email, limit=limit)
+        if not account_email:
+            return []
+        return [
+            event
+            for event in reversed(self._events)
+            if event.account_email == account_email
+        ][:limit]
 
     def recent_for_task(self, task_id: str, limit: int = 100) -> list[OperationEvent]:
-        return self.db.get_operation_events(task_id=task_id, limit=limit)
+        if not task_id:
+            return []
+        return [
+            event
+            for event in reversed(self._events)
+            if event.task_id == task_id
+        ][:limit]
+
+    def clear_account(self, account_email: str) -> None:
+        if not account_email:
+            return
+        self._events = [
+            event for event in self._events
+            if event.account_email != account_email
+        ]
+
+    def clear_all(self) -> None:
+        self._events.clear()
+
+    def _prune_account_events(self, account_email: str) -> None:
+        matching = [
+            event for event in self._events
+            if event.account_email == account_email
+        ]
+        if len(matching) <= self.keep_per_account:
+            return
+        keep_ids = {event.id for event in matching[-self.keep_per_account:]}
+        self._events = [
+            event for event in self._events
+            if event.account_email != account_email or event.id in keep_ids
+        ]

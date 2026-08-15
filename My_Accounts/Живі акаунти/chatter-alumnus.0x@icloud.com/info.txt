@@ -1,6 +1,0 @@
-Email: chatter-alumnus.0x@icloud.com
-Old Email: 
-Password: _Fgjksyfhsz30
-API Key: mx0vgluGLKZkUtyTEM
-Secret Key: d6677a85895c479f98e370e418c5731e
-2FA Secret: ENIBL7D3RAJNGEQG

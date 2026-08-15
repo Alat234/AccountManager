@@ -60,6 +60,14 @@ def open_adspower_selenium_driver(
         )
         raise
 
+    setattr(driver, "_adspower_profile_id", profile_id)
+    setattr(driver, "_adspower_debug_port", str(conn.debug_port or ""))
+    setattr(driver, "_adspower_selenium_address", str(conn.selenium_address or ""))
+    setattr(driver, "_adspower_webdriver_path", str(conn.webdriver_path or ""))
+    service_process = getattr(service, "process", None)
+    if service_process is not None:
+        setattr(driver, "_chromedriver_pid", str(getattr(service_process, "pid", "") or ""))
+
     logger.info(
         "Selenium attached context=%s profile_id=%s session_id=%s",
         context,

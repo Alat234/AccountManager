@@ -39,6 +39,12 @@ class AccountService:
     def get_accounts_for_table(self):
         return self.db.get_accounts_for_table()
 
+    def get_accounts_with_tags(self, *, archived_only: bool = False, include_archive: bool = False):
+        return self.db.get_accounts_with_tags(
+            archived_only=archived_only,
+            include_archive=include_archive,
+        )
+
     def get_first_email(self):
         return self.db.get_first_email()
 

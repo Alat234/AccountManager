@@ -3,6 +3,7 @@ import json
 import threading
 import uuid
 import time
+from datetime import datetime
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox
@@ -20,6 +21,7 @@ from services.operation_event_service import OperationEventService
 from services.task_service import TaskService
 from services.profile_creation_service import ProfileCreationService
 from clients.adspower import AdsPowerClient
+from clients.mexc_api import MexcApiClient
 from automation.runner import ScenarioRunner
 from automation.progress import format_progress_step
 from automation.recovery import (
@@ -34,10 +36,11 @@ from automation.scenarios.open_mexc import OpenMexcScenario
 from automation.scenarios.register_mexc import RegisterMexcScenario
 from automation.scenarios.link_mexc_2fa import LinkMexc2faScenario
 from automation.scenarios.create_mexc_api import CreateMexcApiScenario
+from automation.scenarios.mexc_deposit_screenshot import MexcDepositScreenshotScenario
 from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 from services.mexc_email_service import MexcEmailCodeFetcher
 from ui.activity_log import ActivityLogPanel
-from ui.account_list import AccountListPanel
+from ui.account_list import AccountListPanel, VIEW_ARCHIVE
 from ui.details_tab import DetailsTab
 from ui.settings_tab import SettingsTab
 from ui.modals import open_delete_modal, BatchUploadModal, open_captcha_modal
@@ -123,6 +126,7 @@ class App(ctk.CTk):
             on_select=self.load_account,
             on_status_change=self._on_list_status_change,
             on_copy_email=self._copy_to_clipboard,
+            on_view_change=self._on_account_list_view_change,
         )
         self.account_list.set_create_command(self._create_account)
         self.account_list.set_icloud_command(self._create_account_icloud)
@@ -357,6 +361,8 @@ class App(ctk.CTk):
             on_autosave=self._autosave,
             on_create_2fa=self._run_link_mexc_2fa,
             on_create_api=self._run_create_mexc_api,
+            on_read_latest_deposit=self._read_latest_mexc_deposit,
+            on_find_deposit_screenshot=self._run_find_deposit_screenshot,
             on_remark_save=self._save_remark,
         )
 
@@ -419,9 +425,11 @@ class App(ctk.CTk):
         if email in self._running_accounts:
             self._cancel_running_account_operation(email)
         workspace["details_tab"].flush_autosave()
+        workspace["details_tab"].dispose()
         tab_name = workspace["tab_name"]
         self._account_workspaces.pop(email, None)
         self._workspace_by_tab.pop(tab_name, None)
+        self.event_service.clear_account(email)
         self._delete_account_tab(tab_name)
 
         if self._account_workspaces:
@@ -806,23 +814,42 @@ class App(ctk.CTk):
     # ── AdsPower ──
 
     def _reload_account_list(self):
-        accounts_with_tags = self.db.get_all_accounts_with_tags()
+        accounts_with_tags = self.account_service.get_accounts_with_tags(
+            archived_only=self.account_list.get_view_mode() == VIEW_ARCHIVE,
+        )
         self.account_list.load_all(accounts_with_tags=accounts_with_tags)
 
+    def _on_account_list_view_change(self, _view_name: str):
+        self._reload_account_list()
+
     def _sync_adspower_on_startup(self):
-        if not self.adspower.is_running():
-            return
-        try:
-            stats = self.account_service.sync_with_adspower(self.adspower)
-            self._save_sync_timestamp()
-            if stats.get("created") or stats.get("linked") or stats.get("renamed") or stats.get("name_conflicts"):
-                self._show_status(self._format_sync_message(stats), "green")
-        except Exception:
-            pass
+        self.account_list.set_loading(True, "AdsPower API...")
+
+        def worker():
+            if not self.adspower.is_running():
+                self.after(0, lambda: self.account_list.set_loading(False))
+                return
+            try:
+                stats = self.account_service.sync_with_adspower(self.adspower)
+                self._save_sync_timestamp()
+
+                def on_done():
+                    self.account_list.set_loading(False)
+                    self._reload_account_list()
+                    if self.current_account:
+                        self.account_list.set_current(self.current_account.email)
+                    if stats.get("created") or stats.get("linked") or stats.get("renamed") or stats.get("name_conflicts"):
+                        self._show_status(self._format_sync_message(stats), "green")
+
+                self.after(0, on_done)
+            except Exception:
+                self.after(0, lambda: self.account_list.set_loading(False))
+
+        threading.Thread(target=worker, daemon=True).start()
 
     def _manual_sync_adspower(self):
         self._show_status("Синхронізація з AdsPower...", "#2fa572")
-        self.account_list.btn_sync.configure(state="disabled")
+        self.account_list.set_loading(True, "Синхронізація...")
 
         def worker():
             try:
@@ -862,7 +889,7 @@ class App(ctk.CTk):
             except Exception as e:
                 self.after(0, lambda: self._show_status(f"Помилка синхронізації: {e}", "red"))
             finally:
-                self.after(0, lambda: self.account_list.btn_sync.configure(state="normal"))
+                self.after(0, lambda: self.account_list.set_loading(False))
 
         threading.Thread(target=worker, daemon=True).start()
 
@@ -1157,6 +1184,160 @@ class App(ctk.CTk):
             else:
                 safe[key] = str(value)
         return safe
+
+    def _read_latest_mexc_deposit(self):
+        if not self.current_account:
+            self._show_status("Select an account first.", "red")
+            return
+
+        self.details_tab.flush_autosave()
+        account = self.current_account
+        if not account.api_key or not account.secret_key:
+            self._show_status("Save MEXC API Key and Secret Key first.", "red")
+            return
+
+        account_email = account.email
+        api_key = account.api_key
+        secret_key = account.secret_key
+        self._show_status("Reading latest MEXC deposit...", "#2fa572")
+
+        def worker():
+            try:
+                deposit = MexcApiClient(api_key, secret_key).latest_successful_deposit(days=90)
+            except Exception as exc:
+                error = str(exc)
+                self.after(0, lambda: self._on_latest_mexc_deposit_failed(account_email, error))
+                return
+            self.after(0, lambda: self._on_latest_mexc_deposit_loaded(account_email, deposit))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _run_find_deposit_screenshot(self):
+        if not self.current_account:
+            self._show_status("Select an account first.", "red")
+            return
+
+        self.details_tab.flush_autosave()
+        account = self.current_account
+        account_dir = self.account_service.get_account_dir(account.email)
+        if not account_dir:
+            self._show_status("Account folder was not found.", "red")
+            return
+
+        deposit_path = account_dir / "rk_deposit.json"
+        if not deposit_path.exists():
+            self._show_status("Run Last Deposit first: rk_deposit.json is missing.", "red")
+            return
+
+        main_profile_id = (self.settings.get("icloud_ads_profile_id", "") or "").strip()
+        if not main_profile_id:
+            self._show_status("Set iCloud Profile ID in Settings first.", "red")
+            return
+
+        scenario = MexcDepositScreenshotScenario(
+            adspower=self.adspower,
+            account=account,
+            captcha_service=self.captcha_service,
+            main_profile_id=main_profile_id,
+            account_dir=account_dir,
+        )
+        self._submit_scenario_task(
+            "find_deposit_screenshot",
+            scenario,
+            self._on_find_deposit_screenshot_complete,
+            "Finding RK deposit screenshot...",
+        )
+
+    def _on_find_deposit_screenshot_complete(self, task_id: str, result):
+        self.task_service.complete_task(task_id, result)
+
+        def update_ui():
+            if result.success:
+                path = result.data.get("screenshot_path", "")
+                account_email = result.data.get("account_email", "")
+                if account_email:
+                    self.event_service.emit(
+                        f"RK deposit screenshot saved: {path}",
+                        account_email=account_email,
+                        task_id=task_id,
+                        event_type="rk_deposit_screenshot_saved",
+                        level="success",
+                        data={"path": path},
+                    )
+                self._show_status(result.message, "green")
+            else:
+                self._show_status(clean_error_message(result.message), "red")
+                self._prompt_retry_failed_task(task_id, result.message)
+
+        self.after(0, update_ui)
+
+    def _on_latest_mexc_deposit_loaded(self, account_email: str, deposit) -> None:
+        if deposit is None:
+            self.event_service.emit(
+                "No successful MEXC deposit found in the last 90 days.",
+                account_email=account_email,
+                event_type="mexc_latest_deposit_read",
+                level="warning",
+            )
+            self._show_status("No successful MEXC deposit found in the last 90 days.", "#ff9800")
+            return
+
+        try:
+            deposit_path = self._save_rk_deposit_data(account_email, deposit)
+        except Exception as exc:
+            self._on_latest_mexc_deposit_failed(account_email, f"Failed to save rk_deposit.json: {exc}")
+            return
+
+        time_text = self._format_mexc_timestamp(deposit.insert_time)
+        message = (
+            f"Account: {account_email}\n\n"
+            f"Saved: {deposit_path}\n\n"
+            f"Time: {time_text}\n"
+            f"Amount: {deposit.amount} {deposit.coin}\n"
+            f"Network: {deposit.network or '-'}\n"
+            f"Address: {deposit.address or '-'}\n"
+            f"Memo: {deposit.memo or '-'}\n"
+            f"TXID: {deposit.tx_id or '-'}"
+        )
+        self.event_service.emit(
+            f"Latest MEXC deposit saved: {deposit.amount} {deposit.coin} at {time_text}",
+            account_email=account_email,
+            event_type="mexc_latest_deposit_read",
+            level="success",
+            data={**deposit.to_dict(), "path": str(deposit_path)},
+        )
+        self._show_status(f"Latest deposit saved: {deposit.amount} {deposit.coin}", "green")
+        messagebox.showinfo("Latest MEXC Deposit", message, parent=self)
+
+    def _save_rk_deposit_data(self, account_email: str, deposit) -> str:
+        account_dir = self.account_service.get_account_dir(account_email)
+        if not account_dir:
+            raise RuntimeError("account folder was not found")
+        account_dir.mkdir(parents=True, exist_ok=True)
+        path = account_dir / "rk_deposit.json"
+        payload = {
+            **deposit.to_dict(),
+            "source": "mexc_deposit_history_api",
+            "saved_at": datetime.now().isoformat(timespec="seconds"),
+        }
+        path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        return str(path)
+
+    def _on_latest_mexc_deposit_failed(self, account_email: str, error: str) -> None:
+        message = clean_error_message(error)
+        self.event_service.emit(
+            f"Failed to read latest MEXC deposit: {message}",
+            account_email=account_email,
+            event_type="mexc_latest_deposit_read",
+            level="error",
+        )
+        self._show_status(message, "red")
+
+    @staticmethod
+    def _format_mexc_timestamp(timestamp_ms: int) -> str:
+        if not timestamp_ms:
+            return "-"
+        return datetime.fromtimestamp(timestamp_ms / 1000).strftime("%Y-%m-%d %H:%M:%S")
 
     def _run_open_mexc(self):
         account = self._require_adspower_account()
@@ -2167,5 +2348,7 @@ class App(ctk.CTk):
     def _on_close(self):
         for workspace in list(self._account_workspaces.values()):
             workspace["details_tab"].flush_autosave()
+            workspace["details_tab"].dispose()
+        self.event_service.clear_all()
         self.scenario_runner.shutdown()
         self.destroy()

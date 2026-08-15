@@ -13,6 +13,7 @@ from automation.recovery import (
     PageState,
     PageStateAnalyzer,
 )
+from automation.resource_monitor import emit_resource_event
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,7 @@ class CheckpointRunner:
         captcha_handler: Callable[[str], None] | None = None,
         default_terminal_states: Iterable[str] = (),
         manual_timeout_seconds: int = 600,
+        scenario_name: str = "",
     ):
         self.driver_getter = driver_getter
         self.analyzer = analyzer
@@ -74,6 +76,7 @@ class CheckpointRunner:
         self.network_recovery_handler = network_recovery_handler
         self.captcha_handler = captcha_handler
         self.default_terminal_states = set(default_terminal_states)
+        self.scenario_name = scenario_name
         self.manual_assist = ManualAssistController(
             self.analyzer,
             timeout_seconds=manual_timeout_seconds,
@@ -88,12 +91,14 @@ class CheckpointRunner:
     def _run_checkpoint(self, checkpoint: ScenarioCheckpoint) -> None:
         self.state.current = checkpoint.name
         self._emit("checkpoint_start", checkpoint=checkpoint.name)
+        self._emit_resource("checkpoint_start", checkpoint)
 
         while True:
             state = self._analyze()
             terminal_states = checkpoint.terminal_states or self.default_terminal_states
             if self._is_confident(state, terminal_states, checkpoint):
                 self._emit("checkpoint_terminal", checkpoint=checkpoint.name, state=state.name)
+                self._emit_resource("checkpoint_terminal", checkpoint, {"state": state.name})
                 raise CheckpointAlreadyComplete()
 
             if self._is_confident(state, checkpoint.done_states, checkpoint):
@@ -111,6 +116,7 @@ class CheckpointRunner:
                 state = self._wait_for_known_state(checkpoint, state)
                 if self._is_confident(state, terminal_states, checkpoint):
                     self._emit("checkpoint_terminal", checkpoint=checkpoint.name, state=state.name)
+                    self._emit_resource("checkpoint_terminal", checkpoint, {"state": state.name})
                     raise CheckpointAlreadyComplete()
                 if self._is_confident(state, checkpoint.done_states, checkpoint):
                     self._mark_done(checkpoint, state, already_done=True)
@@ -144,6 +150,7 @@ class CheckpointRunner:
             recovered = self._manual_assist(checkpoint, state)
             if self._is_confident(recovered, terminal_states, checkpoint):
                 self._emit("checkpoint_terminal", checkpoint=checkpoint.name, state=recovered.name)
+                self._emit_resource("checkpoint_terminal", checkpoint, {"state": recovered.name})
                 raise CheckpointAlreadyComplete()
             if self._is_confident(recovered, checkpoint.done_states, checkpoint):
                 self._mark_done(checkpoint, recovered, already_done=True)
@@ -162,7 +169,11 @@ class CheckpointRunner:
                 f"while preparing checkpoint {checkpoint.name}"
             )
 
-        checkpoint.action()
+        try:
+            checkpoint.action()
+        except Exception as exc:
+            self._emit_resource("checkpoint_failed", checkpoint, {"error": str(exc)[:500]})
+            raise
         self._mark_done(checkpoint, self._analyze(), already_done=False)
 
     def _analyze(self) -> PageState:
@@ -288,6 +299,11 @@ class CheckpointRunner:
             checkpoint=checkpoint.name,
             state=state.name,
         )
+        self._emit_resource(
+            "checkpoint_already_done" if already_done else "checkpoint_done",
+            checkpoint,
+            {"state": state.name, "already_done": already_done},
+        )
 
     @staticmethod
     def _is_confident(
@@ -303,3 +319,19 @@ class CheckpointRunner:
                 self.debug.step(step, **fields)
             except Exception:
                 logger.debug("Checkpoint debug emit failed", exc_info=True)
+
+    def _emit_resource(
+        self,
+        event: str,
+        checkpoint: ScenarioCheckpoint,
+        fields: dict[str, Any] | None = None,
+    ) -> None:
+        emit_resource_event(
+            event,
+            task_id=str(getattr(self.debug, "task_id", "") or ""),
+            scenario=self.scenario_name,
+            account_email=str(getattr(self.debug, "account_email", "") or ""),
+            checkpoint=checkpoint.name,
+            driver=self.driver_getter(),
+            fields=fields,
+        )
