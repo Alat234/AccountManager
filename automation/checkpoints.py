@@ -33,6 +33,7 @@ class ScenarioCheckpoint:
     wait_timeout: int = 18
     min_confidence: float = 0.72
     action_already_handles_captcha: bool = False
+    initial_navigation: bool = False
 
 
 @dataclass
@@ -104,6 +105,12 @@ class CheckpointRunner:
             if self._is_confident(state, checkpoint.done_states, checkpoint):
                 self._mark_done(checkpoint, state, already_done=True)
                 return
+
+            # A blank/new tab cannot become the destination page until navigation runs.
+            # Only explicitly designated navigation actions may bypass this wait.
+            if checkpoint.initial_navigation and state.name in ('unknown', 'network_loading'):
+                self._mark_allowed(checkpoint, state)
+                break
 
             if state.name == "captcha" and self._is_confident(state, {"captcha"}, checkpoint):
                 if checkpoint.action_already_handles_captcha:

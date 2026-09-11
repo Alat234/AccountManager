@@ -33,6 +33,10 @@ def format_progress_step(
         return _format_2fa_step(normalized, data, level)
     if scenario_type == "create_mexc_api":
         return _format_api_step(normalized, data, level)
+    if scenario_type == "find_deposit_screenshot":
+        return _format_deposit_screenshot_step(normalized, data, level)
+    if scenario_type == "submit_mexc_risk_control":
+        return _format_submit_rk_step(normalized, data, level)
     if scenario_type == "open_mexc":
         return _format_open_mexc_step(normalized)
     return None
@@ -57,6 +61,141 @@ def _format_open_mexc_step(step: str) -> ProgressPresentation | None:
         "open_mexc_screenshot_taken": ProgressPresentation("mexc_ready", "MEXC profile opened.", "success", True),
     }
     return mapping.get(step)
+
+
+def _format_deposit_screenshot_step(
+    step: str,
+    data: dict[str, Any],
+    level: str,
+) -> ProgressPresentation | None:
+    if step == "mexc_deposit_screenshot_start":
+        return ProgressPresentation("deposit_screenshot_started", "Searching RK withdrawal details...", checkpoint=True)
+    if step == "mexc_deposit_screenshot_withdraw_tab":
+        return ProgressPresentation("withdrawals_opened", "Withdrawal history opened.", checkpoint=True)
+    if step == "mexc_deposit_screenshot_page_scanned":
+        page = data.get("page") or ""
+        return ProgressPresentation("withdrawals_scanned", f"Scanning withdrawal history page {page}...", checkpoint=True)
+    if step == "mexc_deposit_screenshot_foreground_required":
+        return ProgressPresentation(
+            "foreground_required",
+            "Open the AdsPower MEXC window/tab now. MEXC must render its native withdrawal details modal before I can screenshot it.",
+            "warning",
+            True,
+        )
+    if step == "mexc_deposit_screenshot_foreground_resumed":
+        return ProgressPresentation("foreground_resumed", "Native MEXC details modal detected. Capturing screenshot...", "success", True)
+    if step == "mexc_deposit_screenshot_saved":
+        return ProgressPresentation("deposit_screenshot_saved", "RK deposit screenshot saved.", "success", True)
+    return _format_warning(step, level)
+
+
+def _format_submit_rk_step(
+    step: str,
+    data: dict[str, Any],
+    level: str,
+) -> ProgressPresentation | None:
+    rk_messages = {
+        'rk_tab_ready': ('RK-вкладку знайдено.', 'info'),
+        'rk_navigation_started': ('Завантаження RK-форми…', 'info'),
+        'rk_foreground_required': ('Відкрийте RK-вкладку в AdsPower: очікую завершення відкриття меню.', 'warning'),
+        'rk_foreground_resumed': ('Роботу з меню продовжено.', 'success'),
+        'rk_email_countdown_wait': ('MEXC ще обмежує повторний запит коду. Чекаю завершення таймера…', 'info'),
+        'rk_email_code_retry': ('MEXC відхилила код. Запитую новий; документи залишаються у формі.', 'warning'),
+        'rk_submit_rejected': ('MEXC відхилила заявку. Перевірте причину в результаті задачі.', 'warning'),
+        'rk_submit_unknown': ('Результат подачі невідомий. Перевірте статус заявки перед повторною спробою.', 'warning'),
+        'rk_recovery_start': ('Відновлюю RK-форму після переривання…', 'warning'),
+    }
+    if step in rk_messages:
+        message, severity = rk_messages[step]
+        return ProgressPresentation(step, message, severity, True)
+    if step.endswith('_upload_reused'):
+        return ProgressPresentation(step, 'Документ уже завантажений; повторне завантаження пропущено.', 'success', True)
+    checkpoint = str(data.get("checkpoint") or "")
+    if step == "checkpoint_wait_for_page":
+        return ProgressPresentation("page_loading", "RK form is loading. Waiting for a known screen...", "warning", True)
+    if step == "checkpoint_wait_resolved":
+        return ProgressPresentation("screen_detected", "Known RK screen detected.", "success", True)
+    if step == "checkpoint_network_state_detected":
+        return ProgressPresentation("network_attention", "Page is still loading or connection is unstable.", "warning", True)
+    if step == "checkpoint_manual_assist_required":
+        return ProgressPresentation("manual_control", "Manual control is needed. Use the browser; I will keep watching.", "warning", True)
+    if step == "checkpoint_manual_assist_resume":
+        return ProgressPresentation("ready_to_resume", "Known RK screen detected. Ready to continue.", "success", True)
+    if step == "checkpoint_captcha_detected":
+        return ProgressPresentation("captcha_required", "CAPTCHA required. Solve it in the browser.", "warning", True)
+    if step == "checkpoint_captcha_resolved":
+        return ProgressPresentation("captcha_solved", "CAPTCHA solved.", "success", True)
+    if step == "checkpoint_already_done":
+        return ProgressPresentation(
+            f"{checkpoint}_done" if checkpoint else "checkpoint_done",
+            _submit_rk_checkpoint_done_message(checkpoint),
+            "success",
+            True,
+        )
+    if step == "rk_submit_start":
+        return ProgressPresentation("rk_started", "Submit RK started.", checkpoint=True)
+    if step == "rk_page_loaded":
+        return ProgressPresentation("rk_page_loaded", "RK form page loaded.", checkpoint=True)
+    if step in ("login_state_wait_for_page", "login_network_state_detected"):
+        return ProgressPresentation("login_loading", "MEXC login page is loading.", "warning", True)
+    if step == "login_manual_assist_required":
+        return ProgressPresentation("manual_control", "Manual control is needed. Use the browser; I will keep watching.", "warning", True)
+    if step in ("rk_login_required", "login_email_filled", "login_password_filled", "login_submitted"):
+        return ProgressPresentation("login_in_progress", "Logging in to MEXC...", checkpoint=True)
+    if step == "rk_login_completed":
+        return ProgressPresentation("login_done", "MEXC login completed.", "success", True)
+    if step == "rk_form_wait_start":
+        return ProgressPresentation("rk_form_wait", "Waiting for RK form...", checkpoint=True)
+    if step == "rk_form_wait_done":
+        return ProgressPresentation("rk_form_ready", "RK form is ready.", "success", True)
+    if step == "rk_facescan_check_skipped":
+        return ProgressPresentation("rk_facescan_skipped", "Facescan check is disabled for now.", "warning", True)
+    if step == "rk_review_checks_done":
+        return ProgressPresentation("rk_checks_done", "RK review checks completed.", "success", True)
+    if step == "rk_email_code_requested":
+        return ProgressPresentation("email_code_requested", "Email code requested.", checkpoint=True)
+    if step == "email_code_wait_start":
+        return ProgressPresentation("email_code_wait", "Waiting for email verification code...", checkpoint=True)
+    if step == "email_code_found":
+        return ProgressPresentation("email_code_received", "Email code received.", "success", True)
+    if step == "rk_proof_address_type_done":
+        return ProgressPresentation("proof_address_type", "Proof of Address type selected.", checkpoint=True)
+    if step == "rk_deposit_source_type_done":
+        return ProgressPresentation("deposit_source_type", "Proof of Source type selected.", checkpoint=True)
+    if step.endswith("_upload_done"):
+        return ProgressPresentation("rk_file_uploaded", "RK document uploaded.", "success", True)
+    if step.endswith("_text_filled"):
+        return ProgressPresentation("rk_text_filled", "RK explanation text entered.", checkpoint=True)
+    if step == "rk_documents_fill_done":
+        return ProgressPresentation("rk_documents_done", "RK documents and text are filled.", "success", True)
+    if step == "rk_email_code_filled":
+        return ProgressPresentation("email_code_entered", "Email code entered.", checkpoint=True)
+    if step == "rk_submit_clicked":
+        return ProgressPresentation("rk_submit_clicked", "Submit натиснуто. Очікую підтвердження MEXC.", checkpoint=True)
+    if step == "rk_submit_verified":
+        return ProgressPresentation("rk_submit_verified", "RK submission confirmed.", "success", True)
+    if step == "rk_submit_success":
+        return ProgressPresentation("completed", "MEXC RK application submitted.", "success", True)
+    if "captcha_detected" in step:
+        return ProgressPresentation("captcha_required", "CAPTCHA required. Solve it in the browser.", "warning", True)
+    if "captcha_solved" in step:
+        return ProgressPresentation("captcha_solved", "CAPTCHA solved.", "success", True)
+    return _format_warning(step, level)
+
+
+def _submit_rk_checkpoint_done_message(checkpoint: str) -> str:
+    mapping = {
+        "open_rk_form": "RK form page is ready.",
+        "ensure_login": "MEXC login already completed.",
+        "wait_rk_form": "RK form is ready.",
+        "verify_review_checks": "RK review checks already completed.",
+        "request_email_code": "Email code request already completed.",
+        "fill_documents": "RK form is already filled.",
+        "fill_email_code": "Email code already entered.",
+        "submit_application": "RK application already submitted.",
+        "verify_submitted": "RK submission already confirmed.",
+    }
+    return mapping.get(checkpoint, "Previous RK step already completed.")
 
 
 def _format_register_step(
@@ -335,5 +474,7 @@ def _scenario_title(scenario_type: str, suffix: str) -> str:
         "register_mexc": "MEXC registration",
         "link_mexc_2fa": "MEXC 2FA linking",
         "create_mexc_api": "MEXC API creation",
+        "find_deposit_screenshot": "RK deposit screenshot",
+        "submit_mexc_risk_control": "Submit RK",
     }
     return f"{labels.get(scenario_type, scenario_type)} {suffix}."

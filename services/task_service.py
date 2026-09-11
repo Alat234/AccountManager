@@ -29,49 +29,86 @@ class TaskService:
         return task
 
     def start_task(self, task_id: str) -> None:
-        task = self._get_or_none(task_id)
-        if task:
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
             task.status = "running"
             task.current_step = "started"
-            self.db.update_task(task)
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
+            return
+
+    def mark_external_action(self, task_id: str, pending: bool):
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
+            task.external_action_pending = bool(pending)
+            payload = json.loads(task.resume_data or '{}')
+            payload['external_action_pending'] = bool(pending)
+            task.resume_data = json.dumps(payload)
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
+            raise RuntimeError("Cannot record an external action for a finished task")
+
+    def recover_interrupted_tasks(self):
+        for existing in self.db.get_unfinished_tasks():
+            def recover(task):
+                if task.status not in ('pending', 'running', 'retrying', 'waiting_user', 'paused'):
+                    return False
+                task.status = 'cancelled' if task.status == 'pending' and not task.external_action_pending else 'outcome_unknown'
+                task.completed_at = datetime.now()
+                task.result_message = 'Програму закрито до завершення. Перевірте результат перед повторним запуском.'
+            self.db.mutate_task(existing.id, recover)
 
     def complete_task(self, task_id: str, result: ScenarioResult) -> None:
-        task = self._get_or_none(task_id)
-        if not task:
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
+            operation_status = result.data.get('operation_status', '') if result.data else ''
+            if (result.data or {}).get('application_status') == 'unknown' or (task.external_action_pending and not result.success):
+                operation_status = 'outcome_unknown'
+            if result.success:
+                task.external_action_pending = False
+                payload = json.loads(task.resume_data or '{}')
+                payload['external_action_pending'] = False
+                task.resume_data = json.dumps(payload)
+            task.status = 'completed' if result.success else operation_status if operation_status in ('cancelled', 'outcome_unknown') else 'failed'
+            task.completed_at = datetime.now()
+            clean_message = result.message if result.success else clean_error_message(result.message)
+            task.result_message = clean_message
+            task.result_data = json.dumps(result.data, ensure_ascii=False) if result.data else ""
+            task.last_error = "" if result.success else clean_message
+            task.recoverable = False
+            task.requires_user_confirmation = False
+            task.current_step = "completed" if result.success else task.current_step
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
             return
-        task.status = "completed" if result.success else "failed"
-        task.completed_at = datetime.now()
-        clean_message = result.message if result.success else clean_error_message(result.message)
-        task.result_message = clean_message
-        task.result_data = json.dumps(result.data, ensure_ascii=False) if result.data else ""
-        task.last_error = "" if result.success else clean_message
-        task.recoverable = False
-        task.requires_user_confirmation = False
-        task.current_step = "completed" if result.success else task.current_step
-        self.db.update_task(task)
         event_data = dict(result.data or {})
         event_data["scenario_type"] = task.scenario_type
         self._emit(
             task,
-            clean_message,
-            event_type="task_completed" if result.success else "task_failed",
-            level="success" if result.success else "error",
+            task.result_message,
+            event_type="task_completed" if result.success else 'task_' + task.status,
+            level="success" if result.success else 'warning' if task.status in ('cancelled', 'outcome_unknown') else "error",
             data=event_data,
         )
 
     def fail_task(self, task_id: str, error: str) -> None:
-        task = self._get_or_none(task_id)
-        if not task:
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
+            clean_error = clean_error_message(error)
+            task.status = "outcome_unknown" if task.external_action_pending else "failed"
+            task.completed_at = datetime.now()
+            task.result_message = clean_error
+            task.last_error = clean_error
+            task.recoverable = False
+            task.requires_user_confirmation = False
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
             return
-        clean_error = clean_error_message(error)
-        task.status = "failed"
-        task.completed_at = datetime.now()
-        task.result_message = clean_error
-        task.last_error = clean_error
-        task.recoverable = False
-        task.requires_user_confirmation = False
-        self.db.update_task(task)
-        self._emit(task, clean_error, event_type="task_failed", level="error")
+        self._emit(task, task.last_error, event_type="task_failed", level="error")
 
     def record_step(
         self,
@@ -82,11 +119,13 @@ class TaskService:
         level: str = "info",
         data: dict[str, Any] | None = None,
     ) -> None:
-        task = self._get_or_none(task_id)
-        if not task:
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
+            task.current_step = step
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
             return
-        task.current_step = step
-        self.db.update_task(task)
         self._emit(
             task,
             message or step,
@@ -104,34 +143,41 @@ class TaskService:
         current_step: str = "",
         resume_data: dict[str, Any] | None = None,
     ) -> None:
-        task = self._get_or_none(task_id)
-        if not task:
+        def change(task):
+            if task.status in ('completed', 'cancelled', 'outcome_unknown', 'failed'):
+                return False
+            task.status = "waiting_user"
+            clean_error = clean_error_message(error)
+            task.last_error = clean_error
+            task.current_step = current_step or task.current_step
+            task.recoverable = True
+            task.requires_user_confirmation = True
+            payload = json.loads(task.resume_data or '{}')
+            payload.update(resume_data or {})
+            payload['external_action_pending'] = task.external_action_pending
+            task.resume_data = json.dumps(payload, ensure_ascii=False)
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
             return
-        task.status = "waiting_user"
-        clean_error = clean_error_message(error)
-        task.last_error = clean_error
-        task.current_step = current_step or task.current_step
-        task.recoverable = True
-        task.requires_user_confirmation = True
-        task.resume_data = json.dumps(resume_data or {}, ensure_ascii=False) if resume_data else ""
-        self.db.update_task(task)
         self._emit(
             task,
-            f"Task paused: {clean_error}",
+            f"Task paused: {task.last_error}",
             event_type="task_waiting_user",
             level="warning",
             data={"current_step": task.current_step},
         )
 
     def mark_retrying(self, task_id: str) -> None:
-        task = self._get_or_none(task_id)
-        if not task:
+        def change(task):
+            if task.external_action_pending or task.status in ('completed', 'cancelled', 'outcome_unknown'):
+                return False
+            task.status = "retrying"
+            task.retry_count += 1
+            task.recoverable = False
+            task.requires_user_confirmation = False
+        task = self.db.mutate_task(task_id, change)
+        if task is None:
             return
-        task.status = "retrying"
-        task.retry_count += 1
-        task.recoverable = False
-        task.requires_user_confirmation = False
-        self.db.update_task(task)
         self._emit(
             task,
             f"Retrying task from step: {task.current_step or 'unknown'}",
@@ -147,11 +193,7 @@ class TaskService:
         return self._get_or_none(task_id)
 
     def _get_or_none(self, task_id: str) -> AutomationTask | None:
-        tasks = self.db.get_recent_tasks(limit=100)
-        for t in tasks:
-            if t.id == task_id:
-                return t
-        return None
+        return self.db.get_task(task_id)
 
     def _emit(
         self,

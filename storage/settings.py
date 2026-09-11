@@ -1,4 +1,7 @@
 import json
+import threading
+from copy import deepcopy
+from storage.atomic_files import write_json
 from pathlib import Path
 
 from storage.constants import BASE_DIR
@@ -8,6 +11,7 @@ SETTINGS_PATH = BASE_DIR / "settings.json"
 
 class SettingsManager:
     def __init__(self):
+        self._lock = threading.RLock()
         self._data = self._load()
 
     def _load(self):
@@ -19,11 +23,13 @@ class SettingsManager:
         return {}
 
     def _save(self):
-        SETTINGS_PATH.write_text(json.dumps(self._data, indent=2, ensure_ascii=False), encoding="utf-8")
+        write_json(SETTINGS_PATH, self._data)
 
     def get(self, key: str, default=None):
-        return self._data.get(key, default)
+        with self._lock:
+            return deepcopy(self._data.get(key, default))
 
     def set(self, key: str, value):
-        self._data[key] = value
-        self._save()
+        with self._lock:
+            self._data[key] = deepcopy(value)
+            self._save()

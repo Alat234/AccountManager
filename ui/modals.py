@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import os
 import time
+from datetime import datetime
 from tkinter import filedialog
 from PIL import ImageGrab, Image
 import tkinter as tk
@@ -57,6 +58,131 @@ def open_captcha_modal(parent, account_email: str, on_dismiss=None):
 
     ctk.CTkButton(modal, text="OK", command=dismiss).pack(pady=(0, 15))
     return modal
+
+
+class RKDepositsModal(ctk.CTkToplevel):
+    def __init__(self, parent, account_email: str, deposits: list[dict], on_save=None, on_find=None):
+        super().__init__(parent)
+        self.title("RK Deposits")
+        self.geometry("860x520")
+        self.transient(parent)
+        self.grab_set()
+        self.geometry(f"+{parent.winfo_x() + 300}+{parent.winfo_y() + 120}")
+
+        self.account_email = account_email
+        self.deposits = deposits
+        self.on_save = on_save
+        self.on_find = on_find
+        self.rows: list[tuple[ctk.BooleanVar, dict]] = []
+
+        self._build()
+
+    def _build(self):
+        ctk.CTkLabel(
+            self,
+            text=f"RK deposits for {self.account_email}",
+            font=ctk.CTkFont(weight="bold", size=16),
+        ).pack(anchor="w", padx=18, pady=(16, 6))
+
+        ctk.CTkLabel(
+            self,
+            text="Select deposits for screenshot search. Newest is selected by default.",
+            text_color="#aeb6c2",
+        ).pack(anchor="w", padx=18, pady=(0, 10))
+
+        header = ctk.CTkFrame(self, fg_color="#23272f")
+        header.pack(fill="x", padx=18, pady=(0, 4))
+        for index, (text, width) in enumerate([
+            ("Use", 56),
+            ("Time", 150),
+            ("Amount", 130),
+            ("Network", 100),
+            ("Address", 190),
+            ("TXID", 190),
+        ]):
+            ctk.CTkLabel(header, text=text, width=width, anchor="w", font=ctk.CTkFont(weight="bold")).grid(
+                row=0, column=index, padx=6, pady=8, sticky="w"
+            )
+
+        scroll = ctk.CTkScrollableFrame(self, height=310)
+        scroll.pack(fill="both", expand=True, padx=18, pady=(0, 12))
+
+        for index, deposit in enumerate(self.deposits):
+            self._render_deposit_row(scroll, deposit, checked=index == 0)
+
+        actions = ctk.CTkFrame(self, fg_color="transparent")
+        actions.pack(fill="x", padx=18, pady=(0, 16))
+        self.warning_label = ctk.CTkLabel(actions, text="", text_color="#ff6b6b")
+        self.warning_label.pack(side="left")
+        ctk.CTkButton(actions, text="Cancel", width=100, fg_color="#59606b", command=self.destroy).pack(
+            side="right", padx=(8, 0)
+        )
+        ctk.CTkButton(actions, text="Find Screenshots", width=145, fg_color="#7a5c1e", hover_color="#5d4617",
+                      command=self._find).pack(side="right", padx=(8, 0))
+        ctk.CTkButton(actions, text="Save Selection", width=130, fg_color="#2f6f52", hover_color="#255842",
+                      command=self._save).pack(side="right")
+
+    def _render_deposit_row(self, parent, deposit: dict, checked: bool):
+        row = ctk.CTkFrame(parent, fg_color="transparent")
+        row.pack(fill="x", pady=2)
+        selected = ctk.BooleanVar(value=checked)
+        self.rows.append((selected, deposit))
+
+        fields = [
+            self._format_time(deposit.get("insert_time")),
+            f"{deposit.get('amount') or '-'} {deposit.get('coin') or ''}".strip(),
+            deposit.get("network") or "-",
+            self._short(deposit.get("address")),
+            self._short(deposit.get("tx_id")),
+        ]
+        ctk.CTkCheckBox(row, text="", variable=selected, width=56).grid(row=0, column=0, padx=6, pady=7, sticky="w")
+        for index, (text, width) in enumerate(zip(fields, [150, 130, 100, 190, 190]), start=1):
+            ctk.CTkLabel(row, text=text, width=width, anchor="w").grid(row=0, column=index, padx=6, pady=7, sticky="w")
+
+    def _save(self):
+        selected = self._selected_deposits()
+        if not any(item.get("selected") for item in selected):
+            self._warn("Select at least one deposit.")
+            return
+        if self.on_save:
+            self.on_save(selected)
+        self.destroy()
+
+    def _find(self):
+        selected = self._selected_deposits()
+        if not any(item.get("selected") for item in selected):
+            self._warn("Select at least one deposit.")
+            return
+        if self.on_find:
+            self.on_find(selected)
+        self.destroy()
+
+    def _selected_deposits(self) -> list[dict]:
+        selected_ids = {id(deposit) for selected, deposit in self.rows if selected.get()}
+        return [{**deposit, "selected": id(deposit) in selected_ids} for deposit in self.deposits]
+
+    def _warn(self, text: str):
+        self.warning_label.configure(text=text)
+        self.after(3000, lambda: self.warning_label.configure(text=""))
+
+    @staticmethod
+    def _format_time(timestamp_ms):
+        try:
+            value = int(timestamp_ms or 0)
+        except (TypeError, ValueError):
+            value = 0
+        if not value:
+            return "-"
+        return datetime.fromtimestamp(value / 1000).strftime("%Y-%m-%d %H:%M:%S")
+
+    @staticmethod
+    def _short(value, *, keep: int = 8) -> str:
+        text = str(value or "")
+        if not text:
+            return "-"
+        if len(text) <= keep * 2 + 3:
+            return text
+        return f"{text[:keep]}...{text[-keep:]}"
 
 
 class BatchUploadModal(ctk.CTkToplevel):

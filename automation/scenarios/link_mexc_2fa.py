@@ -104,6 +104,7 @@ class LinkMexc2faScenario(BaseScenario):
         return [
             ScenarioCheckpoint(
                 name="open_security_page",
+                initial_navigation=True,
                 action=self._open_security_page,
                 allowed_states={
                     "unknown",
@@ -322,12 +323,15 @@ class LinkMexc2faScenario(BaseScenario):
         email_code = self._wait_for_email_code()
         self.tried_email_codes.add(email_code)
         self._fill_email_verification_code(email_code)
-        self._click_security_submit("email_code")
-        self._handle_captcha("2fa_security_after_email_submit")
-        self._wait_for_email_step_to_finish()
-        self._wait_for_totp_step()
-        self._fill_totp_verification_code()
-        self._click_security_submit("totp_code")
+        if not self._is_totp_verification_step_visible():
+            self._click_security_submit("email_code")
+            self._handle_captcha("2fa_security_after_email_submit")
+            self._wait_for_email_step_to_finish()
+            self._wait_for_totp_step()
+        with self.control.atomic():
+            self._fill_totp_verification_code()
+            self._external_action_pending = True
+            self._click_security_submit("totp_code")
         self._handle_captcha("2fa_security_after_totp_submit")
         time.sleep(4)
         self.debug.step("2fa_security_verification_submitted")
@@ -346,6 +350,8 @@ class LinkMexc2faScenario(BaseScenario):
         self.debug.step("2fa_totp_step_wait_start")
         deadline = time.time() + 30
         while time.time() < deadline:
+            self._raise_if_cancelled()
+            self._handle_captcha('2fa_step_transition')
             if self._is_email_verification_step_visible():
                 self.debug.step("2fa_totp_step_waiting_email_still_visible")
                 time.sleep(0.5)
@@ -364,6 +370,8 @@ class LinkMexc2faScenario(BaseScenario):
         self.debug.step("2fa_email_step_finish_wait_start")
         deadline = time.time() + 30
         while time.time() < deadline:
+            self._raise_if_cancelled()
+            self._handle_captcha('2fa_step_transition')
             if self._is_totp_verification_step_visible():
                 self.debug.step("2fa_email_step_finished", reason="totp_visible")
                 return
@@ -412,22 +420,17 @@ class LinkMexc2faScenario(BaseScenario):
         raise RuntimeError("MEXC Google Authenticator code input was not found")
 
     def _click_security_submit(self, phase: str) -> None:
-        self.debug.step("2fa_security_submit_attempt", phase=phase)
-        button_texts = ("submit",) if phase == "email_code" else ("submit", "confirm")
-        if phase == "totp_code" and self._find_totp_input(security_modal_only=False) is not None:
-            self.debug.step("2fa_submit_path_selected", phase=phase, path="inline")
-            clicked = self._click_inline_submit_button(button_texts, timeout=5)
-        else:
-            self.debug.step("2fa_submit_path_selected", phase=phase, path="modal")
-            clicked = self._click_security_modal_button(button_texts, timeout=20)
-            if not clicked and phase == "totp_code":
-                self.debug.step("2fa_submit_path_selected", phase=phase, path="inline_fallback")
-                clicked = self._click_inline_submit_button(button_texts, timeout=5)
+        browser_state = self.driver.execute_script(
+            'return {visibility:document.visibilityState,hasFocus:document.hasFocus()}')
+        self.debug.step("2fa_security_submit_attempt", phase=phase, mode='foreground_native_background_dom', browser=browser_state)
+        from automation.scenarios.security_submit import click_code_submit
+        field_id = ('googleAuthCode', 'validationCode') if phase == 'totp_code' else 'emailCode'
+        clicked = click_code_submit(self.driver, field_id=field_id)
         if not clicked:
             self.debug.save_page_probe(self.driver, f"2fa_submit_not_found_{phase}.json")
             raise RuntimeError(f"MEXC 2FA security submit button was not found during {phase}")
         time.sleep(2)
-        self.debug.step("2fa_security_submit_clicked", phase=phase)
+        self.debug.step("2fa_security_submit_clicked", phase=phase, mode='foreground_native_background_dom')
 
     def _click_security_modal_button(self, texts: tuple[str, ...], timeout: int = 10) -> bool:
         wanted = tuple(text.lower() for text in texts)
@@ -648,13 +651,16 @@ class LinkMexc2faScenario(BaseScenario):
         self.debug.step("2fa_success_check")
         deadline = time.time() + 20
         while time.time() < deadline:
-            text = self._page_text().lower()
-            if any(word in text for word in ("success", "enabled", "bound")) or "link successful" in text:
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
+            state = self.state_analyzer.analyze(self.driver)
+            if state.name == 'twofa_completed' and state.confidence >= 0.72:
+                self._external_action_pending = False
                 self.debug.step("2fa_success_text_detected")
                 return
-            if self.SECURITY_URL not in (self.driver.current_url or ""):
-                self.debug.step("2fa_success_url_changed", url=self.driver.current_url)
-                return
+            if state.name == 'captcha':
+                self._handle_captcha('2fa_final_confirmation')
+                continue
             error_text = self._collect_error_text()
             if error_text:
                 raise RuntimeError(error_text)
@@ -663,6 +669,7 @@ class LinkMexc2faScenario(BaseScenario):
         if error_text:
             raise RuntimeError(error_text)
         self.debug.warning("2fa_success_not_confirmed")
+        raise RuntimeError('Прив’язку 2FA не підтверджено. Перевірте статус у Security перед повтором.')
 
     def _click_get_code_if_active(self, timeout: int = 10) -> bool:
         deadline = time.time() + timeout
@@ -995,19 +1002,9 @@ class LinkMexc2faScenario(BaseScenario):
 
     def _handle_captcha(self, phase: str) -> None:
         self.debug.step("2fa_captcha_check", phase=phase)
-        captcha_found = False
-        deadline = time.time() + 8
-        while time.time() < deadline:
-            self._raise_if_cancelled()
-            self._raise_if_browser_closed()
-            if detect_captcha(self.driver):
-                captcha_found = True
-                break
-            state = self.state_analyzer.analyze(self.driver)
-            if state.name == "captcha" and state.confidence >= 0.72:
-                captcha_found = True
-                break
-            time.sleep(1)
+        self._raise_if_cancelled()
+        from automation.scenarios.rk_captcha import captcha_visible
+        captcha_found = captcha_visible(self.driver)
         if not captcha_found:
             self.debug.step("2fa_captcha_not_detected", phase=phase)
             return
@@ -1052,6 +1049,10 @@ class LinkMexc2faScenario(BaseScenario):
         return None
 
     def _clear_and_type(self, element: WebElement, value: str) -> None:
+        if len(value) != 1:
+            from automation.scenarios.verified_input import fill_verified
+            fill_verified(self.driver, element, value)
+            return
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
         time.sleep(0.2)
         try:

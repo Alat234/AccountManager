@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 import threading
+from copy import deepcopy
+from automation.profile_access import PROFILE_ACCESS, profile_key
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Callable
@@ -13,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from clients.adspower_selenium import open_adspower_selenium_driver
 from automation.resource_monitor import emit_resource_event
+from automation.operation_control import OperationControl, OperationCancelled
 from automation.recovery import ManualAssistResult, PageState
 
 if TYPE_CHECKING:
@@ -39,25 +42,48 @@ class BaseScenario(ABC):
         captcha_service: CaptchaService | None = None,
     ):
         self.adspower = adspower
-        self.account = account
+        self.account = deepcopy(account)
         self.captcha_service = captcha_service
         self.driver: webdriver.Chrome | None = None
         self.auto_close: bool = True
         self.progress_reporter: Callable[[str, dict], None] | None = None
         self.manual_assist_handler: Callable[[str, set[str], PageState], ManualAssistResult] | None = None
         self.network_recovery_handler: Callable[[str, PageState], str] | None = None
-        self._cancel_requested = threading.Event()
+        self.control = OperationControl()
+        self._cancel_requested = self.control.cancelled
+        self._external_action_pending = False
+        self.external_action_reporter = None
+
+    @property
+    def _external_action_pending(self):
+        return getattr(self, '_pending_action', False)
+
+    @_external_action_pending.setter
+    def _external_action_pending(self, value):
+        reporter = getattr(self, 'external_action_reporter', None)
+        if reporter:
+            reporter(bool(value))
+        self._pending_action = bool(value)
 
     @abstractmethod
     def run(self) -> ScenarioResult:
         ...
 
+    @property
+    def browser_profile_id(self):
+        return self.account.ads_profile_id
+
     def execute(self) -> ScenarioResult:
+        with PROFILE_ACCESS.hold(profile_key(self.adspower, self.browser_profile_id)):
+            return self._execute_owned()
+
+    def _execute_owned(self) -> ScenarioResult:
         try:
             self._log_step("execute_start")
             self._log_resource_event("execute_start")
             self._raise_if_cancelled()
             self._start_browser()
+            self._install_command_control()
             self._raise_if_cancelled()
             result = self.run()
             self._raise_if_cancelled()
@@ -72,34 +98,37 @@ class BaseScenario(ABC):
             logger.exception("Scenario failed for %s", self.account.email)
             self._log_step("execute_failed", error=str(e))
             self._log_resource_event("execute_failed", error=str(e)[:500])
-            return ScenarioResult(success=False, message=str(e))
+            status = ('outcome_unknown' if self._external_action_pending else
+                      'cancelled' if self._cancel_requested.is_set() else 'failed')
+            return ScenarioResult(success=False, message=str(e), data={'operation_status': status})
         finally:
-            if self.auto_close:
-                self._stop_browser()
+            # Cleanup must not replace a confirmed result or call Tk.
+            try:
+                if self.auto_close:
+                    self._stop_browser()
+                elif self.driver:
+                    service = getattr(self.driver, 'service', None)
+                    if service:
+                        service.stop()
+            except Exception:
+                logger.exception('Scenario cleanup failed')
 
     @property
     def cancel_event(self) -> threading.Event:
         return self._cancel_requested
 
     def cancel(self) -> None:
-        self._cancel_requested.set()
-        self._log_step("cancel_requested")
-        profile_id = self.account.ads_profile_id
-        if self.driver:
-            try:
-                self.driver.quit()
-            except Exception:
-                logger.debug("Selenium driver quit during cancel failed", exc_info=True)
-            self.driver = None
-        if profile_id:
-            try:
-                self.adspower.stop_browser(profile_id)
-            except Exception:
-                logger.debug("AdsPower browser stop during cancel failed", exc_info=True)
+        self.auto_close = False
+        self.control.cancel()
+
+    def pause(self) -> None:
+        self.control.pause()
+
+    def resume(self) -> None:
+        self.control.resume()
 
     def _raise_if_cancelled(self) -> None:
-        if self._cancel_requested.is_set():
-            raise RuntimeError("Scenario cancelled by user")
+        self.control.check()
 
     def browser_is_closed(self) -> bool:
         if self._cancel_requested.is_set():
@@ -133,7 +162,7 @@ class BaseScenario(ABC):
             raise RuntimeError("Browser tab was closed by user")
 
     def _start_browser(self) -> None:
-        profile_id = self.account.ads_profile_id
+        profile_id = self.browser_profile_id
         if not profile_id:
             raise RuntimeError("Account has no ads_profile_id")
 
@@ -144,6 +173,11 @@ class BaseScenario(ABC):
             profile_id,
             context=type(self).__name__,
         )
+        if type(self).__name__ in ('RegisterMexcScenario', 'CreateMexcApiScenario', 'LinkMexc2faScenario'):
+            from automation.scenarios.mexc_tab import pin_mexc_tab
+            preferred = {'RegisterMexcScenario': '/register', 'CreateMexcApiScenario': '/user/openapi',
+                         'LinkMexc2faScenario': '/user/security'}[type(self).__name__]
+            self._log_step('browser_tab_selected', **pin_mexc_tab(self.driver, preferred))
         logger.info("Browser started for %s (profile %s)", self.account.email, profile_id)
         self._log_step(
             "browser_started",
@@ -156,8 +190,18 @@ class BaseScenario(ABC):
             session_id=getattr(self.driver, "session_id", ""),
         )
 
+    def _install_command_control(self):
+        if self.driver is None:
+            return
+        # All browser commands remain on the scenario worker. UI only sets signals.
+        execute = self.driver.execute
+        def controlled_execute(command, params=None):
+            self.control.check()
+            return execute(command, params)
+        self.driver.execute = controlled_execute
+
     def _stop_browser(self) -> None:
-        profile_id = self.account.ads_profile_id
+        profile_id = self.browser_profile_id
         self._log_step("browser_stop_requested", profile_id=profile_id)
         self._log_resource_event("browser_stop_requested", profile_id=profile_id)
         if self.driver:

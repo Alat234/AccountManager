@@ -96,6 +96,7 @@ class RegisterMexcScenario(BaseScenario):
         return [
             ScenarioCheckpoint(
                 name="navigate",
+                initial_navigation=True,
                 action=self._navigate_to_signup,
                 allowed_states={"unknown", "network_loading", "network_error", "wrong_browser_tab"},
                 done_states={"register_email", *after_email},
@@ -493,6 +494,9 @@ class RegisterMexcScenario(BaseScenario):
             if not self._click_optional(self.selectors.continue_button, timeout=5):
                 raise RuntimeError("Continue button was not found or is not clickable")
             last_state = self._wait_for_continue_transition(timeout=5)
+            self._raise_if_browser_closed()
+            if error := self._collect_error_text():
+                raise RuntimeError(error)
             if last_state.name in ("register_code", "register_password", "register_completed", "captcha"):
                 self.debug.step(
                     "continue_clicked",
@@ -803,6 +807,8 @@ class RegisterMexcScenario(BaseScenario):
 
     def _click_signup(self) -> None:
         self.debug.step("signup_click_attempt")
+        self._raise_if_cancelled()
+        self._external_action_pending = True
         if not self._click_optional(self.selectors.signup_button, timeout=15):
             raise RuntimeError("Sign Up/Register button was not found or is not clickable")
         time.sleep(3)
@@ -814,8 +820,14 @@ class RegisterMexcScenario(BaseScenario):
         while time.time() < deadline:
             state = self.state_analyzer.analyze(self.driver)
             if state.name == "register_completed" and state.confidence >= 0.72:
+                self._external_action_pending = False
                 self.debug.step("success_verification_passed", url=self.driver.current_url)
                 return
+            self._raise_if_cancelled()
+            self._raise_if_browser_closed()
+            if state.name == 'captcha':
+                self._handle_captcha('final_confirmation')
+                continue
             error_text = self._collect_error_text()
             if error_text:
                 raise RuntimeError(error_text)
@@ -824,21 +836,13 @@ class RegisterMexcScenario(BaseScenario):
         error_text = self._collect_error_text()
         if error_text:
             raise RuntimeError(error_text)
-        raise RuntimeError("MEXC registration did not complete within 30s")
+        raise RuntimeError("Результат реєстрації не підтверджений. Перевірте вхід в акаунт перед повторною реєстрацією.")
 
     def _handle_captcha(self, phase: str) -> None:
         self.debug.step("captcha_check", phase=phase)
-        captcha_found = False
-        deadline = time.time() + 8
-        while time.time() < deadline:
-            if detect_captcha(self.driver):
-                captcha_found = True
-                break
-            state = self.state_analyzer.analyze(self.driver)
-            if state.name == "captcha" and state.confidence >= 0.72:
-                captcha_found = True
-                break
-            time.sleep(1)
+        self._raise_if_cancelled()
+        from automation.scenarios.rk_captcha import captcha_visible
+        captcha_found = captcha_visible(self.driver)
         if not captcha_found:
             self.debug.step("captcha_not_detected", phase=phase)
             return
