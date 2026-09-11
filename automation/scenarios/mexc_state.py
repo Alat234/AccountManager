@@ -16,10 +16,15 @@ REGISTER_PATH_MARKERS = ("/register", "/signup", "sign-up")
 LOGIN_PATH_MARKERS = ("/login", "sign-in", "signin")
 SECURITY_PATH_MARKERS = ("/user/security", "manage-google-auth")
 OPENAPI_PATH_MARKERS = ("/openapi", "/api-management")
+RISK_CONTROL_PATH_MARKERS = ("/support/apply-risk-account-protection",)
 
 
 class MexcPageStateAnalyzer:
     """Best-effort MEXC screen classifier shared by all MEXC scenarios."""
+
+    def _detect_captcha(self, driver):
+        from automation.scenarios.rk_captcha import captcha_visible
+        return captcha_visible(driver)
 
     def analyze(self, driver: WebDriver | None) -> PageState:
         if driver is None:
@@ -37,7 +42,7 @@ class MexcPageStateAnalyzer:
 
             captcha_active = False
             try:
-                captcha_active = detect_captcha(driver)
+                captcha_active = self._detect_captcha(driver)
             except Exception:
                 logger.debug("Shared CAPTCHA detector failed during state analysis", exc_info=True)
 
@@ -78,9 +83,7 @@ class MexcPageStateAnalyzer:
                     || has('email verification')
                     || has('enter verification code');
                 const buttonHas = (needle) => visibleButtons.some((value) => value.includes(needle));
-                const captcha = [...document.querySelectorAll(
-                    '.geetest_panel,.geetest_popup_wrap,.geetest_widget,.geetest_window,.captcha-container,.g-recaptcha,iframe[src*="captcha"],iframe[src*="geetest"],iframe[src*="recaptcha"]'
-                )].some(visible);
+                const captcha = Boolean(arguments[0]);
                 const visibleModals = [...document.querySelectorAll('.ant-modal-content, .ant-modal, [role="dialog"], [class*="modal"]')]
                     .filter(visible);
                 const modalText = visibleModals
@@ -100,7 +103,7 @@ class MexcPageStateAnalyzer:
                         ].join(' ').toLowerCase())
                 );
                 const modalInputHas = (needle) => modalInputs.some((value) => value.includes(needle));
-                const loader = [...document.querySelectorAll('[class*="loading"],[class*="spin"],[aria-busy="true"]')]
+                const loader = [...document.querySelectorAll('.ant-spin-spinning,.ant-spin-v2-spinning,[aria-busy="true"],[data-loading="true"]')]
                     .some(visible);
                 const url = window.location.href;
                 const urlLower = url.toLowerCase();
@@ -111,17 +114,41 @@ class MexcPageStateAnalyzer:
                 const accountSignals = has('assets') || has('wallet') || has('deposit')
                     || has('orders') || has('account') || has('profile') || has('overview');
                 const twofaUrl = /manage-google-auth|user\\/security/.test(urlLower);
+                const riskControlUrl = /support\\/apply-risk-account-protection/.test(urlLower);
+                const riskControlFormUrl = /support\\/apply-risk-account-protection\\/form/.test(urlLower);
                 const compactText = text.replace(/\\s+/g, ' ');
                 const base32Candidate = /\\b[A-Z2-7]{16,64}\\b/i.test(compactText);
                 const twofaSecret = /\\bkey:\\s*[A-Z2-7]{16,64}\\b/i.test(compactText)
                     || (has('backup') && base32Candidate);
                 const hasSecurityModal = modalText.includes('security verification');
-                const twofaCompleted = twofaUrl && (
-                    has('success') || has('enabled') || has('bound') || has('link successful')
-                    || has('unbind') || has('disable google authenticator')
+                const twofaCompleted = twofaUrl && !hasSecurityModal && !twofaSecret && (
+                    has('link successful') || has('google authenticator enabled')
+                    || has('authenticator linked successfully') || has('disable google authenticator')
+                    || [...document.querySelectorAll('h1,h2,h3,[role="status"]')].filter(visible)
+                        .some(e => /^(?:successfully linked|linked successfully|setup successful|successfully enabled)[.!]?$/i.test(e.innerText.trim()))
+                    || [...document.querySelectorAll('div,section')].filter(visible).some(e =>
+                        e.children.length < 8 && /google authenticator/i.test(e.innerText)
+                        && e.innerText.length < 500 && [...e.querySelectorAll('button,a')].some(b =>
+                            /^(?:change|disable|unbind|remove)$/i.test(b.innerText.trim())))
                 );
                 const twofaIntro = twofaUrl && !twofaSecret && !hasSecurityModal
                     && (has('google authenticator') || has('authenticator app') || buttonHas('next'));
+                const riskControlForm = riskControlFormUrl && (
+                    has('risk review documents') || has('proof of address')
+                    || has('occupation details') || has('source of last')
+                    || has('email verification code') || has('submit application')
+                );
+                const confirmationNodes = [...document.querySelectorAll('h1,h2,h3,p,[role="status"],[role="alert"],[class*="title"],[class*="status"]')].filter(visible);
+                const riskControlSubmitted = riskControlUrl && confirmationNodes.some(element => {
+                    const value = (element.innerText || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const receipt = /^(?:your (?:rk )?application (?:has been |was )?(?:submitted(?: successfully)?|is under review)|application submitted(?: successfully)?|submitted successfully|successfully submitted|under review)[.!]?$/.test(value);
+                    const applicationModal = element.closest('[role="dialog"],.ant-modal-content') && value.includes('application');
+                    return receipt && (!document.querySelector('#emailCode') || applicationModal);
+                });
+                const introPath = /^\\/(?:[a-z]{2}-[a-z]{2}\\/)?support\\/apply-risk-account-protection\\/?$/i.test(window.location.pathname);
+                const riskControlUnavailable = introPath && readyState === 'complete' && !loader
+                    && !loginButton && !signupButton && !riskControlSubmitted
+                    && (has('account risk') || has('risk review') || has('risk control'));
                 return {
                     url,
                     title: document.title,
@@ -151,6 +178,9 @@ class MexcPageStateAnalyzer:
                     twofaCompleted,
                     twofaSecret: twofaUrl && twofaSecret,
                     twofaIntro,
+                    riskControlSubmitted,
+                    riskControlForm,
+                    riskControlUnavailable,
                     securityModalEmail: hasSecurityModal && (
                         modalInputHas('email') || modalText.includes('email verification') || modalText.includes('sent to')
                     ),
@@ -194,9 +224,12 @@ class MexcPageStateAnalyzer:
             ("network_error", 0.95),
             ("captcha", 0.95),
             ("api_created", 0.92),
+            ("risk_control_submitted", 0.92),
             ("twofa_completed", 0.92),
             ("security_modal_totp", 0.9),
             ("security_modal_email", 0.9),
+            ("risk_control_form", 0.88),
+            ("risk_control_unavailable", 0.86),
             ("twofa_secret", 0.88),
             ("twofa_intro", 0.84),
             ("api_form", 0.88),
@@ -216,6 +249,15 @@ class MexcPageStateAnalyzer:
         return "unknown", 0.2
 
     def _ensure_relevant_mexc_tab(self, driver: WebDriver) -> dict[str, Any]:
+        owned = getattr(driver, '_mexc_owned_handle', None)
+        if isinstance(owned, str) and owned:
+            if owned not in driver.window_handles:
+                raise RuntimeError('no such window: scenario tab closed')
+            switched = driver.current_window_handle != owned
+            if switched:
+                driver.switch_to.window(owned)
+            return {'state': 'current_mexc_tab', 'handle': owned, 'switched': switched,
+                    'url': driver.current_url, 'title': driver.title}
         current_handle = ""
         try:
             current_handle = driver.current_window_handle
@@ -246,6 +288,7 @@ class MexcPageStateAnalyzer:
         best_mexc = None
         best_security = None
         best_openapi = None
+        best_risk_control = None
         best_register = None
         for handle in handles:
             try:
@@ -264,13 +307,16 @@ class MexcPageStateAnalyzer:
             if any(marker in lowered for marker in OPENAPI_PATH_MARKERS):
                 best_openapi = candidate
                 continue
+            if any(marker in lowered for marker in RISK_CONTROL_PATH_MARKERS):
+                best_risk_control = candidate
+                continue
             if any(marker in lowered for marker in REGISTER_PATH_MARKERS):
                 best_register = candidate
                 continue
             if best_mexc is None:
                 best_mexc = candidate
 
-        selected = best_security or best_openapi or best_register or best_mexc
+        selected = best_security or best_openapi or best_risk_control or best_register or best_mexc
         if selected:
             if selected["handle"] != current_handle:
                 driver.switch_to.window(selected["handle"])

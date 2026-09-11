@@ -1,4 +1,9 @@
 import customtkinter as ctk
+import tkinter as tk
+from models.rk_document_types import (
+    ADDRESS_DOCUMENT_TYPES, DEPOSIT_SOURCE_TYPES, DEFAULT_ADDRESS_TYPE,
+    DEFAULT_DEPOSIT_SOURCE_TYPE, normalized_category,
+)
 
 from services.mailbox_service import MailboxService
 from storage.settings import SettingsManager
@@ -157,8 +162,10 @@ class SettingsTab:
             width=150,
         ).grid(row=1, column=2, rowspan=4, sticky="ns", padx=(8, 14), pady=6)
 
+        self._build_rk_card()
+
         tg_card = self._card(self.scroll, "Telegram Bot")
-        tg_card.grid(row=4, column=0, sticky="ew", padx=14, pady=(0, 18))
+        tg_card.grid(row=5, column=0, sticky="ew", padx=14, pady=(0, 18))
         tg_card.grid_columnconfigure(1, weight=1)
 
         self._label(tg_card, "Bot Token", 1, 0)
@@ -181,6 +188,45 @@ class SettingsTab:
             command=self._save_tg_settings,
             width=150,
         ).grid(row=1, column=2, rowspan=2, sticky="ns", padx=(8, 14), pady=6)
+
+    def _build_rk_card(self):
+        rk_card = self._card(self.scroll, "RK — Risk Control")
+        rk_card.grid(row=4, column=0, sticky="ew", padx=14, pady=(0, 18))
+        rk_card.grid_columnconfigure(1, weight=1)
+        self._label(rk_card, "RK Occupation Details", 1, 0)
+        self.txt_rk_occupation_details = ctk.CTkTextbox(rk_card, height=70)
+        self.txt_rk_occupation_details.grid(row=1, column=1, sticky="ew", padx=8, pady=6)
+        saved_rk_occupation = self.settings.get("rk_occupation_details_text", "")
+        if saved_rk_occupation:
+            self.txt_rk_occupation_details.insert("1.0", saved_rk_occupation)
+
+        self._label(rk_card, "RK Deposit Source", 2, 0)
+        self.txt_rk_deposit_source = ctk.CTkTextbox(rk_card, height=70)
+        self.txt_rk_deposit_source.grid(row=2, column=1, sticky="ew", padx=8, pady=6)
+        saved_rk_deposit_source = self.settings.get("rk_deposit_source_text", "")
+        if saved_rk_deposit_source:
+            self.txt_rk_deposit_source.insert("1.0", saved_rk_deposit_source)
+
+        self._label(rk_card, "RK Deposit Source Type", 3, 0)
+        self.entry_rk_deposit_source_type = ctk.CTkOptionMenu(rk_card, values=list(DEPOSIT_SOURCE_TYPES))
+        self.entry_rk_deposit_source_type.grid(row=3, column=1, sticky="ew", padx=8, pady=6)
+        self.entry_rk_deposit_source_type.set(normalized_category(
+            self.settings.get("rk_deposit_source_type_text"), DEPOSIT_SOURCE_TYPES, DEFAULT_DEPOSIT_SOURCE_TYPE))
+
+        self._label(rk_card, "RK Proof of Address Type", 4, 0)
+        self.menu_rk_address_type = ctk.CTkOptionMenu(rk_card, values=list(ADDRESS_DOCUMENT_TYPES))
+        self.menu_rk_address_type.grid(row=4, column=1, sticky="ew", padx=8, pady=6)
+        self.menu_rk_address_type.set(normalized_category(
+            self.settings.get("rk_address_document_type_text"), ADDRESS_DOCUMENT_TYPES, DEFAULT_ADDRESS_TYPE))
+        self.rk_enforce_facescan_var = tk.BooleanVar(
+            value=bool(self.settings.get("rk_enforce_facescan_check", True)))
+        ctk.CTkSwitch(rk_card, text="Перевіряти Facescan перед подачею RK",
+                      variable=self.rk_enforce_facescan_var).grid(row=5, column=1, padx=8, pady=8, sticky="w")
+        ctk.CTkLabel(rk_card, text="Якщо вимкнено, програма пропускає перевірку Facescan. Вимоги самої MEXC залишаються чинними.",
+                     text_color="gray", wraplength=600, justify="left").grid(
+                         row=6, column=1, padx=8, pady=(0, 10), sticky="w")
+        ctk.CTkButton(rk_card, text="Зберегти RK", command=self._save_rk_settings,
+                      width=150).grid(row=1, column=2, rowspan=3, padx=(8, 14), pady=6, sticky="ns")
 
     @staticmethod
     def _card(parent, title):
@@ -243,7 +289,6 @@ class SettingsTab:
         password = self.entry_mexc_password.get().strip()
         main_api_key = self.entry_mexc_main_api_key.get().strip()
         main_secret_key = self.entry_mexc_main_secret_key.get().strip()
-
         if password:
             from utils.validators import PasswordValidator
             is_valid, error = PasswordValidator.validate(password)
@@ -258,6 +303,20 @@ class SettingsTab:
         self.settings.set("mexc_main_api_key", main_api_key)
         self.settings.set("mexc_main_secret_key", main_secret_key)
         self.show_status("MEXC налаштування збережено!", "green")
+
+    def _save_rk_settings(self):
+        rk_occupation_details = self.txt_rk_occupation_details.get("1.0", "end").strip()
+        rk_deposit_source = self.txt_rk_deposit_source.get("1.0", "end").strip()
+        rk_deposit_source_type = self.entry_rk_deposit_source_type.get()
+        rk_address_type = self.menu_rk_address_type.get()
+        rk_enforce_facescan = bool(self.rk_enforce_facescan_var.get())
+
+        self.settings.set("rk_occupation_details_text", rk_occupation_details)
+        self.settings.set("rk_deposit_source_text", rk_deposit_source)
+        self.settings.set("rk_deposit_source_type_text", rk_deposit_source_type)
+        self.settings.set("rk_address_document_type_text", rk_address_type)
+        self.settings.set("rk_enforce_facescan_check", rk_enforce_facescan)
+        self.show_status("RK налаштування збережено!", "green")
 
     def _save_tg_settings(self):
         token = self.entry_tg_token.get().strip()

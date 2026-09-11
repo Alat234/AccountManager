@@ -142,19 +142,22 @@ class TwoFactorAuthWidget(ctk.CTkFrame):
 
 
 class EmailCodesWidget(ctk.CTkFrame):
-    def __init__(self, master, copy_func, get_credentials_func):
+    def __init__(self, master, copy_func, get_credentials_func, compact: bool = False):
         super().__init__(master, fg_color="#212121", corner_radius=10, border_width=1, border_color="#343638")
         self.copy_func = copy_func
         self.get_credentials_func = get_credentials_func
+        self.compact = compact
+        self.code_font_size = 18 if compact else 22
+        self.row_button_pady = 5 if compact else 10
 
         self.is_fetching = False
         self.last_found_code = None  # Зберігаємо останній код, щоб не пікати двічі на одне й те саме
         self._auto_after_id = None
 
         top_frame = ctk.CTkFrame(self, fg_color="transparent")
-        top_frame.pack(fill="x", padx=10, pady=(10, 5))
+        top_frame.pack(fill="x", padx=10, pady=(8 if compact else 10, 3 if compact else 5))
 
-        ctk.CTkLabel(top_frame, text="📩 Останній код з пошти", font=ctk.CTkFont(size=14, weight="bold")).pack(
+        ctk.CTkLabel(top_frame, text="📩 Останній код з пошти", font=ctk.CTkFont(size=12 if compact else 14, weight="bold")).pack(
             side="left")
 
         # НОВИЙ ПЕРЕМИКАЧ АВТО-ПОШУКУ
@@ -168,11 +171,11 @@ class EmailCodesWidget(ctk.CTkFrame):
         self.btn_refresh.pack(side="right")
 
         self.lbl_status = ctk.CTkLabel(self, text="Натисніть 'Оновити' або увімкніть Авто", text_color="gray",
-                                       font=ctk.CTkFont(size=11), wraplength=250)
-        self.lbl_status.pack(pady=2)
+                                       font=ctk.CTkFont(size=10 if compact else 11), wraplength=220 if compact else 250)
+        self.lbl_status.pack(pady=1 if compact else 2)
 
         self.codes_frame = ctk.CTkFrame(self, fg_color="transparent")
-        self.codes_frame.pack(fill="both", expand=True, padx=10, pady=5)
+        self.codes_frame.pack(fill="x" if compact else "both", expand=not compact, padx=10, pady=(2 if compact else 5))
 
     def on_auto_toggle(self):
         """Обробка натискання перемикача 'Авто'"""
@@ -272,11 +275,11 @@ class EmailCodesWidget(ctk.CTkFrame):
                 row.pack(fill="x", pady=2)
 
                 ctk.CTkLabel(row, text=time_str, text_color="#dce4ee", width=80).pack(side="left", padx=10)
-                ctk.CTkLabel(row, text=new_code, font=ctk.CTkFont(weight="bold", size=22), text_color="white").pack(
+                ctk.CTkLabel(row, text=new_code, font=ctk.CTkFont(weight="bold", size=self.code_font_size), text_color="white").pack(
                     side="left", padx=10)
 
                 ctk.CTkButton(row, text="📋 Копіювати", width=30, fg_color="#b35b04", hover_color="#d9710b",
-                              command=lambda c=new_code: self.copy_func(c)).pack(side="right", padx=10, pady=10)
+                              command=lambda c=new_code: self.copy_func(c)).pack(side="right", padx=10, pady=self.row_button_pady)
 
         # ЛОГІКА ЗУПИНКИ / ПРОДОВЖЕННЯ АВТО-ПОШУКУ
         if self.auto_var.get():

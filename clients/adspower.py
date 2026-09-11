@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import logging
+import threading
 import time
 from dataclasses import dataclass
 from typing import Any
 
 import requests
+from automation.profile_access import guarded_profile
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +40,18 @@ class AdsPowerClient:
     def __init__(self, api_key: str = "", base_url: str | None = None):
         self.api_key = api_key
         self.base_url = (base_url or self.BASE_URL).rstrip("/")
-        self.session = requests.Session()
-        self.session.trust_env = False
+        self._sessions = threading.local()
+
+    @property
+    def session(self):
+        if not hasattr(self._sessions, 'value'):
+            self._sessions.value = requests.Session()
+            self._sessions.value.trust_env = False
+        return self._sessions.value
+
+    @session.setter
+    def session(self, value):
+        self._sessions.value = value
 
     def _headers(self) -> dict:
         if self.api_key:
@@ -220,6 +232,7 @@ class AdsPowerClient:
 
     # ── Browser operations ───────────────────────────────────
 
+    @guarded_profile
     def start_browser(
         self,
         profile_id: str,
@@ -252,6 +265,7 @@ class AdsPowerClient:
         )
         return conn
 
+    @guarded_profile
     def stop_browser(self, profile_id: str) -> bool:
         return self._get("/api/v1/browser/stop", {"user_id": profile_id}) is not None
 

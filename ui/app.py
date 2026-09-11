@@ -1,3 +1,4 @@
+from automation.base import ScenarioResult
 import os
 import json
 import threading
@@ -10,6 +11,11 @@ from tkinter import messagebox
 
 from models.account import ADS_CONFLICT, ADS_LINKED, ADS_ORPHANED, ADS_UNLINKED
 from models.account import Account
+from models.rk_document_types import (
+    ADDRESS_DOCUMENT_TYPES, DEPOSIT_SOURCE_TYPES, DEFAULT_ADDRESS_TYPE,
+    DEFAULT_DEPOSIT_SOURCE_TYPE, normalized_category,
+)
+from services.rk_submission_journal import read_submission_state
 from storage.constants import BASE_DIR, STATUSES, TAG_SHORT, FILTER_ALL
 from storage.database import DatabaseManager
 from storage.file_manager import FileManager
@@ -37,22 +43,28 @@ from automation.scenarios.register_mexc import RegisterMexcScenario
 from automation.scenarios.link_mexc_2fa import LinkMexc2faScenario
 from automation.scenarios.create_mexc_api import CreateMexcApiScenario
 from automation.scenarios.mexc_deposit_screenshot import MexcDepositScreenshotScenario
+from automation.scenarios.submit_mexc_risk_control import SubmitMexcRiskControlScenario
 from automation.scenarios.mexc_state import MexcPageStateAnalyzer
 from services.mexc_email_service import MexcEmailCodeFetcher
+from services.rk_submission_files import discover_rk_files
+from ui.rk_file_picker import choose_rk_files
 from ui.activity_log import ActivityLogPanel
+from ui.thread_dispatch import ThreadDispatchMixin
+from ui.active_operation import OperationUIMixin
 from ui.account_list import AccountListPanel, VIEW_ARCHIVE
 from ui.details_tab import DetailsTab
 from ui.settings_tab import SettingsTab
-from ui.modals import open_delete_modal, BatchUploadModal, open_captcha_modal
+from ui.modals import open_delete_modal, BatchUploadModal, open_captcha_modal, RKDepositsModal
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
 ctk.deactivate_automatic_dpi_awareness()
 
 
-class App(ctk.CTk):
+class App(ThreadDispatchMixin, OperationUIMixin, ctk.CTk):
     def __init__(self):
         super().__init__()
+        self.init_dispatch()
         self.title("Accounts Manager CRM PRO")
         self.geometry("1500x900")
 
@@ -69,6 +81,7 @@ class App(ctk.CTk):
         self.captcha_service = CaptchaService()
         self.event_service = OperationEventService(self.db, keep_per_account=1000)
         self.task_service = TaskService(self.db, self.event_service)
+        self.task_service.recover_interrupted_tasks()
         self.profile_creation = ProfileCreationService(self.account_service, self.adspower, self.settings)
         self.scenario_runner = ScenarioRunner(max_workers=2)
         self.captcha_service.register_listener(self._on_captcha_notification)
@@ -84,9 +97,10 @@ class App(ctk.CTk):
         self._pending_workspaces = {}
         self._running_accounts = set()
         self._task_scenarios = {}
+        self.init_operation_ui()
         self.error_classifier = ScenarioErrorClassifier()
         self.mexc_state_analyzer = MexcPageStateAnalyzer()
-        self._captcha_modal = None
+        self._captcha_modals = {}
         self._notification_toast = None
         self._notification_toast_after_id = None
         self._recent_notification_alerts = {}
@@ -245,6 +259,7 @@ class App(ctk.CTk):
             return
         for child in self.account_tab_bar.winfo_children():
             child.destroy()
+        self._tab_operation_labels.clear()
 
         for tab_name in self._account_tab_order:
             email = self._workspace_by_tab.get(tab_name, "")
@@ -255,6 +270,10 @@ class App(ctk.CTk):
             hover_color = "#24384d"
             tab = ctk.CTkFrame(self.account_tab_bar, fg_color=fg_color, corner_radius=6)
             tab.pack(side="left", padx=(4, 2), pady=4)
+            if email:
+                indicator = ctk.CTkLabel(tab, text='', width=18)
+                indicator.pack(side='left', padx=(3, 0))
+                self._tab_operation_labels[email] = indicator
 
             if workspace:
                 account = workspace["account"]
@@ -335,16 +354,18 @@ class App(ctk.CTk):
     def _create_account_workspace(self, account: Account):
         tab_name = self._workspace_title(account)
         tab = self._add_account_tab_frame(tab_name)
-        tab.grid_columnconfigure(0, weight=2)
-        tab.grid_columnconfigure(1, weight=5)
+        tab.grid_columnconfigure(0, weight=0, minsize=260)
+        tab.grid_columnconfigure(1, weight=1)
         tab.grid_rowconfigure(0, weight=1)
 
-        log_frame = ctk.CTkFrame(tab, fg_color="transparent")
-        log_frame.grid(row=0, column=0, sticky="nsew", padx=(8, 12), pady=8)
+        log_frame = ctk.CTkFrame(tab, fg_color="transparent", width=260)
+        log_frame.grid(row=0, column=0, sticky="nsew", padx=(8, 8), pady=8)
+        log_frame.grid_propagate(False)
         log_frame.grid_columnconfigure(0, weight=1)
         log_frame.grid_rowconfigure(0, weight=1)
 
         activity_log = ActivityLogPanel(log_frame)
+        activity_log.configure(width=260)
         activity_log.grid(row=0, column=0, sticky="nsew")
         for event in reversed(self.event_service.recent_for_account(account.email, limit=80)):
             activity_log.add(event.message, event.level)
@@ -363,34 +384,19 @@ class App(ctk.CTk):
             on_create_api=self._run_create_mexc_api,
             on_read_latest_deposit=self._read_latest_mexc_deposit,
             on_find_deposit_screenshot=self._run_find_deposit_screenshot,
+            on_register_mexc=self._run_register_mexc,
+            on_delete_account=self._delete_account,
+            on_upload_files=self._open_batch_modal,
+            on_open_folder=self._open_folder,
+            on_refresh_rk_state=self._refresh_current_rk_state,
+            on_submit_rk=self._run_submit_rk,
+            on_launch_adspower=self._launch_adspower,
+            on_unlink_adspower=self._unlink_adspower,
             on_remark_save=self._save_remark,
         )
 
-        btn_frame = ctk.CTkFrame(account_workspace, fg_color="transparent")
-        btn_frame.grid(row=1, column=0, sticky="ew", pady=(10, 0))
-        btn_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
-
-        files_group = self._action_group(btn_frame, "Файли", 0)
-        ctk.CTkButton(files_group, text="Завантажити", command=self._open_batch_modal).pack(side="left", fill="x", expand=True, padx=(0, 4))
-        ctk.CTkButton(files_group, text="Папка", command=self._open_folder).pack(side="left", fill="x", expand=True, padx=(4, 0))
-
-        ads_group = self._action_group(btn_frame, "AdsPower", 1)
-        ctk.CTkButton(ads_group, text="Відкрити ADS", command=self._launch_adspower).pack(side="left", fill="x", expand=True, padx=(0, 4))
-        ctk.CTkButton(ads_group, text="Відв'язати", fg_color="#6a4c93", hover_color="#4a3570",
-                      command=self._unlink_adspower).pack(side="left", fill="x", expand=True, padx=(4, 0))
-
-        mexc_group = self._action_group(btn_frame, "MEXC", 2)
-        ctk.CTkButton(mexc_group, text="Open", command=self._run_open_mexc).pack(side="left", fill="x", expand=True, padx=(0, 4))
-        ctk.CTkButton(mexc_group, text="Register", fg_color="#1f538d",
-                      hover_color="#143a63", command=self._run_register_mexc).pack(side="left", fill="x", expand=True, padx=(4, 0))
-
-        account_group = self._action_group(btn_frame, "Акаунт", 3)
-        ctk.CTkButton(account_group, text="Зберегти", fg_color="#b35b04",
-                      hover_color="#d9710b", command=self._save_account).pack(side="left", fill="x", expand=True, padx=(0, 4))
-        ctk.CTkButton(account_group, text="Видалити", fg_color="#8b0000",
-                      hover_color="#5c0000", command=self._delete_account).pack(side="left", fill="x", expand=True, padx=(4, 0))
         lbl_status = ctk.CTkLabel(account_workspace, text="", font=ctk.CTkFont(size=12))
-        lbl_status.grid(row=2, column=0, pady=(6, 4))
+        lbl_status.grid(row=1, column=0, pady=(6, 4))
 
         workspace = {
             "account": account,
@@ -565,6 +571,7 @@ class App(ctk.CTk):
         self._activate_account_workspace(email)
         tags = self.account_service.get_account_tags(email)
         workspace["details_tab"].display(account, tags=tags)
+        self._refresh_rk_state_for(email)
         self.account_list.set_current(email)
         if open_account_tab:
             self.tabview.set("Акаунт")
@@ -599,6 +606,7 @@ class App(ctk.CTk):
 
         if not silent:
             self._show_status("💾 Авто-збережено", "#2fa572")
+        self._refresh_rk_state_for(account.email)
 
     # ── Account CRUD ──
 
@@ -1039,7 +1047,11 @@ class App(ctk.CTk):
                 self.after(0, lambda: self._show_status("Профіль вже відкритий!", "#2fa572"))
                 return
 
-            conn = self.adspower.start_browser(profile_id)
+            try:
+                conn = self.adspower.start_browser(profile_id)
+            except Exception as exc:
+                self.after(0, self._show_status, str(exc), "red")
+                return
             if conn:
                 self.event_service.emit(
                     "AdsPower profile opened.",
@@ -1096,9 +1108,15 @@ class App(ctk.CTk):
         if account_email in self._running_accounts:
             self._show_status("This account already has a running operation.", "#ff9800")
             return None
+        previous = next((t for t in self.task_service.get_recent_tasks(limit=1000)
+                         if t.account_email == account_email and t.scenario_type == scenario_type), None)
+        if previous and previous.status == 'outcome_unknown':
+            if not messagebox.askyesno('Непідтверджений результат',
+                    'Попередню операцію не підтверджено. Ви перевірили її результат на MEXC і бажаєте запустити сценарій знову?', parent=self):
+                return None
         task = self.task_service.create_task(account_email, scenario_type)
-        self.task_service.start_task(task.id)
         scenario.task_id = task.id
+        scenario.external_action_reporter = lambda pending: self.task_service.mark_external_action(task.id, pending)
         scenario.progress_reporter = lambda step, fields: self._record_scenario_progress(
             task.id,
             scenario_type,
@@ -1118,13 +1136,20 @@ class App(ctk.CTk):
             )
         self._running_accounts.add(account_email)
         self._task_scenarios[task.id] = scenario
+        self._track_operation(task.id, account_email, status_message, scenario)
         wrapped_on_complete = lambda done_task_id, result: self._finish_scenario_task(
             done_task_id,
             result,
             account_email,
             on_complete,
         )
-        self.scenario_runner.submit(task.id, scenario, on_complete=wrapped_on_complete)
+        try:
+            self.scenario_runner.submit(task.id, scenario, on_complete=wrapped_on_complete,
+                                        on_start=self.task_service.start_task)
+        except Exception as exc:
+            self._finish_scenario_task(task.id, ScenarioResult(False, str(exc)), account_email, on_complete)
+            self._show_status(str(exc), "red")
+            return None
         self._show_status(status_message, "#2fa572")
         return task
 
@@ -1145,6 +1170,7 @@ class App(ctk.CTk):
         )
         if not presentation:
             return
+        self.after(0, self._operation_progress, task_id, presentation.message, step)
         self.task_service.record_step(
             task_id,
             presentation.step,
@@ -1155,13 +1181,33 @@ class App(ctk.CTk):
                 "checkpoint": presentation.checkpoint,
             },
         )
+        if scenario_type == "find_deposit_screenshot" and presentation.step == "foreground_required":
+            task = self.task_service.get_task(task_id)
+            account_email = getattr(task, "account_email", "") if task else ""
+            self.event_service.emit(
+                presentation.message,
+                account_email=account_email,
+                task_id=task_id,
+                event_type="task_waiting_user",
+                level="warning",
+                data={
+                    "scenario_type": scenario_type,
+                    "source_step": step,
+                },
+            )
+            self.after(0, lambda msg=presentation.message: self._show_status(msg, "#ff9800"))
 
     def _finish_scenario_task(self, task_id: str, result, account_email: str, on_complete) -> None:
         try:
+            self.task_service.complete_task(task_id, result)
             on_complete(task_id, result)
         finally:
-            self._running_accounts.discard(account_email)
-            self._task_scenarios.pop(task_id, None)
+            self.after(0, self._release_scenario_ui, task_id, account_email)
+
+    def _release_scenario_ui(self, task_id, account_email):
+        self._running_accounts.discard(account_email)
+        self._task_scenarios.pop(task_id, None)
+        self._active_operations.pop(task_id, None)
 
     @staticmethod
     def _safe_event_data(fields):
@@ -1199,34 +1245,38 @@ class App(ctk.CTk):
         account_email = account.email
         api_key = account.api_key
         secret_key = account.secret_key
-        self._show_status("Reading latest MEXC deposit...", "#2fa572")
+        self._show_status("Reading RK MEXC deposits...", "#2fa572")
 
         def worker():
             try:
-                deposit = MexcApiClient(api_key, secret_key).latest_successful_deposit(days=90)
+                deposits = MexcApiClient(api_key, secret_key).successful_deposits(days=90)
             except Exception as exc:
                 error = str(exc)
                 self.after(0, lambda: self._on_latest_mexc_deposit_failed(account_email, error))
                 return
-            self.after(0, lambda: self._on_latest_mexc_deposit_loaded(account_email, deposit))
+            self.after(0, lambda: self._on_mexc_deposits_loaded(account_email, deposits))
 
         threading.Thread(target=worker, daemon=True).start()
 
-    def _run_find_deposit_screenshot(self):
-        if not self.current_account:
+    def _run_find_deposit_screenshot(self, account_email: str | None = None):
+        if account_email:
+            account = self.account_service.get_account(account_email)
+        else:
+            account = self.current_account
+        if not account:
             self._show_status("Select an account first.", "red")
             return
 
         self.details_tab.flush_autosave()
-        account = self.current_account
         account_dir = self.account_service.get_account_dir(account.email)
         if not account_dir:
             self._show_status("Account folder was not found.", "red")
             return
 
+        deposits_path = account_dir / "rk_deposits.json"
         deposit_path = account_dir / "rk_deposit.json"
-        if not deposit_path.exists():
-            self._show_status("Run Last Deposit first: rk_deposit.json is missing.", "red")
+        if not deposits_path.exists() and not deposit_path.exists():
+            self._show_status("Open RK Deposits first: deposit data is missing.", "red")
             return
 
         main_profile_id = (self.settings.get("icloud_ads_profile_id", "") or "").strip()
@@ -1253,61 +1303,90 @@ class App(ctk.CTk):
 
         def update_ui():
             if result.success:
+                paths = result.data.get("screenshot_paths") or []
                 path = result.data.get("screenshot_path", "")
+                failures = result.data.get("failures") or []
                 account_email = result.data.get("account_email", "")
-                if account_email:
+                if account_email and (path or paths):
                     self.event_service.emit(
-                        f"RK deposit screenshot saved: {path}",
+                        f"RK deposit screenshot saved: {path or paths[0]}",
                         account_email=account_email,
                         task_id=task_id,
                         event_type="rk_deposit_screenshot_saved",
                         level="success",
-                        data={"path": path},
+                        data={"path": path, "paths": paths},
                     )
-                self._show_status(result.message, "green")
+                    self._refresh_rk_state_for(account_email)
+                self._show_status(result.message, "#ff9800" if failures else "green")
             else:
-                self._show_status(clean_error_message(result.message), "red")
-                self._prompt_retry_failed_task(task_id, result.message)
+                paths = result.data.get("screenshot_paths") if isinstance(result.data, dict) else []
+                if paths:
+                    self._show_status(clean_error_message(result.message), "#ff9800")
+                else:
+                    self._show_status(clean_error_message(result.message), "red")
+                    self._prompt_retry_failed_task(task_id, result.message)
 
         self.after(0, update_ui)
 
-    def _on_latest_mexc_deposit_loaded(self, account_email: str, deposit) -> None:
-        if deposit is None:
+    def _on_mexc_deposits_loaded(self, account_email: str, deposits) -> None:
+        if not deposits:
             self.event_service.emit(
-                "No successful MEXC deposit found in the last 90 days.",
+                "No successful MEXC deposits found in the last 90 days.",
                 account_email=account_email,
                 event_type="mexc_latest_deposit_read",
                 level="warning",
             )
-            self._show_status("No successful MEXC deposit found in the last 90 days.", "#ff9800")
+            self._show_status("No successful MEXC deposits found in the last 90 days.", "#ff9800")
             return
 
-        try:
-            deposit_path = self._save_rk_deposit_data(account_email, deposit)
-        except Exception as exc:
-            self._on_latest_mexc_deposit_failed(account_email, f"Failed to save rk_deposit.json: {exc}")
-            return
+        deposit_items = []
+        for index, deposit in enumerate(deposits):
+            item = deposit.to_dict()
+            item["selected"] = index == 0
+            deposit_items.append(item)
 
-        time_text = self._format_mexc_timestamp(deposit.insert_time)
-        message = (
-            f"Account: {account_email}\n\n"
-            f"Saved: {deposit_path}\n\n"
-            f"Time: {time_text}\n"
-            f"Amount: {deposit.amount} {deposit.coin}\n"
-            f"Network: {deposit.network or '-'}\n"
-            f"Address: {deposit.address or '-'}\n"
-            f"Memo: {deposit.memo or '-'}\n"
-            f"TXID: {deposit.tx_id or '-'}"
+        def save_selection(selected_deposits):
+            self._save_selected_rk_deposits(account_email, selected_deposits, start_search=False)
+
+        def find_selection(selected_deposits):
+            if self._save_selected_rk_deposits(account_email, selected_deposits, start_search=False):
+                self._run_find_deposit_screenshot(account_email)
+
+        RKDepositsModal(
+            self,
+            account_email,
+            deposit_items,
+            on_save=save_selection,
+            on_find=find_selection,
         )
         self.event_service.emit(
-            f"Latest MEXC deposit saved: {deposit.amount} {deposit.coin} at {time_text}",
+            f"Loaded {len(deposit_items)} successful MEXC deposit(s).",
             account_email=account_email,
             event_type="mexc_latest_deposit_read",
             level="success",
-            data={**deposit.to_dict(), "path": str(deposit_path)},
+            data={"count": len(deposit_items)},
         )
-        self._show_status(f"Latest deposit saved: {deposit.amount} {deposit.coin}", "green")
-        messagebox.showinfo("Latest MEXC Deposit", message, parent=self)
+        self._show_status(f"Loaded {len(deposit_items)} RK deposit(s).", "green")
+
+    def _save_selected_rk_deposits(self, account_email: str, deposits: list[dict], *, start_search: bool) -> bool:
+        try:
+            deposits_path = self._save_rk_deposits_data(account_email, deposits)
+        except Exception as exc:
+            self._on_latest_mexc_deposit_failed(account_email, f"Failed to save rk_deposits.json: {exc}")
+            return False
+
+        selected_count = sum(1 for item in deposits if item.get("selected"))
+        self.event_service.emit(
+            f"RK deposits selection saved: {selected_count} selected.",
+            account_email=account_email,
+            event_type="mexc_latest_deposit_read",
+            level="success",
+            data={"path": deposits_path, "selected_count": selected_count},
+        )
+        if not start_search:
+            self._show_status(f"RK deposits saved: {selected_count} selected.", "green")
+        self._refresh_rk_state_for(account_email)
+        return True
 
     def _save_rk_deposit_data(self, account_email: str, deposit) -> str:
         account_dir = self.account_service.get_account_dir(account_email)
@@ -1323,15 +1402,266 @@ class App(ctk.CTk):
         path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
         return str(path)
 
+    def _save_rk_deposits_data(self, account_email: str, deposits: list[dict]) -> str:
+        account_dir = self.account_service.get_account_dir(account_email)
+        if not account_dir:
+            raise RuntimeError("account folder was not found")
+        account_dir.mkdir(parents=True, exist_ok=True)
+
+        now = datetime.now().isoformat(timespec="seconds")
+        clean_items = []
+        for item in deposits:
+            clean_items.append({
+                "amount": str(item.get("amount") or ""),
+                "coin": str(item.get("coin") or ""),
+                "network": str(item.get("network") or ""),
+                "address": str(item.get("address") or ""),
+                "tx_id": str(item.get("tx_id") or item.get("txId") or ""),
+                "insert_time": int(item.get("insert_time") or 0),
+                "status": int(item.get("status") or 0),
+                "memo": str(item.get("memo") or ""),
+                "selected": bool(item.get("selected")),
+            })
+
+        path = account_dir / "rk_deposits.json"
+        payload = {
+            "source": "mexc_deposit_history_api",
+            "saved_at": now,
+            "deposits": clean_items,
+        }
+        path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+        first_selected = next((item for item in clean_items if item.get("selected")), None)
+        if first_selected:
+            legacy_path = account_dir / "rk_deposit.json"
+            legacy_payload = {
+                **{key: value for key, value in first_selected.items() if key != "selected"},
+                "source": "mexc_deposit_history_api",
+                "saved_at": now,
+            }
+            legacy_path.write_text(json.dumps(legacy_payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        return str(path)
+
+    def _refresh_current_rk_state(self):
+        if not self.current_account:
+            self._show_status("Select an account first.", "red")
+            return
+        self._refresh_rk_state_for(self.current_account.email)
+        self._show_status("RK status refreshed.", "green")
+
+    def _refresh_rk_state_for(self, account_email: str):
+        workspace = self._account_workspaces.get(account_email)
+        details_tab = workspace.get("details_tab") if workspace else None
+        if details_tab:
+            details_tab.update_rk_state(self._build_rk_state(account_email))
+
+    def _build_rk_state(self, account_email: str) -> dict:
+        account_dir = self.account_service.get_account_dir(account_email)
+        if not account_dir or not account_dir.exists():
+            return {"bank_statement_exists": False, "selected_deposits": []}
+
+        bank_statement_exists = any(path.is_file() for path in account_dir.glob("*.pdf"))
+        selected_deposits = []
+        deposits_path = account_dir / "rk_deposits.json"
+        if deposits_path.exists():
+            try:
+                payload = json.loads(deposits_path.read_text(encoding="utf-8"))
+                deposits = payload.get("deposits") if isinstance(payload, dict) else []
+            except Exception:
+                deposits = []
+            for item in (deposits if isinstance(deposits, list) else []):
+                if not isinstance(item, dict) or not item.get("selected"):
+                    continue
+                selected_deposits.append({
+                    **item,
+                    "label": self._rk_deposit_label(item),
+                    "screenshot_exists": self._rk_deposit_screenshot_exists(account_dir, item),
+                })
+
+        return {
+            "bank_statement_exists": bank_statement_exists,
+            "selected_deposits": selected_deposits,
+        }
+
+    def _rk_deposit_screenshot_exists(self, account_dir, deposit: dict) -> bool:
+        filename = self._rk_deposit_screenshot_filename(deposit)
+        path = account_dir / filename
+        if path.exists():
+            return True
+        return any(account_dir.glob(f"{path.stem}_*.png"))
+
+    def _rk_deposit_screenshot_filename(self, deposit: dict) -> str:
+        insert_time = int(deposit.get("insert_time") or 0)
+        time_part = "unknown"
+        if insert_time:
+            time_part = datetime.fromtimestamp(insert_time / 1000).strftime("%Y-%m-%d_%H%M%S")
+        amount = self._safe_filename_part(str(deposit.get("amount") or "amount"))
+        coin = str(deposit.get("coin") or "coin")
+        coin_base = coin.split("-", 1)[0] if "-" in coin else coin
+        coin_part = self._safe_filename_part(coin_base)
+        return f"rk_deposit_{time_part}_{amount}_{coin_part}.png"
+
+    def _rk_deposit_label(self, deposit: dict) -> str:
+        insert_time = int(deposit.get("insert_time") or 0)
+        time_text = "-"
+        if insert_time:
+            time_text = datetime.fromtimestamp(insert_time / 1000).strftime("%Y-%m-%d %H:%M:%S")
+        amount = deposit.get("amount") or "-"
+        coin = deposit.get("coin") or ""
+        return f"{time_text} · {amount} {coin}".strip()
+
+    @staticmethod
+    def _safe_filename_part(value: str) -> str:
+        clean = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in value.strip())
+        clean = clean.strip("._-")
+        return clean or "value"
+
+    def _run_submit_rk(self):
+        account = self._require_adspower_account()
+        if not account:
+            return
+
+        self.details_tab.flush_autosave()
+        if not account.password:
+            self._show_status("Save the MEXC account password first.", "red")
+            return
+
+        mailboxes_raw, _ = self._get_email_credentials()
+        if not mailboxes_raw:
+            self._show_status("Add mailbox credentials in Settings first.", "red")
+            return
+
+        account_dir = self.account_service.get_account_dir(account.email)
+        if not account_dir or not account_dir.exists():
+            self._show_status("Account folder was not found.", "red")
+            return
+
+        try:
+            files = choose_rk_files(self, discover_rk_files(account_dir))
+        except OSError:
+            self._show_status("Could not read RK documents in the account folder.", "red")
+            return
+        if files is None:
+            self._show_status("Submit RK cancelled.", "#ff9800")
+            return
+        occupation_text = (self.settings.get("rk_occupation_details_text", "") or "").strip()
+        deposit_source_text = (self.settings.get("rk_deposit_source_text", "") or "").strip()
+
+        missing = list(files.get("missing") or [])
+        if not occupation_text:
+            missing.append("RK Occupation Details text in Settings")
+        if not deposit_source_text:
+            missing.append("RK Deposit Source text in Settings")
+
+        if missing:
+            confirmed = messagebox.askyesno(
+                "Submit RK",
+                "Not all RK data is ready.\n\n"
+                "The scenario can start, but MEXC may reject the application or require manual action.\n\n"
+                + "\n".join(f"- {item}" for item in missing[:10])
+                + "\n\nStart Submit RK anyway?",
+                parent=self,
+            )
+            if not confirmed:
+                self._show_status("Submit RK cancelled: missing RK data.", "#ff9800")
+                return
+
+        allow_resubmit = False
+        if read_submission_state(account_dir).get('status') in {'pending', 'unknown'}:
+            allow_resubmit = messagebox.askyesno(
+                'Submit RK — попередній результат невідомий',
+                'Спочатку перевірте статус попередньої заявки на MEXC.\n\n'
+                'Ви перевірили, що заявку не подано, і дозволяєте нову спробу?\n'
+                'Ні — сценарій лише перевірить статус без заповнення та подачі.', parent=self)
+        email_fetcher = MexcEmailCodeFetcher(mailboxes_raw)
+        scenario = SubmitMexcRiskControlScenario(
+            adspower=self.adspower,
+            account=account,
+            captcha_service=self.captcha_service,
+            email_fetcher=email_fetcher,
+            account_dir=account_dir,
+            address_pdf_paths=files.get("bank_statement_paths", []),
+            occupation_pdf_paths=files.get("bank_statement_paths", []),
+            deposit_screenshot_paths=files.get("deposit_screenshot_paths") or [],
+            occupation_details_text=occupation_text,
+            deposit_source_text=deposit_source_text,
+            deposit_source_type_text=normalized_category(
+                self.settings.get("rk_deposit_source_type_text"), DEPOSIT_SOURCE_TYPES, DEFAULT_DEPOSIT_SOURCE_TYPE),
+            address_document_type_text=normalized_category(
+                self.settings.get("rk_address_document_type_text"), ADDRESS_DOCUMENT_TYPES, DEFAULT_ADDRESS_TYPE),
+            allow_resubmit_after_review=allow_resubmit,
+            enforce_facescan_check=bool(self.settings.get("rk_enforce_facescan_check", True)),
+            on_captcha_detected=lambda email: self.after(0, lambda: self._show_captcha_modal(email)),
+            on_email_timeout=self._ask_wait_more_for_email_code,
+        )
+        scenario.manual_assist_handler = lambda step, states, initial: self._manual_assist_for_scenario(
+            scenario,
+            step,
+            states,
+            initial,
+        )
+        scenario.network_recovery_handler = lambda step, state: self._ask_network_recovery_action(
+            account.email,
+            step,
+            state,
+        )
+        self._submit_scenario_task(
+            "submit_mexc_risk_control",
+            scenario,
+            self._on_submit_rk_complete,
+            "Submit RK scenario started...",
+        )
+
+    def _on_submit_rk_complete(self, task_id: str, result):
+        self.task_service.complete_task(task_id, result)
+
+        def update_ui():
+            self._close_task_captcha(task_id)
+
+            if result.success:
+                account_email = result.data.get("account_email", "")
+                if account_email:
+                    self.event_service.emit(
+                        f"MEXC RK application submitted: {account_email}",
+                        account_email=account_email,
+                        task_id=task_id,
+                        event_type="mexc_rk_submitted",
+                        level="success",
+                    )
+                    self._refresh_rk_state_for(account_email)
+                self._show_status(result.message, "green")
+            else:
+                self._show_status(clean_error_message(result.message), "red")
+                self._prompt_retry_failed_task(task_id, result.message)
+
+        self.after(0, update_ui)
+
     def _on_latest_mexc_deposit_failed(self, account_email: str, error: str) -> None:
-        message = clean_error_message(error)
+        message = self._human_mexc_api_error(error)
         self.event_service.emit(
-            f"Failed to read latest MEXC deposit: {message}",
+            f"Failed to read RK MEXC deposits: {message}",
             account_email=account_email,
             event_type="mexc_latest_deposit_read",
             level="error",
         )
         self._show_status(message, "red")
+
+    @staticmethod
+    def _human_mexc_api_error(error: str) -> str:
+        raw = clean_error_message(error)
+        lower = raw.lower()
+        if "start time and end time diff cannot exceed 7 days" in lower or "query time cannot exceed 90 days" in lower:
+            return "MEXC limits history requests by date range. The app now splits the request automatically; try again."
+        if "signature" in lower:
+            return "MEXC rejected the API signature. Check the Secret Key."
+        if "api key" in lower or "apikey" in lower:
+            return "MEXC API key was rejected. Check API Key, Secret Key and permissions."
+        if "permission" in lower or "unauthorized" in lower:
+            return "MEXC API permissions are not enough. Enable deposit history read permission."
+        if raw.startswith("MEXC API error HTTP "):
+            parts = raw.split(":", 1)
+            return f"MEXC API: {parts[1].strip()}" if len(parts) == 2 else "MEXC API request failed."
+        return raw
 
     @staticmethod
     def _format_mexc_timestamp(timestamp_ms: int) -> str:
@@ -1507,10 +1837,22 @@ class App(ctk.CTk):
             self._show_status("Add mailbox credentials in Settings first!", "red")
             return
 
+        if account.two_fa_secret and self.settings.get('twofa_pending:' + account.email, False):
+            confirmed = messagebox.askyesno(
+                'Підтвердження наявної 2FA',
+                'Попередня операція не встигла підтвердити результат. Це не означає, що 2FA не прив’язана.\n\n'
+                'Ви вже завершили прив’язку на MEXC і збережений секрет відповідає активній 2FA?\n'
+                'Так — використати його для створення API. Ні — зупинитися без повторної прив’язки.',
+                parent=self,
+            )
+            if not confirmed:
+                self._show_status('Перевірте 2FA на MEXC та збережений секрет. Повторну прив’язку не запущено.', 'orange')
+                return
+            self.settings.set('twofa_pending:' + account.email, False)
         if not account.two_fa_secret:
             confirmed = messagebox.askyesno(
                 "MEXC API",
-                "This account has no saved 2FA secret.\n\n"
+                "Прив’язку 2FA ще не підтверджено.\n\n"
                 "Link 2FA now and continue API creation automatically?",
                 parent=self,
             )
@@ -1528,6 +1870,7 @@ class App(ctk.CTk):
             account=account,
             captcha_service=self.captcha_service,
             email_fetcher=email_fetcher,
+            on_keys_found=self._persist_api_credentials,
             on_captcha_detected=lambda email: self.after(0, lambda: self._show_captcha_modal(email)),
             on_email_timeout=self._ask_wait_more_for_email_code,
         )
@@ -1558,79 +1901,33 @@ class App(ctk.CTk):
             self.after(0, lambda: self._prompt_retry_failed_task(task_id, result.message))
 
     def _show_captcha_modal(self, account_email: str):
-        if self._captcha_modal is not None:
+        if account_email not in self._running_accounts:
+            return
+        previous = self._captcha_modals.pop(account_email, None)
+        if previous:
+            previous.destroy()
+        self._captcha_modals[account_email] = open_captcha_modal(self, account_email)
+
+    def _close_task_captcha(self, task_id):
+        task = self.task_service.get_task(task_id)
+        modal = self._captcha_modals.pop(task.account_email, None) if task else None
+        if modal:
             try:
-                self._captcha_modal.destroy()
+                modal.destroy()
             except Exception:
                 pass
-        self._captcha_modal = open_captcha_modal(self, account_email)
 
     def _ask_wait_more_for_email_code(self, account_email: str) -> bool:
-        result = {"wait_more": False}
-
-        def ask():
-            result["wait_more"] = messagebox.askyesno(
-                "MEXC email code",
-                f"No MEXC verification code arrived for {account_email} within 180 seconds.\n\n"
-                "Wait another 180 seconds?",
-                parent=self,
-            )
-            event.set()
-
-        event = threading.Event()
-        self.after(0, ask)
-        event.wait()
-        return result["wait_more"]
+        from ui.operation_prompts import ask_operation
+        return ask_operation(self, account_email, 'MEXC email code',
+            f'Код для {account_email} не надійшов за 180 секунд. Чекати ще?',
+            [('Чекати ще', True), ('Припинити', False)], False)
 
     def _ask_network_recovery_action(self, account_email: str, step_name: str, state: PageState) -> str:
-        result = {"action": "wait"}
-        done = threading.Event()
-
-        def ask():
-            dialog = ctk.CTkToplevel(self)
-            dialog.title("Network loading")
-            dialog.geometry("500x240")
-            dialog.transient(self)
-            dialog.grab_set()
-            dialog.grid_columnconfigure(0, weight=1)
-
-            ctk.CTkLabel(
-                dialog,
-                text=f"Page is not ready for {account_email}",
-                font=ctk.CTkFont(size=16, weight="bold"),
-                anchor="w",
-            ).grid(row=0, column=0, sticky="ew", padx=18, pady=(18, 8))
-            ctk.CTkLabel(
-                dialog,
-                text=(
-                    f"Step: {step_name}\n"
-                    f"Detected state: {state.name}\n\n"
-                    "The page may still be loading or the connection/proxy is unstable."
-                ),
-                justify="left",
-                anchor="w",
-                wraplength=460,
-            ).grid(row=1, column=0, sticky="ew", padx=18, pady=(0, 16))
-
-            buttons = ctk.CTkFrame(dialog, fg_color="transparent")
-            buttons.grid(row=2, column=0, sticky="e", padx=18, pady=(0, 18))
-
-            def choose(action: str):
-                result["action"] = action
-                try:
-                    dialog.destroy()
-                finally:
-                    done.set()
-
-            ctk.CTkButton(buttons, text="Чекати ще", width=110, command=lambda: choose("wait")).pack(side="left", padx=(0, 8))
-            ctk.CTkButton(buttons, text="Оновити сторінку", width=130, command=lambda: choose("refresh")).pack(side="left", padx=(0, 8))
-            ctk.CTkButton(buttons, text="Скасувати", width=100, fg_color="#555555",
-                          hover_color="#444444", command=lambda: choose("cancel")).pack(side="left")
-            dialog.protocol("WM_DELETE_WINDOW", lambda: choose("wait"))
-
-        self.after(0, ask)
-        done.wait()
-        return result["action"]
+        from ui.operation_prompts import ask_operation
+        return ask_operation(self, account_email, 'Очікування мережі',
+            f'{account_email}\nЕтап: {step_name}\nСтан: {state.name}\nПеревірте з’єднання або проксі.',
+            [('Чекати', 'wait'), ('Оновити', 'refresh'), ('Припинити', 'cancel')], 'cancel')
 
     def _manual_assist_for_scenario(
         self,
@@ -1658,6 +1955,8 @@ class App(ctk.CTk):
         )
 
         def create_dialog():
+            if action_event.is_set() or scenario.cancel_event.is_set():
+                return
             dialog = ctk.CTkToplevel(self)
             dialog.title("Manual assist")
             dialog.geometry("560x330")
@@ -1773,23 +2072,38 @@ class App(ctk.CTk):
 
             self.after(0, update_state)
             if state.name in allowed_states and state.confidence >= 0.72:
-                while time.time() < deadline and not action_event.is_set():
-                    time.sleep(0.2)
+                while time.time() < deadline and not action_event.wait(0.2):
+                    if scenario.cancel_event.is_set():
+                        result["action"] = ManualAssistAction.CANCEL
+                        action_event.set()
+                        break
                 break
-            time.sleep(3)
+            scenario.cancel_event.wait(3)
 
         if not action_event.is_set():
             result["action"] = ManualAssistAction.TIMEOUT
-            self.after(0, lambda: dialog_state.get("dialog") and dialog_state["dialog"].destroy())
+        self.after(0, lambda: dialog_state.get("dialog") and dialog_state["dialog"].destroy())
         return ManualAssistResult(result["action"], result["state"])
+
+    def _persist_api_credentials(self, account_email, api_key, secret_key):
+        account = self.account_service.get_account(account_email)
+        if not account:
+            raise RuntimeError('Акаунт для збереження API не знайдено')
+        account.api_key, account.secret_key = api_key, secret_key
+        self.account_service.save_account(account)
+        saved = self.account_service.get_account(account_email)
+        if not saved or saved.api_key != api_key or saved.secret_key != secret_key:
+            raise RuntimeError('Не вдалося підтвердити збереження API. Залиште вікно ключів відкритим.')
 
     def _save_link_mexc_2fa_secret_early(self, account_email: str, two_fa_secret: str) -> None:
         done = threading.Event()
+        errors = []
 
         def save():
             try:
                 account = self.account_service.get_account(account_email)
                 if account:
+                    self.settings.set('twofa_pending:' + account_email, True)
                     account.two_fa_secret = two_fa_secret
                     self.account_service.save_account(account)
                     workspace = self._account_workspaces.get(account_email)
@@ -1800,22 +2114,23 @@ class App(ctk.CTk):
                         self.current_account = account
                         self.details_tab.two_fa_widget.set_secret(two_fa_secret)
                     self._show_status("MEXC 2FA secret saved before verification...", "#2fa572")
+            except Exception as exc:
+                errors.append(exc)
             finally:
                 done.set()
 
         self.after(0, save)
-        done.wait()
+        if not done.wait(10):
+            raise RuntimeError('Не отримано підтвердження збереження 2FA secret від інтерфейсу')
+
+        if errors:
+            raise RuntimeError('Не вдалося зберегти 2FA secret') from errors[0]
 
     def _on_register_complete(self, task_id: str, result):
         self.task_service.complete_task(task_id, result)
 
         def update_ui():
-            if self._captcha_modal is not None:
-                try:
-                    self._captcha_modal.destroy()
-                except Exception:
-                    pass
-                self._captcha_modal = None
+            self._close_task_captcha(task_id)
 
             if result.success:
                 account_email = result.data.get("account_email", "")
@@ -1853,17 +2168,13 @@ class App(ctk.CTk):
         self.task_service.complete_task(task_id, result)
 
         def update_ui():
-            if self._captcha_modal is not None:
-                try:
-                    self._captcha_modal.destroy()
-                except Exception:
-                    pass
-                self._captcha_modal = None
+            self._close_task_captcha(task_id)
 
             if result.success:
                 account_email = result.data.get("account_email", "")
                 two_fa_secret = result.data.get("two_fa_secret", "")
                 if account_email and two_fa_secret:
+                    self.settings.set('twofa_pending:' + account_email, False)
                     account = self.account_service.get_account(account_email)
                     if account:
                         account.two_fa_secret = two_fa_secret
@@ -1888,12 +2199,7 @@ class App(ctk.CTk):
         self.task_service.complete_task(task_id, result)
 
         def update_ui():
-            if self._captcha_modal is not None:
-                try:
-                    self._captcha_modal.destroy()
-                except Exception:
-                    pass
-                self._captcha_modal = None
+            self._close_task_captcha(task_id)
 
             if result.success:
                 account_email = result.data.get("account_email", "")
@@ -1927,7 +2233,7 @@ class App(ctk.CTk):
 
     def _prompt_retry_failed_task(self, task_id: str, error: str) -> None:
         task = self.task_service.get_task(task_id)
-        if not task or task.status == "waiting_user":
+        if not task or task.status in ('waiting_user', 'cancelled', 'outcome_unknown'):
             return
         issue = self.error_classifier.classify(error)
         page_state = self._analyze_failed_task_state(task_id)
@@ -1951,7 +2257,6 @@ class App(ctk.CTk):
         )
         if action == "cancel":
             return
-        self.task_service.mark_retrying(task_id)
         self.load_account(task.account_email)
         self.after(
             100,
@@ -1963,9 +2268,9 @@ class App(ctk.CTk):
         )
 
     def _analyze_failed_task_state(self, task_id: str):
-        scenario = self._task_scenarios.get(task_id)
-        driver = getattr(scenario, "driver", None)
-        return self.mexc_state_analyzer.analyze(driver)
+        # The worker has released the browser; Tk must not issue WebDriver commands.
+        from automation.recovery import PageState
+        return PageState('unknown', 0.0)
 
     def _ask_retry_action(
         self,
@@ -2042,6 +2347,8 @@ class App(ctk.CTk):
             self._run_link_mexc_2fa()
         elif scenario_type == "create_mexc_api":
             self._run_create_mexc_api(skip_existing_prompt=True)
+        elif scenario_type == "submit_mexc_risk_control":
+            self._run_submit_rk()
         else:
             self._show_status(f"Unknown scenario type: {scenario_type}", "red")
 
@@ -2108,6 +2415,8 @@ class App(ctk.CTk):
             "link_mexc_2fa": "MEXC 2FA",
             "create_mexc_api": "MEXC API",
             "open_mexc": "MEXC profile",
+            "find_deposit_screenshot": "RK deposit screenshot",
+            "submit_mexc_risk_control": "Submit RK",
         }
         scenario_title = scenario_titles.get(scenario, "Operation")
 
@@ -2270,8 +2579,13 @@ class App(ctk.CTk):
         self.details_tab.flush_autosave()
         acc_dir = self.account_service.get_account_dir(self.current_account.email)
         if acc_dir:
-            BatchUploadModal(self, self.current_account.email, acc_dir,
-                             lambda count: self._show_status(f"Успішно збережено {count} файлів!", "green"))
+            account_email = self.current_account.email
+
+            def on_saved(count):
+                self._show_status(f"Успішно збережено {count} файлів!", "green")
+                self._refresh_rk_state_for(account_email)
+
+            BatchUploadModal(self, account_email, acc_dir, on_saved)
 
     def _open_folder(self):
         if not self.current_account:
@@ -2346,6 +2660,8 @@ class App(ctk.CTk):
                 return "break"
 
     def _on_close(self):
+        for scenario in list(self._task_scenarios.values()):
+            scenario.cancel()
         for workspace in list(self._account_workspaces.values()):
             workspace["details_tab"].flush_autosave()
             workspace["details_tab"].dispose()

@@ -45,11 +45,15 @@ def open_adspower_selenium_driver(
         conn.debug_port,
     )
     options = Options()
+    options.page_load_strategy = 'eager'
     options.add_experimental_option("debuggerAddress", conn.selenium_address)
     service = Service(conn.webdriver_path)
 
     try:
         driver = webdriver.Chrome(service=service, options=options)
+        driver.set_page_load_timeout(30)
+        driver.set_script_timeout(15)
+        driver.command_executor._client_config.timeout = 35
     except Exception:
         logger.exception(
             "Selenium attach failed context=%s profile_id=%s selenium=%s webdriver_path=%s",

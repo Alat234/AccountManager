@@ -303,20 +303,11 @@ def complete_login_totp_if_visible(ctx: MexcBrowserContext) -> bool:
     return False
 
 
-def handle_mexc_captcha(ctx: MexcBrowserContext, phase: str) -> None:
+def handle_mexc_captcha(ctx: MexcBrowserContext, phase: str, *, already_detected: bool = False) -> None:
     ctx.debug.step("captcha_check", phase=phase)
-    captcha_found = False
-    deadline = time.time() + 8
-    while time.time() < deadline:
-        raise_if_context_cancelled(ctx)
-        if detect_captcha(ctx.driver):
-            captcha_found = True
-            break
-        state = ctx.state_analyzer.analyze(ctx.driver)
-        if state.name == "captcha" and state.confidence >= 0.72:
-            captcha_found = True
-            break
-        time.sleep(1)
+    raise_if_context_cancelled(ctx)
+    from automation.scenarios.rk_captcha import captcha_visible
+    captcha_found = already_detected or captcha_visible(ctx.driver)
     if not captcha_found:
         ctx.debug.step("captcha_not_detected", phase=phase)
         return
@@ -635,7 +626,9 @@ def otp_values_match(driver: WebDriver, code: str) -> bool:
 
 
 def click_security_submit(driver: WebDriver, texts: tuple[str, ...] = ("submit", "confirm")) -> bool:
-    return click_button_in_modal(driver, texts, timeout=10) or click_by_text(driver, texts, timeout=5)
+    from automation.scenarios.security_submit import click_code_submit
+    return click_code_submit(driver, texts)
+
 
 
 def click_button_in_modal(driver: WebDriver, texts: tuple[str, ...], timeout: int = 10) -> bool:
@@ -744,27 +737,8 @@ def find_visible(driver: WebDriver, locators: tuple[Locator, ...], timeout: int 
 
 
 def clear_and_type(driver: WebDriver, element: WebElement, value: str) -> None:
-    try:
-        element.click()
-        element.send_keys(Keys.CONTROL, "a")
-        element.send_keys(Keys.BACKSPACE)
-        element.send_keys(value)
-        return
-    except Exception:
-        logger.debug("Keyboard input failed, using JS value setter", exc_info=True)
-    driver.execute_script(
-        """
-        const element = arguments[0];
-        const value = arguments[1];
-        const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
-            || Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set;
-        setter.call(element, value);
-        element.dispatchEvent(new Event('input', { bubbles: true }));
-        element.dispatchEvent(new Event('change', { bubbles: true }));
-        """,
-        element,
-        value,
-    )
+    from automation.scenarios.verified_input import fill_verified
+    fill_verified(driver, element, value)
 
 
 def page_text(driver: WebDriver) -> str:
@@ -787,8 +761,8 @@ def collect_error_text(driver: WebDriver) -> str:
                         && style.display !== 'none';
                 };
                 return [...document.querySelectorAll(
-                    '.ant-form-item-explain-error, .ant-message-error, .ant-notification-notice-message, '
-                    + '.ant-modal .error, [class*="error"], [class*="Error"]'
+                    '.ant-form-item-explain-error, .ant-form-item-v2-explain-error, .ant-message-error, .ant-notification-notice-error, '
+                    + '.ant-modal .error'
                 )].filter(visible).map((element) => element.innerText || element.textContent || '')
                     .join('\\n').trim();
                 """

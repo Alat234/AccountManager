@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 import time
+from automation.profile_access import PROFILE_ACCESS, profile_key
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
@@ -79,6 +80,10 @@ class ICloudHMEClient:
         self.progress_callback = callback
 
     def create_mask(self, label: str | None = None) -> str:
+        with PROFILE_ACCESS.hold(profile_key(self.adspower, self.profile_id)):
+            return self._create_mask_owned(label)
+
+    def _create_mask_owned(self, label: str | None = None) -> str:
         logger.info("Starting iCloud HME profile %s", self.profile_id)
         self._step("start")
         self.driver = self._open_driver()

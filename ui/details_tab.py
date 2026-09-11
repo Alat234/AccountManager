@@ -24,6 +24,14 @@ class DetailsTab:
         on_create_api=None,
         on_read_latest_deposit=None,
         on_find_deposit_screenshot=None,
+        on_register_mexc=None,
+        on_delete_account=None,
+        on_upload_files=None,
+        on_open_folder=None,
+        on_refresh_rk_state=None,
+        on_submit_rk=None,
+        on_launch_adspower=None,
+        on_unlink_adspower=None,
         on_remark_save=None,
     ):
         self.parent = parent
@@ -33,11 +41,20 @@ class DetailsTab:
         self.on_create_api = on_create_api
         self.on_read_latest_deposit = on_read_latest_deposit
         self.on_find_deposit_screenshot = on_find_deposit_screenshot
+        self.on_register_mexc = on_register_mexc
+        self.on_delete_account = on_delete_account
+        self.on_upload_files = on_upload_files
+        self.on_open_folder = on_open_folder
+        self.on_refresh_rk_state = on_refresh_rk_state
+        self.on_submit_rk = on_submit_rk
+        self.on_launch_adspower = on_launch_adspower
+        self.on_unlink_adspower = on_unlink_adspower
         self.on_remark_save = on_remark_save
         self._autosave_after_id = None
         self._current_email = None
         self._current_serial = 0
         self._current_profile_id = ""
+        self._rk_deposit_rows = []
 
         self._build(parent, get_email_credentials)
 
@@ -85,82 +102,189 @@ class DetailsTab:
         )
         self.lbl_profile_id.grid(row=1, column=1, sticky="ew", padx=(0, 16), pady=(0, 14))
 
+        self.btn_delete_account = ctk.CTkButton(
+            self.header_card,
+            text="Видалити",
+            width=110,
+            fg_color="#8b0000",
+            hover_color="#5c0000",
+            command=self._on_delete_account,
+        )
+        self.btn_delete_account.grid(row=0, column=2, rowspan=2, sticky="ne", padx=14, pady=14)
+
         main_container = ctk.CTkFrame(self.scroll, fg_color="transparent")
         main_container.grid(row=1, column=0, sticky="nsew", padx=10, pady=(0, 10))
-        main_container.grid_columnconfigure(0, weight=6)
-        main_container.grid_columnconfigure(1, weight=4)
+        main_container.grid_columnconfigure(0, weight=38)
+        main_container.grid_columnconfigure(1, weight=32)
+        main_container.grid_columnconfigure(2, weight=30)
 
         left_side = ctk.CTkFrame(main_container, fg_color="transparent")
-        left_side.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+        left_side.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+
+        middle_side = ctk.CTkFrame(main_container, fg_color="transparent")
+        middle_side.grid(row=0, column=1, sticky="nsew", padx=8)
 
         right_side = ctk.CTkFrame(main_container, fg_color="transparent")
-        right_side.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
+        right_side.grid(row=0, column=2, sticky="nsew", padx=(8, 0))
 
         profile_card = self._card(left_side, "Профіль")
         profile_card.pack(fill="x", pady=(0, 12))
         profile_inner = ctk.CTkFrame(profile_card, fg_color="transparent")
         profile_inner.pack(fill="x", padx=12, pady=(0, 12))
-        profile_inner.grid_columnconfigure((0, 1), weight=1)
+        profile_inner.grid_columnconfigure(0, weight=1)
 
-        self._field_label(profile_inner, "№ AdsPower", 0, 0)
-        self.entry_ads_serial = ctk.CTkEntry(profile_inner)
-        self.entry_ads_serial.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 10))
-        self.entry_ads_serial.configure(state="disabled")
-
-        self._field_label(profile_inner, "Статус / папка", 0, 1)
-        self.status_var = ctk.StringVar(value=STATUSES[0])
-        self.opt_status = ctk.CTkOptionMenu(
-            profile_inner,
-            values=STATUSES,
-            variable=self.status_var,
-            command=lambda _choice: self._schedule_autosave(),
-        )
-        self.opt_status.grid(row=1, column=1, sticky="ew", padx=5, pady=(0, 10))
-
-        self._field_label(profile_inner, "Головна пошта", 2, 0)
-        self._field_label(profile_inner, "Пароль", 2, 1)
+        self._field_label(profile_inner, "Головна пошта", 0, 0)
 
         frame_main_email, self.entry_main_email = create_entry_with_copy(
             profile_inner,
             self.copy_func,
             font=ctk.CTkFont(weight="bold"),
         )
-        frame_main_email.grid(row=3, column=0, sticky="ew", padx=5, pady=(0, 10))
+        frame_main_email.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 10))
 
+        self._field_label(profile_inner, "Пароль", 2, 0)
         frame_pass, self.entry_pass = create_entry_with_copy(profile_inner, self.copy_func)
-        frame_pass.grid(row=3, column=1, sticky="ew", padx=5, pady=(0, 10))
+        frame_pass.grid(row=3, column=0, sticky="ew", padx=5, pady=(0, 10))
 
         self._field_label(profile_inner, "Теги AdsPower", 4, 0)
         self.tags_frame = ctk.CTkFrame(profile_inner, fg_color="#17191c", corner_radius=6, height=34)
-        self.tags_frame.grid(row=5, column=0, columnspan=2, sticky="ew", padx=5, pady=(0, 10))
+        self.tags_frame.grid(row=5, column=0, sticky="ew", padx=5, pady=(0, 10))
         self.tags_frame.pack_propagate(False)
 
         self._field_label(profile_inner, "Зауваження / remark", 6, 0)
-        remark_frame = ctk.CTkFrame(profile_inner, fg_color="transparent")
-        remark_frame.grid(row=7, column=0, columnspan=2, sticky="ew", padx=5, pady=(0, 2))
-        remark_frame.grid_columnconfigure(0, weight=1)
-        self.entry_ads_remark = ctk.CTkTextbox(remark_frame, height=72, wrap="word")
-        self.entry_ads_remark.grid(row=0, column=0, sticky="ew", padx=(0, 8))
+        self.entry_ads_remark = ctk.CTkTextbox(profile_inner, height=76, wrap="word")
+        self.entry_ads_remark.grid(row=7, column=0, sticky="ew", padx=5, pady=(0, 8))
+        profile_buttons = ctk.CTkFrame(profile_inner, fg_color="transparent")
+        profile_buttons.grid(row=8, column=0, sticky="ew", padx=5, pady=(0, 2))
+        profile_buttons.grid_columnconfigure((0, 1), weight=1)
+        self.btn_register_mexc = ctk.CTkButton(
+            profile_buttons,
+            text="Register",
+            fg_color="#1f538d",
+            hover_color="#143a63",
+            command=self._on_register_mexc,
+        )
+        self.btn_register_mexc.grid(row=0, column=0, sticky="ew", padx=(0, 4))
         self.btn_save_remark = ctk.CTkButton(
-            remark_frame,
+            profile_buttons,
             text="Синхр. ADS",
-            width=96,
             height=32,
             fg_color="#1f538d",
             hover_color="#143a63",
             command=self._on_remark_save,
         )
-        self.btn_save_remark.grid(row=0, column=1, sticky="n")
+        self.btn_save_remark.grid(row=0, column=1, sticky="ew", padx=(4, 0))
+        ads_buttons = ctk.CTkFrame(profile_inner, fg_color="transparent")
+        ads_buttons.grid(row=9, column=0, sticky="ew", padx=5, pady=(8, 2))
+        ads_buttons.grid_columnconfigure((0, 1), weight=1)
+        ctk.CTkButton(
+            ads_buttons,
+            text="Відкрити ADS",
+            command=self._on_launch_adspower,
+        ).grid(row=0, column=0, sticky="ew", padx=(0, 4))
+        ctk.CTkButton(
+            ads_buttons,
+            text="Відв'язати",
+            fg_color="#6a4c93",
+            hover_color="#4a3570",
+            command=self._on_unlink_adspower,
+        ).grid(row=0, column=1, sticky="ew", padx=(4, 0))
 
-        security_card = self._card(left_side, "API MEXC")
+        rk_card = self._card(middle_side, "RK")
+        rk_card.pack(fill="x", pady=(0, 12))
+        rk_inner = ctk.CTkFrame(rk_card, fg_color="transparent")
+        rk_inner.pack(fill="x", padx=12, pady=(0, 12))
+        rk_inner.grid_columnconfigure(0, weight=1)
+        rk_top = ctk.CTkFrame(rk_inner, fg_color="transparent")
+        rk_top.grid(row=0, column=0, sticky="ew", padx=5, pady=(0, 8))
+        rk_top.grid_columnconfigure(0, weight=1)
+        self.rk_summary_label = ctk.CTkLabel(rk_top, text="Файли RK", text_color="#dce4ee", anchor="w")
+        self.rk_summary_label.grid(row=0, column=0, sticky="ew")
+        self.btn_refresh_rk = ctk.CTkButton(
+            rk_top,
+            text="↻",
+            width=34,
+            fg_color="#343638",
+            hover_color="#1f538d",
+            command=self._on_refresh_rk_state,
+        )
+        self.btn_refresh_rk.grid(row=0, column=1, sticky="e")
+
+        self.rk_bank_row, self.rk_bank_dot, self.rk_bank_label = self._rk_status_row(
+            rk_inner,
+            "Bank statement PDF",
+            1,
+        )
+        self.rk_deposits_frame = ctk.CTkFrame(rk_inner, fg_color="#17191c", corner_radius=6)
+        self.rk_deposits_frame.grid(row=2, column=0, sticky="ew", padx=5, pady=(4, 10))
+
+        rk_buttons = ctk.CTkFrame(rk_inner, fg_color="transparent")
+        rk_buttons.grid(row=3, column=0, sticky="ew", padx=5, pady=(0, 8))
+        rk_buttons.grid_columnconfigure(0, weight=1)
+        self.btn_latest_deposit = ctk.CTkButton(
+            rk_buttons,
+            text="Find RK Deposits",
+            fg_color="#2f6f52",
+            hover_color="#255842",
+            command=self._on_read_latest_deposit,
+        )
+        self.btn_latest_deposit.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        self.btn_find_deposit_screenshot = ctk.CTkButton(
+            rk_buttons,
+            text="Make Deposit Screenshot",
+            fg_color="#7a5c1e",
+            hover_color="#5d4617",
+            state="disabled",
+            command=self._on_find_deposit_screenshot,
+        )
+        self.btn_find_deposit_screenshot.grid(row=1, column=0, sticky="ew", pady=(0, 8))
+        self.btn_submit_rk = ctk.CTkButton(
+            rk_buttons,
+            text="Submit RK",
+            fg_color="#8b5cf6",
+            hover_color="#6d28d9",
+            command=self._on_submit_rk,
+        )
+        self.btn_submit_rk.grid(row=2, column=0, sticky="ew")
+
+        files_card = self._card(middle_side, "Файли")
+        files_card.pack(fill="x", pady=(0, 12))
+        files_inner = ctk.CTkFrame(files_card, fg_color="transparent")
+        files_inner.pack(fill="x", padx=12, pady=(0, 12))
+        files_inner.grid_columnconfigure(0, weight=1)
+        self._field_label(files_inner, "Статус / папка", 0, 0)
+        self.status_var = ctk.StringVar(value=STATUSES[0])
+        self.opt_status = ctk.CTkOptionMenu(
+            files_inner,
+            values=STATUSES,
+            variable=self.status_var,
+            command=lambda _choice: self._schedule_autosave(),
+        )
+        self.opt_status.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 10))
+        file_buttons = ctk.CTkFrame(files_inner, fg_color="transparent")
+        file_buttons.grid(row=2, column=0, sticky="ew", padx=5, pady=(0, 2))
+        file_buttons.grid_columnconfigure((0, 1), weight=1)
+        ctk.CTkButton(file_buttons, text="Завантажити", command=self._on_upload_files).grid(
+            row=0, column=0, sticky="ew", padx=(0, 4)
+        )
+        ctk.CTkButton(file_buttons, text="Папка", command=self._on_open_folder).grid(
+            row=0, column=1, sticky="ew", padx=(4, 0)
+        )
+
+        self.two_fa_widget = TwoFactorAuthWidget(
+            right_side,
+            self.copy_func,
+            on_create_2fa=self.on_create_2fa,
+        )
+        self.two_fa_widget.pack(fill="x", pady=(0, 12))
+
+        security_card = self._card(right_side, "API MEXC")
         security_card.pack(fill="x", pady=(0, 12))
         access_inner = ctk.CTkFrame(security_card, fg_color="transparent")
         access_inner.pack(fill="x", padx=12, pady=(0, 12))
-        access_inner.grid_columnconfigure((0, 1), weight=1)
+        access_inner.grid_columnconfigure(0, weight=1)
 
         self._field_label(access_inner, "API Key", 0, 0)
-        self._field_label(access_inner, "Secret Key", 0, 1)
-
         frame_api, self.entry_api = create_entry_with_copy(access_inner, self.copy_func)
         self.btn_create_api = ctk.CTkButton(
             frame_api,
@@ -171,38 +295,14 @@ class DetailsTab:
             command=self._on_create_api,
         )
         self.btn_create_api.grid(row=0, column=2, padx=(5, 0))
-        self.btn_latest_deposit = ctk.CTkButton(
-            frame_api,
-            text="Last Deposit",
-            width=105,
-            fg_color="#2f6f52",
-            hover_color="#255842",
-            command=self._on_read_latest_deposit,
-        )
-        self.btn_latest_deposit.grid(row=0, column=3, padx=(5, 0))
-        self.btn_find_deposit_screenshot = ctk.CTkButton(
-            frame_api,
-            text="Find Screenshot",
-            width=120,
-            fg_color="#7a5c1e",
-            hover_color="#5d4617",
-            command=self._on_find_deposit_screenshot,
-        )
-        self.btn_find_deposit_screenshot.grid(row=0, column=4, padx=(5, 0))
         frame_api.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 10))
 
+        self._field_label(access_inner, "Secret Key", 2, 0)
         frame_secret, self.entry_secret = create_entry_with_copy(access_inner, self.copy_func)
-        frame_secret.grid(row=1, column=1, sticky="ew", padx=5, pady=(0, 10))
+        frame_secret.grid(row=3, column=0, sticky="ew", padx=5, pady=(0, 10))
 
-        self.two_fa_widget = TwoFactorAuthWidget(
-            right_side,
-            self.copy_func,
-            on_create_2fa=self.on_create_2fa,
-        )
-        self.two_fa_widget.pack(fill="x", pady=(0, 12))
-
-        self.email_codes_widget = EmailCodesWidget(right_side, self.copy_func, get_email_credentials)
-        self.email_codes_widget.pack(fill="both", expand=True)
+        self.email_codes_widget = EmailCodesWidget(right_side, self.copy_func, get_email_credentials, compact=True)
+        self.email_codes_widget.pack(fill="x", expand=False)
 
         self._setup_autosave_bindings()
 
@@ -232,6 +332,82 @@ class DetailsTab:
             pady=(5, 0),
         )
 
+    @staticmethod
+    def _rk_status_row(parent, text, row):
+        frame = ctk.CTkFrame(parent, fg_color="transparent")
+        frame.grid(row=row, column=0, sticky="ew", padx=5, pady=3)
+        frame.grid_columnconfigure(1, weight=1)
+        dot = ctk.CTkLabel(
+            frame,
+            text="✕",
+            width=26,
+            height=24,
+            corner_radius=12,
+            fg_color="#7f1d1d",
+            text_color="white",
+            font=ctk.CTkFont(size=13, weight="bold"),
+        )
+        dot.grid(row=0, column=0, sticky="w", padx=(0, 8))
+        label = ctk.CTkLabel(frame, text=text, anchor="w")
+        label.grid(row=0, column=1, sticky="ew")
+        return frame, dot, label
+
+    @staticmethod
+    def _set_status_dot(dot, ok: bool):
+        dot.configure(
+            text="✓" if ok else "✕",
+            fg_color="#166534" if ok else "#7f1d1d",
+        )
+
+    def update_rk_state(self, state: dict | None):
+        state = state or {}
+        bank_ok = bool(state.get("bank_statement_exists"))
+        deposits = state.get("selected_deposits") or []
+
+        self._set_status_dot(self.rk_bank_dot, bank_ok)
+        self.rk_bank_label.configure(
+            text="Bank statement PDF" if bank_ok else "Bank statement PDF missing"
+        )
+
+        for widget in self.rk_deposits_frame.winfo_children():
+            widget.destroy()
+        self._rk_deposit_rows = []
+
+        if not deposits:
+            ctk.CTkLabel(
+                self.rk_deposits_frame,
+                text="Немає вибраних RK депозитів",
+                text_color="gray",
+            ).pack(anchor="w", padx=10, pady=10)
+            self.rk_summary_label.configure(text="RK: deposits not selected")
+            self.btn_find_deposit_screenshot.configure(state="disabled")
+            return
+
+        loaded_count = 0
+        for deposit in deposits:
+            row = ctk.CTkFrame(self.rk_deposits_frame, fg_color="transparent")
+            row.pack(fill="x", padx=8, pady=3)
+            row.grid_columnconfigure(1, weight=1)
+            ok = bool(deposit.get("screenshot_exists"))
+            loaded_count += 1 if ok else 0
+            dot = ctk.CTkLabel(
+                row,
+                text="✓" if ok else "✕",
+                width=24,
+                height=22,
+                corner_radius=11,
+                fg_color="#166534" if ok else "#7f1d1d",
+                text_color="white",
+                font=ctk.CTkFont(size=12, weight="bold"),
+            )
+            dot.grid(row=0, column=0, sticky="w", padx=(0, 8))
+            label = ctk.CTkLabel(row, text=deposit.get("label") or "Deposit screenshot", anchor="w")
+            label.grid(row=0, column=1, sticky="ew")
+            self._rk_deposit_rows.append((dot, label))
+
+        self.rk_summary_label.configure(text=f"RK: {loaded_count}/{len(deposits)} screenshots")
+        self.btn_find_deposit_screenshot.configure(state="normal")
+
     def _setup_autosave_bindings(self):
         for entry in (
             self.entry_pass,
@@ -251,7 +427,6 @@ class DetailsTab:
         self.lbl_editing_status.configure(text=account.email)
         self.lbl_profile_id.configure(text=f"AdsPower ID: {account.ads_profile_id or '-'}")
 
-        self._set_disabled_entry(self.entry_ads_serial, str(account.ads_serial_number or ""))
         self.entry_main_email.delete(0, "end")
         self.entry_main_email.insert(0, account.email)
         self.entry_pass.delete(0, "end")
@@ -274,6 +449,7 @@ class DetailsTab:
         )
         self.email_codes_widget.auto_var.set(False)
         self.email_codes_widget.last_found_code = None
+        self.update_rk_state({})
 
     @staticmethod
     def _set_disabled_entry(entry, value):
@@ -338,7 +514,6 @@ class DetailsTab:
         self.lbl_profile_number.configure(text="№ -")
         self.lbl_profile_id.configure(text="AdsPower ID: -")
         self.lbl_editing_status.configure(text="Акаунт не вибрано")
-        self._set_disabled_entry(self.entry_ads_serial, "")
         self.entry_main_email.delete(0, "end")
         self.entry_pass.delete(0, "end")
         self.entry_api.delete(0, "end")
@@ -346,6 +521,7 @@ class DetailsTab:
         self.entry_ads_remark.delete("1.0", "end")
         self.two_fa_widget.set_secret("")
         self._render_tags([])
+        self.update_rk_state({})
 
     def _schedule_autosave(self):
         if not self._current_email:
@@ -392,3 +568,35 @@ class DetailsTab:
     def _on_remark_save(self):
         if self.on_remark_save and self._current_email:
             self.on_remark_save(self._current_email, self.entry_ads_remark.get("1.0", "end").strip())
+
+    def _on_register_mexc(self):
+        if self.on_register_mexc:
+            self.on_register_mexc()
+
+    def _on_delete_account(self):
+        if self.on_delete_account:
+            self.on_delete_account()
+
+    def _on_upload_files(self):
+        if self.on_upload_files:
+            self.on_upload_files()
+
+    def _on_open_folder(self):
+        if self.on_open_folder:
+            self.on_open_folder()
+
+    def _on_refresh_rk_state(self):
+        if self.on_refresh_rk_state:
+            self.on_refresh_rk_state()
+
+    def _on_submit_rk(self):
+        if self.on_submit_rk:
+            self.on_submit_rk()
+
+    def _on_launch_adspower(self):
+        if self.on_launch_adspower:
+            self.on_launch_adspower()
+
+    def _on_unlink_adspower(self):
+        if self.on_unlink_adspower:
+            self.on_unlink_adspower()

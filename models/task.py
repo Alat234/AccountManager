@@ -20,3 +20,5 @@ class AutomationTask:
     recoverable: bool = False
     requires_user_confirmation: bool = False
     resume_data: str = ""
+    version: int = 0
+    external_action_pending: bool = False

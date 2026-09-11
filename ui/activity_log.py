@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import customtkinter as ctk
+from ui.active_operation import ActiveOperationView
 
 
 class ActivityLogPanel(ctk.CTkFrame):
@@ -15,7 +16,8 @@ class ActivityLogPanel(ctk.CTkFrame):
             corner_radius=8,
         )
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+        self.active = ActiveOperationView(self)
 
         header = ctk.CTkFrame(self, fg_color="transparent")
         header.grid(row=0, column=0, sticky="ew", padx=12, pady=(8, 2))
@@ -47,9 +49,16 @@ class ActivityLogPanel(ctk.CTkFrame):
             font=ctk.CTkFont(family="Consolas", size=12),
             wrap="word",
         )
-        self.textbox.grid(row=1, column=0, sticky="nsew", padx=10, pady=(4, 10))
+        self.textbox.grid(row=2, column=0, sticky="nsew", padx=10, pady=(4, 10))
         self.textbox.configure(state="disabled")
         self.add("Система готова до роботи.", "info")
+
+    def set_operation(self, operation):
+        if operation:
+            self.active.grid(row=1, column=0, sticky='ew', padx=10, pady=4)
+            self.active.update_operation(operation)
+        else:
+            self.active.grid_remove()
 
     def add(self, message: str, level: str = "info") -> None:
         if not message:

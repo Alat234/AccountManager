@@ -14,7 +14,10 @@ from models.operation_event import OperationEvent
 from models.task import AutomationTask
 
 
-class DatabaseManager:
+from storage.task_repository import TaskRepositoryMixin
+
+
+class DatabaseManager(TaskRepositoryMixin):
     def __init__(self):
         self.db_path = BASE_DIR / "database.db"
         self.init_db()
@@ -155,6 +158,19 @@ class DatabaseManager:
             )
         if "resume_data" not in task_columns:
             cursor.execute("ALTER TABLE automation_tasks ADD COLUMN resume_data TEXT DEFAULT ''")
+
+        if "version" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN version INTEGER NOT NULL DEFAULT 0")
+        if "external_action_pending" not in task_columns:
+            cursor.execute("ALTER TABLE automation_tasks ADD COLUMN external_action_pending INTEGER NOT NULL DEFAULT 0")
+            import json
+            for task_id, raw in cursor.execute("SELECT id, resume_data FROM automation_tasks").fetchall():
+                try:
+                    pending = bool(json.loads(raw or '{}').get('external_action_pending'))
+                except (ValueError, AttributeError):
+                    pending = True
+                if pending:
+                    cursor.execute("UPDATE automation_tasks SET external_action_pending=1 WHERE id=?", (task_id,))
 
     # ── Account methods (new, return dataclasses) ──
 
@@ -539,25 +555,6 @@ class DatabaseManager:
         conn.commit()
         conn.close()
 
-    def update_task(self, task: AutomationTask):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute(
-            '''UPDATE automation_tasks
-               SET status=?, completed_at=?, result_message=?, result_data=?,
-                   current_step=?, last_error=?, retry_count=?, recoverable=?,
-                   requires_user_confirmation=?, resume_data=?
-               WHERE id=?''',
-            (task.status,
-             task.completed_at.isoformat() if task.completed_at else None,
-             task.result_message, task.result_data, task.current_step,
-             task.last_error, task.retry_count, 1 if task.recoverable else 0,
-             1 if task.requires_user_confirmation else 0, task.resume_data,
-             task.id),
-        )
-        conn.commit()
-        conn.close()
-
     def get_recent_tasks(self, limit: int = 20) -> list[AutomationTask]:
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
@@ -568,29 +565,7 @@ class DatabaseManager:
         )
         rows = cursor.fetchall()
         conn.close()
-        from datetime import datetime
-        result = []
-        for r in rows:
-            completed = None
-            if r["completed_at"]:
-                completed = datetime.fromisoformat(r["completed_at"])
-            result.append(AutomationTask(
-                id=r["id"],
-                account_email=r["account_email"],
-                scenario_type=r["scenario_type"],
-                status=r["status"],
-                created_at=datetime.fromisoformat(r["created_at"]),
-                completed_at=completed,
-                result_message=r["result_message"] or "",
-                result_data=r["result_data"] or "",
-                current_step=r["current_step"] or "",
-                last_error=r["last_error"] or "",
-                retry_count=r["retry_count"] or 0,
-                recoverable=bool(r["recoverable"] or 0),
-                requires_user_confirmation=bool(r["requires_user_confirmation"] or 0),
-                resume_data=r["resume_data"] or "",
-            ))
-        return result
+        return [self._task_from_row(row) for row in rows]
 
     # Operation event methods
 
