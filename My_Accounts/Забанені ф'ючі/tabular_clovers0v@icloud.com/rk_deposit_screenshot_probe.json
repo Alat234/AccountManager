@@ -1,0 +1,240 @@
+{
+  "reason": "verified_details_not_found",
+  "criteria": {
+    "amount": "350",
+    "coin": "USDT-BSC",
+    "coin_base": "USDT",
+    "network": "BNB Smart Chain(BEP20)",
+    "address": "0x0cd4721f8afa5861a4d75bac453ed55bc9fd928f",
+    "tx_id": "INTERNAL9ad1dfdf18734b9eb7144bea2f31f0d9",
+    "date_hints": [
+      "2026-08-28",
+      "2026/08/28",
+      "08-28",
+      "19:52",
+      "2026-08-28",
+      "16:52"
+    ],
+    "address_hints_count": 60,
+    "address_hints_sample": [
+      "0x0cd...928f",
+      "0x0cd...9fd928f",
+      "0x0cd...c9fd928f",
+      "0x0cd...d928f",
+      "0x0cd...fd928f",
+      "0x0cd4...928f",
+      "0x0cd4...9fd928f",
+      "0x0cd4...c9fd928f"
+    ],
+    "tx_hints_count": 60,
+    "tx_hints_sample": [
+      "inter...1f0d9",
+      "inter...2f31f0d9",
+      "inter...31f0d9",
+      "inter...f0d9",
+      "inter...f31f0d9",
+      "intern...1f0d9",
+      "intern...2f31f0d9",
+      "intern...31f0d9"
+    ]
+  },
+  "pages": [
+    {
+      "page": 1,
+      "snapshot": {
+        "hasAmount": true,
+        "hasCoin": true,
+        "hasDate": false,
+        "hasEmptyState": false,
+        "rowCount": 30,
+        "url": "https://www.mexc.com/assets/record",
+        "title": "Bitcoin, Litecoin, Ethereum Assets | MEXC Exchange",
+        "bodyHint": "buy crypto markets spot futures btc earn event center rewards hub more 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 deposit wallets orders overview spot maker 0% / taker 0.05% realstocks futures maker 0%-0.02% / taker 0%-0.06% fiat earn new prediction markets copy trade trading bot on-chain funding history claim 10,000 usdt bonus deposit withdrawal transfer send others time crypto all reset refresh export crypto network time status amount fee withdrawal address action usdt bsc bnb smart chain(bep20) 2026-08-31 11:50:56 withdrawal successful 350 0.01 0x004...bb4eb details usdt bsc bnb smart chain(bep20) 2026-08-31 11:08:26 withdrawal successful 150 0 0x632...c304c details usdt bsc bnb smart chain(bep20) 2026-08-31 10:55:10 withdrawal successful 150 0 0x0bf...52655 details usdt bsc bnb smart chain(bep20) 2026-08-30 22:17:57 withdrawal successful 350 0 0xcf0...8c900 details usdt bsc bnb smart chain(bep20) 2026-08-30 14:38:10 withdrawal successful 100 0.01 0x016...ff969 details usdt bsc bnb smart chain(bep20) 2026-08-30 14:28:05 withdrawal successful 800 0 0xa59...6707d details usdt bsc bnb smart chain(bep20) 2026-08-30 10:23:37 withdrawal successful 200 0.01 0xee9...fa07b details usdt bsc bnb smart chain(bep20) 2026-08-29 22:09:41 withdrawal successful 20 0.01 0x6c4...ad788 details usdt bsc bnb smart chain(bep20) 2026-08-29 21:44:43 withdrawal successful 200 0 0xa89...7a460 details usdt bsc bnb sma",
+        "rows": [
+          "overview",
+          "spot maker 0% / taker 0.05%",
+          "realstocks",
+          "futures maker 0%-0.02% / taker 0%-0.06%",
+          "fiat",
+          "earn new",
+          "prediction markets",
+          "copy trade",
+          "trading bot",
+          "on-chain",
+          "funding history",
+          "time",
+          "crypto all",
+          "all",
+          "crypto network time status amount fee withdrawal address action",
+          "usdt bsc bnb smart chain(bep20) 2026-08-31 11:50:56 withdrawal successful 350 0.01 0x004...bb4eb details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-31 11:08:26 withdrawal successful 150 0 0x632...c304c details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-31 10:55:10 withdrawal successful 150 0 0x0bf...52655 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-30 22:17:57 withdrawal successful 350 0 0xcf0...8c900 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-30 14:38:10 withdrawal successful 100 0.01 0x016...ff969 details"
+        ]
+      },
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "page": 2,
+      "snapshot": {
+        "hasAmount": true,
+        "hasCoin": true,
+        "hasDate": true,
+        "hasEmptyState": false,
+        "rowCount": 30,
+        "url": "https://www.mexc.com/assets/record",
+        "title": "Bitcoin, Litecoin, Ethereum Assets | MEXC Exchange",
+        "bodyHint": "buy crypto markets spot futures btc earn event center rewards hub more 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 deposit wallets orders overview spot maker 0% / taker 0.05% realstocks futures maker 0%-0.02% / taker 0%-0.06% fiat earn new prediction markets copy trade trading bot on-chain funding history claim 10,000 usdt bonus deposit withdrawal transfer send others time crypto all reset refresh export crypto network time status amount fee withdrawal address action usdt bsc bnb smart chain(bep20) 2026-08-29 21:24:56 withdrawal successful 800 0.01 0xa3c...8860a details usdt bsc bnb smart chain(bep20) 2026-08-29 17:08:53 withdrawal successful 360 0 0x643...a066a details usdt bsc bnb smart chain(bep20) 2026-08-29 08:44:56 withdrawal successful 400 0.01 0xa92...5090b details usdt bsc bnb smart chain(bep20) 2026-08-29 08:39:13 withdrawal successful 140 0 0x643...a066a details usdt bsc bnb smart chain(bep20) 2026-08-29 08:37:48 withdrawal successful 140 0 0xa63...f2a79 details usdt bsc bnb smart chain(bep20) 2026-08-28 19:31:11 withdrawal successful 30 0.01 0xa54...77f5b details usdt bsc bnb smart chain(bep20) 2026-08-28 19:13:53 withdrawal successful 1,000 0 0x427...cba27 details usdt bsc bnb smart chain(bep20) 2026-08-28 19:02:34 withdrawal successful 650 0 0x0cd...d928f details usdt bsc bnb smart chain(bep20) 2026-08-28 18:51:03 withdrawal successful 350 0 0x0cd...d928f details usdt bsc bnb smar",
+        "rows": [
+          "overview",
+          "spot maker 0% / taker 0.05%",
+          "realstocks",
+          "futures maker 0%-0.02% / taker 0%-0.06%",
+          "fiat",
+          "earn new",
+          "prediction markets",
+          "copy trade",
+          "trading bot",
+          "on-chain",
+          "funding history",
+          "time",
+          "crypto all",
+          "all",
+          "crypto network time status amount fee withdrawal address action",
+          "usdt bsc bnb smart chain(bep20) 2026-08-29 21:24:56 withdrawal successful 800 0.01 0xa3c...8860a details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-29 17:08:53 withdrawal successful 360 0 0x643...a066a details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-29 08:44:56 withdrawal successful 400 0.01 0xa92...5090b details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-29 08:39:13 withdrawal successful 140 0 0x643...a066a details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-29 08:37:48 withdrawal successful 140 0 0xa63...f2a79 details"
+        ]
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 99,
+          "matched": [
+            "address_hint",
+            "amount",
+            "coin_base",
+            "network",
+            "date"
+          ],
+          "text": "usdt bsc bnb smart chain(bep20) 2026-08-28 18:51:03 withdrawal successful 350 0 0x0cd...d928f details"
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "snapshot": {
+        "hasAmount": false,
+        "hasCoin": true,
+        "hasDate": true,
+        "hasEmptyState": false,
+        "rowCount": 38,
+        "url": "https://www.mexc.com/assets/record",
+        "title": "Bitcoin, Litecoin, Ethereum Assets | MEXC Exchange",
+        "bodyHint": "buy crypto markets spot futures btc earn event center rewards hub more 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 deposit wallets orders overview spot maker 0% / taker 0.05% realstocks futures maker 0%-0.02% / taker 0%-0.06% fiat earn new prediction markets copy trade trading bot on-chain funding history claim 10,000 usdt bonus deposit withdrawal transfer send others time crypto all reset refresh export crypto network time status amount fee withdrawal address action usdt bsc bnb smart chain(bep20) 2026-08-28 09:35:29 withdrawal successful 200 0 0x456...3e9d6 details usdt bsc bnb smart chain(bep20) 2026-08-28 09:33:40 withdrawal successful 200 0 0x1db...5dca1 details usdt bsc bnb smart chain(bep20) 2026-08-28 09:32:10 withdrawal successful 700 0 0xc63...08284 details usdt bsc bnb smart chain(bep20) 2026-08-27 21:32:00 withdrawal successful 55 0.01 0x016...ff969 details usdt bsc bnb smart chain(bep20) 2026-08-27 17:25:43 withdrawal successful 66 0.01 0x004...bb4eb details usdt bsc bnb smart chain(bep20) 2026-08-27 16:17:34 withdrawal successful 230 0 0xb78...ae902 details usdt bsc bnb smart chain(bep20) 2026-08-27 16:00:34 withdrawal successful 22.3 0.01 0x17f...21348 details usdt bsc bnb smart chain(bep20) 2026-08-27 15:57:24 withdrawal successful 300 0 0xa1a...42784 details usdt bsc bnb smart chain(bep20) 2026-08-27 15:54:39 withdrawal successful 250 0 0xa1a...42784 details usdt bsc bnb smart ",
+        "rows": [
+          "overview",
+          "spot maker 0% / taker 0.05%",
+          "realstocks",
+          "futures maker 0%-0.02% / taker 0%-0.06%",
+          "fiat",
+          "earn new",
+          "prediction markets",
+          "copy trade",
+          "trading bot",
+          "on-chain",
+          "funding history",
+          "time",
+          "crypto all",
+          "all",
+          "crypto network time status amount fee withdrawal address action",
+          "usdt bsc bnb smart chain(bep20) 2026-08-28 09:35:29 withdrawal successful 200 0 0x456...3e9d6 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-28 09:33:40 withdrawal successful 200 0 0x1db...5dca1 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-28 09:32:10 withdrawal successful 700 0 0xc63...08284 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-27 21:32:00 withdrawal successful 55 0.01 0x016...ff969 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-27 17:25:43 withdrawal successful 66 0.01 0x004...bb4eb details"
+        ]
+      },
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "page": 4,
+      "snapshot": {
+        "hasAmount": false,
+        "hasCoin": true,
+        "hasDate": false,
+        "hasEmptyState": false,
+        "rowCount": 38,
+        "url": "https://www.mexc.com/assets/record",
+        "title": "Bitcoin, Litecoin, Ethereum Assets | MEXC Exchange",
+        "bodyHint": "buy crypto markets spot futures btc earn event center rewards hub more 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 deposit wallets orders overview spot maker 0% / taker 0.05% realstocks futures maker 0%-0.02% / taker 0%-0.06% fiat earn new prediction markets copy trade trading bot on-chain funding history claim 10,000 usdt bonus deposit withdrawal transfer send others time crypto all reset refresh export crypto network time status amount fee withdrawal address action usdt bsc bnb smart chain(bep20) 2026-08-26 11:53:25 withdrawal successful 85 0.01 0x27a...03e37 details usdt bsc bnb smart chain(bep20) 2026-08-26 10:11:41 withdrawal successful 250 0 0x1b4...79696 details usdt bsc bnb smart chain(bep20) 2026-08-25 21:31:42 withdrawal successful 128 0.01 0xb81...58863 details usdt bsc bnb smart chain(bep20) 2026-08-25 14:58:01 withdrawal successful 250 0 0x1b4...79696 details usdt bsc bnb smart chain(bep20) 2026-08-25 14:29:50 withdrawal successful 250 0 0x336...526d6 details usdt bsc bnb smart chain(bep20) 2026-08-25 13:02:01 withdrawal successful 6 0.01 0xb81...58863 details usdt bsc bnb smart chain(bep20) 2026-08-25 12:28:19 withdrawal successful 30 0.01 0x27a...03e37 details usdt bsc bnb smart chain(bep20) 2026-08-25 10:41:18 withdrawal successful 155 0 0xd9b...e9132 details usdt bsc bnb smart chain(bep20) 2026-08-25 10:14:11 withdrawal successful 20 0 0xc6c...5318e details usdt bsc bnb smart c",
+        "rows": [
+          "overview",
+          "spot maker 0% / taker 0.05%",
+          "realstocks",
+          "futures maker 0%-0.02% / taker 0%-0.06%",
+          "fiat",
+          "earn new",
+          "prediction markets",
+          "copy trade",
+          "trading bot",
+          "on-chain",
+          "funding history",
+          "time",
+          "crypto all",
+          "all",
+          "crypto network time status amount fee withdrawal address action",
+          "usdt bsc bnb smart chain(bep20) 2026-08-26 11:53:25 withdrawal successful 85 0.01 0x27a...03e37 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-26 10:11:41 withdrawal successful 250 0 0x1b4...79696 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-25 21:31:42 withdrawal successful 128 0.01 0xb81...58863 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-25 14:58:01 withdrawal successful 250 0 0x1b4...79696 details",
+          "usdt bsc bnb smart chain(bep20) 2026-08-25 14:29:50 withdrawal successful 250 0 0x336...526d6 details"
+        ]
+      },
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "page": 5,
+      "snapshot": {
+        "hasAmount": false,
+        "hasCoin": true,
+        "hasDate": false,
+        "hasEmptyState": false,
+        "rowCount": 21,
+        "url": "https://www.mexc.com/assets/record",
+        "title": "Bitcoin, Litecoin, Ethereum Assets | MEXC Exchange",
+        "bodyHint": "buy crypto markets spot futures btc earn event center rewards hub more 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 oil(wti) skr zkc mexc win: team competition heats up shein 牛来 deposit wallets orders overview spot maker 0% / taker 0.05% realstocks futures maker 0%-0.02% / taker 0%-0.06% fiat earn new prediction markets copy trade trading bot on-chain funding history claim 10,000 usdt bonus deposit withdrawal transfer send others time crypto all reset refresh export crypto network time status amount fee withdrawal address action usdt bsc bnb smart chain(bep20) 2026-08-25 09:37:24 withdrawal successful 180 0 0xc6c...5318e details 1 2 3 4 5",
+        "rows": [
+          "overview",
+          "spot maker 0% / taker 0.05%",
+          "realstocks",
+          "futures maker 0%-0.02% / taker 0%-0.06%",
+          "fiat",
+          "earn new",
+          "prediction markets",
+          "copy trade",
+          "trading bot",
+          "on-chain",
+          "funding history",
+          "time",
+          "crypto all",
+          "all",
+          "crypto network time status amount fee withdrawal address action",
+          "usdt bsc bnb smart chain(bep20) 2026-08-25 09:37:24 withdrawal successful 180 0 0xc6c...5318e details",
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "candidate_count": 0,
+      "candidates": []
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+Email: 3lmz6wck9@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglgdqoyN1NgoT7
+Secret Key: f9c0668fe3724b07b8ed2e4f0b0c353b
+2FA Secret: CZPSTF37KLKRKHPY

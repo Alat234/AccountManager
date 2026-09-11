@@ -1,0 +1,4719 @@
+{
+  "sections": [
+    {
+      "buttons": [
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 92,
+            "x": 353,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Self-service",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 158,
+            "x": 466,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md components-module-scss-module__MLXwla__recordBtn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 131,
+            "x": 1422,
+            "y": -243
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Record",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 326,
+            "x": 414,
+            "y": 146
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Account Risk Review-Account Risk Review Guide",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 624,
+            "x": 640,
+            "y": 168
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "https://www.mexc.com/announcements/article/mexc-risk-control-guideline-17827791524314",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-spin-nested-loading",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 2454,
+          "width": 1905,
+          "x": 0,
+          "y": -275
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Self-service/ Account Risk Review Submit Record 1 Submit Application 2 Information Review 3 Risk Analysis 4 Review Completed Gentle Reminder Risk Reason The platform has detected that your account activity triggered an a",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 92,
+            "x": 353,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Self-service",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 158,
+            "x": 466,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md components-module-scss-module__MLXwla__recordBtn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 131,
+            "x": 1422,
+            "y": -243
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Record",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 326,
+            "x": 414,
+            "y": 146
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Account Risk Review-Account Risk Review Guide",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 624,
+            "x": 640,
+            "y": 168
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "https://www.mexc.com/announcements/article/mexc-risk-control-guideline-17827791524314",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-spin-container",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 2454,
+          "width": 1905,
+          "x": 0,
+          "y": -275
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Self-service/ Account Risk Review Submit Record 1 Submit Application 2 Information Review 3 Risk Analysis 4 Review Completed Gentle Reminder Risk Reason The platform has detected that your account activity triggered an a",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 92,
+            "x": 353,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Self-service",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-breadcrumb-link",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 158,
+            "x": 466,
+            "y": -241
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md components-module-scss-module__MLXwla__recordBtn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 131,
+            "x": 1422,
+            "y": -243
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Record",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 326,
+            "x": 414,
+            "y": 146
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Account Risk Review-Account Risk Review Guide",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 624,
+            "x": 640,
+            "y": 168
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "https://www.mexc.com/announcements/article/mexc-risk-control-guideline-17827791524314",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module___MJ_GW__processing",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 2454,
+          "width": 1905,
+          "x": 0,
+          "y": -275
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Self-service/ Account Risk Review Submit Record 1 Submit Application 2 Information Review 3 Risk Analysis 4 Review Completed Gentle Reminder Risk Reason The platform has detected that your account activity triggered an a",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 326,
+            "x": 414,
+            "y": 146
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Account Risk Review-Account Risk Review Guide",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 624,
+            "x": 640,
+            "y": 168
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "https://www.mexc.com/announcements/article/mexc-risk-control-guideline-17827791524314",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module___MJ_GW__container",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 2366,
+          "width": 1200,
+          "x": 353,
+          "y": -187
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "1 Submit Application 2 Information Review 3 Risk Analysis 4 Review Completed Gentle Reminder Risk Reason The platform has detected that your account activity triggered an alert for abnormal fund flows (pursuant to Sectio",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 326,
+            "x": 414,
+            "y": 146
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Account Risk Review-Account Risk Review Guide",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md styles-module-scss-module___MJ_GW__linkBtn styles-module-scss-module___MJ_GW__normalSize",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 20,
+            "width": 624,
+            "x": 640,
+            "y": 168
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "https://www.mexc.com/announcements/article/mexc-risk-control-guideline-17827791524314",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 2154,
+          "width": 1200,
+          "x": 353,
+          "y": -35
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Gentle Reminder Risk Reason The platform has detected that your account activity triggered an alert for abnormal fund flows (pursuant to Section 4.4 of the MEXC Risk Control Guideline: Legal and Compliance Violations). T",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module___MJ_GW__wrapper",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 391,
+          "width": 1200,
+          "x": 353,
+          "y": 253
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Personal Details Contactable Email Email Verification Code 49s Nationality Vietnam",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-spin-nested-loading",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 1866,
+          "width": 1200,
+          "x": 353,
+          "y": 253
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Personal Details Contactable Email Email Verification Code 49s Nationality Vietnam Risk Review Documents Complete Facial Recognition Please complete facial recognition to confirm your identity Start Facial Recognition Co",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg styles-module-scss-module___MJ_GW__button ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 48,
+            "width": 1200,
+            "x": 353,
+            "y": 2071
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Submit Application",
+          "type": "button",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-input mx-motion-input-inner",
+          "id": "contactEmail",
+          "name": "",
+          "placeholder": "Please enter contactable email",
+          "rect": {
+            "height": 40,
+            "width": 1142,
+            "x": 382,
+            "y": 363
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        },
+        {
+          "className": "ant-input ant-input-sm ant-input-status-success _searchInput_8z791_269",
+          "id": "",
+          "name": "",
+          "placeholder": "Search",
+          "rect": {
+            "height": 32,
+            "width": 406,
+            "x": 406,
+            "y": 592
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": false
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-spin-container",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 1866,
+          "width": 1200,
+          "x": 353,
+          "y": 253
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Personal Details Contactable Email Email Verification Code 49s Nationality Vietnam Risk Review Documents Complete Facial Recognition Please complete facial recognition to confirm your identity Start Facial Recognition Co",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item-required",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 20,
+          "width": 188,
+          "x": 382,
+          "y": 427
+        },
+        "role": "",
+        "tag": "LABEL",
+        "text": "Email Verification Code",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-col ant-form-item-label",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 23,
+          "width": 1142,
+          "x": 382,
+          "y": 427
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Email Verification Code",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-form-item",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 65,
+          "width": 1142,
+          "x": 382,
+          "y": 427
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Email Verification Code 49s",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [
+        {
+          "className": "ant-input",
+          "id": "emailCode",
+          "name": "",
+          "placeholder": "Please enter email verification code",
+          "rect": {
+            "height": 22,
+            "width": 1084,
+            "x": 395,
+            "y": 461
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "text",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "ant-row ant-form-item-row",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 65,
+          "width": 1142,
+          "x": 382,
+          "y": 427
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Email Verification Code 49s",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module___MJ_GW__wrapper",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 1363,
+          "width": 1200,
+          "x": 353,
+          "y": 676
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Risk Review Documents Complete Facial Recognition Please complete facial recognition to confirm your identity Start Facial Recognition Complete Advanced KYC Verification The Advanced KYC review result will be returned in",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-md styles-module-scss-module___MJ_GW__goToButton ant-btn-v2-motion-btn",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 40,
+            "width": 210,
+            "x": 1314,
+            "y": 761
+          },
+          "role": "",
+          "tag": "BUTTON",
+          "text": "Start Facial Recognition",
+          "type": "button",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 1217,
+          "width": 1142,
+          "x": 382,
+          "y": 761
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Complete Facial Recognition Please complete facial recognition to confirm your identity Start Facial Recognition Complete Advanced KYC Verification The Advanced KYC review result will be returned in about 5–10 minutes. P",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        },
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-col ant-form-item-label",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 23,
+          "width": 565,
+          "x": 382,
+          "y": 1053
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Address",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item styles-module-scss-module__VQR4fa__descLabel styles-module-scss-module__VQR4fa__formItemNoStyle",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 209,
+          "width": 565,
+          "x": 382,
+          "y": 1053
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Address Provide a proof-of-address document issued within the past 6 months and in your name to verify your residential address. Select the applicable document type to view the submission requirements. Document ",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-row ant-form-item-row",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 209,
+          "width": 565,
+          "x": 382,
+          "y": 1053
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Address Provide a proof-of-address document issued within the past 6 months and in your name to verify your residential address. Select the applicable document type to view the submission requirements. Document ",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module__VQR4fa__submitItem",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 209,
+          "width": 1142,
+          "x": 382,
+          "y": 1053
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Address Provide a proof-of-address document issued within the past 6 months and in your name to verify your residential address. Select the applicable document type to view the submission requirements. Document ",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-155-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1054
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 209,
+            "width": 565,
+            "x": 959,
+            "y": 1053
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item-required",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 20,
+          "width": 140,
+          "x": 382,
+          "y": 1054
+        },
+        "role": "",
+        "tag": "LABEL",
+        "text": "Proof of Address",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-col ant-form-item-label",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 23,
+          "width": 702,
+          "x": 382,
+          "y": 1323
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Occupation Details",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-row ant-form-item-row",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 153,
+          "width": 702,
+          "x": 382,
+          "y": 1323
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Occupation Details Please enter your current occupation information. If you do not have an occupation or source of income, please provide your bank account statements for the past 3 months. Note: Please upload unencrypte",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item styles-module-scss-module__VQR4fa__descLabel",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 264,
+          "width": 702,
+          "x": 382,
+          "y": 1323
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Occupation Details Please enter your current occupation information. If you do not have an occupation or source of income, please provide your bank account statements for the past 3 months. Note: Please upload unencrypte",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        },
+        {
+          "className": "ant-input",
+          "id": "requiredItemId-157-textArea",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 100,
+            "width": 428,
+            "x": 1096,
+            "y": 1487
+          },
+          "role": "",
+          "tag": "TEXTAREA",
+          "text": "",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module__VQR4fa__submitItem",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 264,
+          "width": 1142,
+          "x": 382,
+          "y": 1323
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Occupation Details Please enter your current occupation information. If you do not have an occupation or source of income, please provide your bank account statements for the past 3 months. Note: Please upload unencrypte",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 264,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 428,
+            "x": 1096,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload-picture-card-wrapper components-module-scss-module__MLXwla__columnCenter components-module-scss-module__MLXwla__uploadWrapper",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 144,
+            "width": 208,
+            "x": 1316,
+            "y": 1323
+          },
+          "role": "",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload ant-upload-select ant-upload-select-picture-card",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "ant-upload",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 142,
+            "width": 206,
+            "x": 1317,
+            "y": 1324
+          },
+          "role": "button",
+          "tag": "SPAN",
+          "text": "Upload or paste here",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "role": "",
+          "tag": "INPUT",
+          "text": "",
+          "type": "file",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item-required",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 20,
+          "width": 155,
+          "x": 382,
+          "y": 1324
+        },
+        "role": "",
+        "tag": "LABEL",
+        "text": "Occupation Details",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-col ant-form-item-label",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 23,
+          "width": 565,
+          "x": 382,
+          "y": 1648
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Source of Last 1-2 Deposits",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item styles-module-scss-module__VQR4fa__descLabel styles-module-scss-module__VQR4fa__formItemNoStyle",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 299,
+          "width": 565,
+          "x": 382,
+          "y": 1648
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Source of Last 1-2 Deposits 1. Provide proof of the source of funds for your 1–2 most recent deposits. 2. Explain: • Source of funds: Who sent the funds, whether from you or another person, and the originating w",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [],
+      "root": {
+        "className": "ant-row ant-form-item-row",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 299,
+          "width": 565,
+          "x": 382,
+          "y": 1648
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Source of Last 1-2 Deposits 1. Provide proof of the source of funds for your 1–2 most recent deposits. 2. Explain: • Source of funds: Who sent the funds, whether from you or another person, and the originating w",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    },
+    {
+      "buttons": [
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 169,
+            "x": 428,
+            "y": 1769
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Risk Review Guide",
+          "type": "",
+          "visible": true
+        },
+        {
+          "className": "",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 16,
+            "width": 128,
+            "x": 387,
+            "y": 1874
+          },
+          "role": "",
+          "tag": "A",
+          "text": "Account Data Export",
+          "type": "",
+          "visible": true
+        }
+      ],
+      "inputs": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "root": {
+        "className": "styles-module-scss-module__VQR4fa__submitItem",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 299,
+          "width": 1142,
+          "x": 382,
+          "y": 1648
+        },
+        "role": "",
+        "tag": "DIV",
+        "text": "Proof of Source of Last 1-2 Deposits 1. Provide proof of the source of funds for your 1–2 most recent deposits. 2. Explain: • Source of funds: Who sent the funds, whether from you or another person, and the originating w",
+        "type": "",
+        "visible": true
+      },
+      "selects": [
+        {
+          "className": "ant-select-v2-selection-search-input",
+          "id": "requiredItemId-78-relatedSelect",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 38,
+            "width": 527,
+            "x": 971,
+            "y": 1649
+          },
+          "role": "combobox",
+          "tag": "INPUT",
+          "text": "",
+          "type": "search",
+          "visible": true
+        }
+      ],
+      "uploads": [
+        {
+          "className": "styles-module-scss-module__VQR4fa__submitItem styles-module-scss-module__VQR4fa__fileUploadSection",
+          "id": "",
+          "name": "",
+          "placeholder": "",
+          "rect": {
+            "height": 299,
+            "width": 565,
+            "x": 959,
+            "y": 1648
+          },
+          "role": "",
+          "tag": "DIV",
+          "text": "Please select",
+          "type": "",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "buttons": [],
+      "inputs": [],
+      "root": {
+        "className": "ant-form-item-required",
+        "id": "",
+        "name": "",
+        "placeholder": "",
+        "rect": {
+          "height": 20,
+          "width": 289,
+          "x": 382,
+          "y": 1649
+        },
+        "role": "",
+        "tag": "LABEL",
+        "text": "Proof of Source of Last 1-2 Deposits",
+        "type": "",
+        "visible": true
+      },
+      "selects": [],
+      "uploads": []
+    }
+  ],
+  "title": "Crypto Trading Platform | Buy Bitcoin, Ethereum, Altcoin, DeFi, Kickstarter | MEXC",
+  "url": "https://www.mexc.com/support/apply-risk-account-protection/form"
+}

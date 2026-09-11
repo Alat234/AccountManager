@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-08-04T00:14:57",
+  "task_id": "841e8fb23fe2",
+  "account": "p***v@icloud.com",
+  "reason": "MEXC 2FA secret key is not available. Return to the backup key step or save the secret before continuing.",
+  "url": "https://www.mexc.com/user/security/manage-google-auth",
+  "title": "User Security Center｜MEXC Exchange",
+  "artifact_capture_skipped": false
+}

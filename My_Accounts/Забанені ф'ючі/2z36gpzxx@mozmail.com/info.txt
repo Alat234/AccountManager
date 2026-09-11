@@ -1,0 +1,6 @@
+Email: 2z36gpzxx@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglbw26JggEA6UP
+Secret Key: 2fbf5f9330c343bf8953801682eebadf
+2FA Secret: QMSZSJLERLVQMEAR

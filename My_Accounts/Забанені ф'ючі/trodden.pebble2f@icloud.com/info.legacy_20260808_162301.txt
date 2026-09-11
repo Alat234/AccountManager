@@ -1,0 +1,6 @@
+Email: trodden.pebble2f@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vgljaDCIqTdTNr9
+Secret Key: e073f6f114c24f789bbffdd9f4634e31
+2FA Secret: T6RAPMBCJ7SB2IAQ

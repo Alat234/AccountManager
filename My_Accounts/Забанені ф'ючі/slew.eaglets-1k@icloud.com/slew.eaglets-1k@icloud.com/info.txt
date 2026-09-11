@@ -1,0 +1,6 @@
+Email: slew.eaglets-1k@icloud.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

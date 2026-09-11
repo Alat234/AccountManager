@@ -1,0 +1,6 @@
+Email: ekocdbwh8@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglGdvRpbf5ojd1
+Secret Key: 9145d043cba54d31861031d3dd45b2c0
+2FA Secret: QSHBNBOD7S5IISKC

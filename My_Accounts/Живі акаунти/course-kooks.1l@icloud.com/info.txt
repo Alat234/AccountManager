@@ -1,0 +1,6 @@
+Email: course-kooks.1l@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglA87iIk9bwnWf
+Secret Key: 815049f4e6bb4806b93c22c3992ef5f2
+2FA Secret: 4WZ2UWOTXJVU62NC

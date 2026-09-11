@@ -1,0 +1,6 @@
+Email: gasfixpub@neko2.net
+Old Email: 
+Password: Abcd12345@
+API Key: mx0vgl5pRuphLyQnIT
+Secret Key: 70da02848feb406a87d67f393ed830e8
+2FA Secret: Z2IEHS3JYOZ7KDNK

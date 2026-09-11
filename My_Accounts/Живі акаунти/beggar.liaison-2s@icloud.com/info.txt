@@ -1,0 +1,6 @@
+Email: beggar.liaison-2s@icloud.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

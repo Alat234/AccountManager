@@ -1,0 +1,6 @@
+Email: eat_bunny11@icloud.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

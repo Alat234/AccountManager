@@ -1,0 +1,6 @@
+Email: mv2dt73rm@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglFZfT39YSGSRD
+Secret Key: 3d92f56c58bf4ba28c3cabe45be42d76
+2FA Secret: YXMJYAIHHR3L7KZJ

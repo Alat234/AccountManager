@@ -1,0 +1,6 @@
+Email: vjg32begt@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglIDpDpJK6AF0i
+Secret Key: 64aeb1a416be492c90dcc5f34f469d2e
+2FA Secret: NWIKY7V2RHMGCJW6

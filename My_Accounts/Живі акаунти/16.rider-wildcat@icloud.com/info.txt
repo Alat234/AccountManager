@@ -1,0 +1,6 @@
+Email: 16.rider-wildcat@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglOD5YWdhGfyxr
+Secret Key: 95e3259793634db9b42cdd988e10b68a
+2FA Secret: TMOQWJ36RIEYCYAM

@@ -1,0 +1,6 @@
+Email: flyouryet@cream.pink
+Old Email: 
+Password: Abcd12345@
+API Key: mx0vglbvI7D4k2aW6g
+Secret Key: 4076b8c58b9244c485c2062b3f792a0f
+2FA Secret: 3YHZVB7UOKRWQK5O

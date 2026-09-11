@@ -1,0 +1,6 @@
+Email: nn38cklv8@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglynxTjhtMAE5q
+Secret Key: b5f480a3482547388f7b895a6597473a
+2FA Secret: PZTURZR55DBM3PXG

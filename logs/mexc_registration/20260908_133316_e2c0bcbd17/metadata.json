@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-09-08T13:33:16",
+  "task_id": "17db122517a4",
+  "account": "u***a@icloud.com",
+  "reason": "Message: no such window: target window already closed\nfrom unknown error: web view not found\n  (Session info: chrome=152.0.7977.54)\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x7ff62d8aa515+c6f5]\n\tchromedriver!(No symbol) [0x7ff62d615497]\n\tchromedriver!(No symbol) [0x7ff62d19ceae]\n\tchromedriver!(No symbol) [0x7ff62d174ebd]\n\tchromedriver!(No symbol) [0x7ff62d22a957]\n\tchromedriver!(No symbol) [0x7ff62d24601a]\n\tchromedriver!(No symbol) [0x7ff62d1ea1ae]\n\tchromedriver!(No symbol) [0x7ff62d1e8e6f]\n\tchromedriver!(No symbol) [0x7ff62d1e9ecc]\n\tchromedriver!GetHandleVerifier [0x7ff62d8c9ab8+2bc98]\n\tchromedriver!sqlite3_dbdata_init [0x7ff62dc40ea8+2734a8]\n\tchromedriver!sqlite3_dbdata_init [0x7ff62dc40754+272d54]\n\tchromedriver!sqlite3_dbdata_init [0x7ff62dc3d36b+26f96b]\n\tchromedriver!sqlite3_dbdata_init [0x7ff62dc417b5+273db5]\n\tchromedriver!(No symbol) [0x7ff62d6331ee]\n\tchromedriver!(No symbol) [0x7ff62d623be4]\n\tchromedriver!(No symbol) [0x7ff62d623d6e]\n\tchromedriver!(No symbol) [0x7ff62d5fc6b2]\n\tKERNEL32!BaseThreadInitThunk [0x7ffcd9c7ccb7+17]\n\tntdll!RtlUserThreadStart [0x7ffcdaa8ad6c+2c]\n",
+  "url": "",
+  "title": ""
+}

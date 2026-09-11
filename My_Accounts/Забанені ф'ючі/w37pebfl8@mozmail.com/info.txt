@@ -1,0 +1,6 @@
+Email: w37pebfl8@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglMpqbivg9ZI7x
+Secret Key: b9033847464c48e0a9ff70e573d1a9fc
+2FA Secret: DGOJKEQHLQASDGEX

@@ -1,0 +1,6 @@
+Email: rqzs0btbz@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglIXgOmLILVm54
+Secret Key: 542f92d69b2a486b9e97f252deaab1a9
+2FA Secret: 7SSGKRKM56NALBYH

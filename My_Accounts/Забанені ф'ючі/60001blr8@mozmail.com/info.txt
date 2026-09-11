@@ -1,0 +1,6 @@
+Email: 60001blr8@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglBsMstqeJs3hv
+Secret Key: 3699051f5bb446c8bb7bdeed87660f95
+2FA Secret: MMPOXHDPRMNG76ET

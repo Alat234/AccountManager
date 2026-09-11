@@ -1,0 +1,6 @@
+Email: 2i2bwlr9r@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglhzT4rOroOXQn
+Secret Key: 4ca192088e604f9e80d012eb7a069173
+2FA Secret: ZGWHZWZXLVPHJ7DP

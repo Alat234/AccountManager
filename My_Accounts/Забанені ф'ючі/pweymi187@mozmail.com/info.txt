@@ -1,0 +1,6 @@
+Email: pweymi187@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglhvDw837T7DSa
+Secret Key: bb153df750ae4d68997e4f7d3d610337
+2FA Secret: CZO7KBR6PGIGLK6J

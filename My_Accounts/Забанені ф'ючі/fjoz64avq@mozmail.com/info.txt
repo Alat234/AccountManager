@@ -1,0 +1,6 @@
+Email: fjoz64avq@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglpyIALbYQdYBE
+Secret Key: 2d1120cd24b040cbb74ec6a5c010080d
+2FA Secret: 5E2UXNWMHNJ2VXKL

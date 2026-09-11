@@ -1,0 +1,35 @@
+{
+  "deposit": {
+    "amount": "650",
+    "coin": "USDT-BSC",
+    "coin_base": "USDT",
+    "network": "BNB Smart Chain(BEP20)",
+    "address": "0x0cd4721f8afa5861a4d75bac453ed55bc9fd928f",
+    "tx_id": "INTERNAL89cd730ec2b24288924654792a64ad50",
+    "date_hints": [
+      "2026-08-28",
+      "2026/08/28",
+      "08-28",
+      "20:03",
+      "2026-08-28",
+      "17:03"
+    ]
+  },
+  "page": 2,
+  "candidate": 3,
+  "verification": {
+    "hasAddress": false,
+    "hasAmount": false,
+    "hasCoin": true,
+    "hasDate": true,
+    "hasNetwork": true,
+    "hasTx": false,
+    "looksLikeDetails": true,
+    "looksLikeHistoryPage": false,
+    "matches": false,
+    "reason": "tx_id_missing_in_details",
+    "score": 20,
+    "text": "withdrawal details 1 withdrawal request submitted 2026-08-28 09:32 2 system processing 2026-08-28 09:33 3 withdrawal completed 2026-08-28 09:33 your assets have been successfully sent from mexc to your withdrawal address. please check the receiving platform. why hasn’t my transaction arrived? report scam status withdrawal successful crypto usdt network bsc bnb smart chain(bep20) amount 700 fee 0 received 700 withdrawal address 0xc63c62e05e65bbe2c3994849dcbaeb2977c08284 txid internalfcaad9f73a4d40b09a202a8d90a154c0 withdrawal descriptions"
+  },
+  "row_text": "usdt bsc bnb smart chain(bep20) 2026-08-28 09:32:10 withdrawal successful 700 0 0xc63...08284 details"
+}

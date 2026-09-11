@@ -1,0 +1,6 @@
+Email: tins_adopter.9f@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglyDwSTJGPUa7E
+Secret Key: 35d6daabaabd44aabe2f8840444bb6a1
+2FA Secret: GLDF3VNG3VD6I5HR

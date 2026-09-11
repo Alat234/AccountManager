@@ -1,0 +1,6 @@
+Email: 8kpo9auay@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglKRZb9urTIsTo
+Secret Key: e5bc982989384a3d8fb910ce3139509d
+2FA Secret: FRCHSL6TY7FEIMTW

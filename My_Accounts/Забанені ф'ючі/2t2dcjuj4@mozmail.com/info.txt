@@ -1,0 +1,6 @@
+Email: 2t2dcjuj4@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglbnD3un45swrp
+Secret Key: 0f96e3775f2a44428ce3b95eeb326285
+2FA Secret: CAP7GKFUJZJRINAO

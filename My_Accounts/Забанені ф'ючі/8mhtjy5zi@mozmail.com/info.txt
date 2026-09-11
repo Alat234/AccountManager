@@ -1,0 +1,6 @@
+Email: 8mhtjy5zi@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl4AC0clm9H51c
+Secret Key: 374c28f5fb3847efb30fe9295d4604b6
+2FA Secret: 2B7J2FGZ5UMB2PKP

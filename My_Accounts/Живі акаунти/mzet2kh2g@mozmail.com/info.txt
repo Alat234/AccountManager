@@ -1,0 +1,6 @@
+Email: mzet2kh2g@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglFCCmRtfeu1OA
+Secret Key: 4c2300c9893c43f283760c01913f5a7e
+2FA Secret: LACXPXUA4LCPWIFN

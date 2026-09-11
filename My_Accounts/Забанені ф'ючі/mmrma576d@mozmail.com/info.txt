@@ -1,0 +1,6 @@
+Email: mmrma576d@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglCrHZsEyFdifr
+Secret Key: a42d52a74ced43bea1c146d0f1e532a2
+2FA Secret: 3RAZFVLMGZTFINE7

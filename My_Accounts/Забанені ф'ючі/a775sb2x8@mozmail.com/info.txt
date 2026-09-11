@@ -1,0 +1,6 @@
+Email: a775sb2x8@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglP79LfV2Krhrj
+Secret Key: 8be36581003f41afbc2e36cff88bae82
+2FA Secret: NKBUY6VHRLEEQZTE

@@ -1,0 +1,6 @@
+Email: xn593acpf@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglr1ayMquBxjOT
+Secret Key: 32c025633fee4aadbfbae64b3b80a102
+2FA Secret: ZFB5QEJGA6OA3N6L

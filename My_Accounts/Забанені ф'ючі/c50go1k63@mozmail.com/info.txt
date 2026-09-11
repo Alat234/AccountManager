@@ -1,0 +1,6 @@
+Email: c50go1k63@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglrQswaOdLPtMW
+Secret Key: 31f866ca8c6149e98dd74c946502a79a
+2FA Secret: OT6QY53S42EU4TDQ

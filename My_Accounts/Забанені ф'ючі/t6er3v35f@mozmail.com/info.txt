@@ -1,0 +1,6 @@
+Email: t6er3v35f@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglxvtBAUNsFUp4
+Secret Key: 75af1f5ba69f41af8ad7e73eedc77ddc
+2FA Secret: DANSTJQHJUZLPH4C

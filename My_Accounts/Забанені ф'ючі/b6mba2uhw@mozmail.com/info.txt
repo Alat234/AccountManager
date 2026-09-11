@@ -1,0 +1,6 @@
+Email: b6mba2uhw@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgljio30iPslW0j
+Secret Key: 70ab4cb467db47be81a219b1bc94656b
+2FA Secret: FV33C6N6VMOIXUHU

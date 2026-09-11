@@ -1,0 +1,17 @@
+{
+  "source": "mexc_deposit_history_api",
+  "saved_at": "2026-09-02T10:08:28",
+  "deposits": [
+    {
+      "amount": "200",
+      "coin": "USDT-BSC",
+      "network": "BNB Smart Chain(BEP20)",
+      "address": "0xca9bfa78ff838d74f65857b67bf39f4bb1519001",
+      "tx_id": "INTERNAL4b1ef9189c824715a7a369904e082489",
+      "insert_time": 1788297361000,
+      "status": 5,
+      "memo": "",
+      "selected": true
+    }
+  ]
+}

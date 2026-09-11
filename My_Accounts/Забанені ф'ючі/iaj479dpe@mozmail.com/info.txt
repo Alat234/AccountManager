@@ -1,0 +1,6 @@
+Email: iaj479dpe@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglnxPT5zetAdir
+Secret Key: 1b21514d415944bfaed464e906ef2729
+2FA Secret: 42DMKXIB7ASZGRH4

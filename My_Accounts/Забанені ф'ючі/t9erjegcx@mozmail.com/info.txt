@@ -1,0 +1,6 @@
+Email: t9erjegcx@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl6C4rSo2z7hBT
+Secret Key: 71120ad993fc467e800b6ae094458449
+2FA Secret: SEQ5PQYTENXJ54GX

@@ -1,0 +1,6 @@
+Email: binds_hails2t@icloud.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

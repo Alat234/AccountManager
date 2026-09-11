@@ -1,0 +1,6 @@
+Email: f60iuu2u2@mozmail.com
+Old Email: 
+Password: Gora.12345
+API Key: mx0vglqDN7h9EQYmHg
+Secret Key: d5f48537ee204b9a893da8a80a0d97fb
+2FA Secret: 4OTPZSEWZ44K5PJ3

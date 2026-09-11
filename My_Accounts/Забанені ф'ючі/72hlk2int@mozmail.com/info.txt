@@ -1,0 +1,6 @@
+Email: 72hlk2int@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglBhEv8Jr09OVS
+Secret Key: 003940f63a024499a586f29b64a213fd
+2FA Secret: NAM3VVUSXGXHJRAG

@@ -1,0 +1,6 @@
+Email: 817z5uowf@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglzLmXjKkQFjRi
+Secret Key: 741467cb6cec45a49e84495572d4b7cb
+2FA Secret: JW2M7SED23I3YSNX

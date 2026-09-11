@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-09-08T13:29:38",
+  "task_id": "7393aa77196d",
+  "account": "u***a@icloud.com",
+  "reason": "MEXC 2FA security submit button was not found during totp_code",
+  "url": "https://www.mexc.com/user/security/manage-google-auth",
+  "title": "Google Authenticator Setup | MEXC"
+}

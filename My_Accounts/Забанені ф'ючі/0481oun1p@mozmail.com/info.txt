@@ -1,0 +1,6 @@
+Email: 0481oun1p@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglW6yzT6ED7ACt
+Secret Key: 7a5db6edb9ae447a909d94c8641fb124
+2FA Secret: UO4KFEH6S5HWMHCG

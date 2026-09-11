@@ -1,0 +1,6 @@
+Email: 1lcwbi8fd@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglicJlcTWWDTIN
+Secret Key: 99574d533a514a768f20872ce1e2eb8b
+2FA Secret: O74NF35SUK24PAZR

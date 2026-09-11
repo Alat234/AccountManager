@@ -1,0 +1,6 @@
+Email: salts_gaunt.7p@icloud.com
+Old Email: 
+Password: 
+API Key: 
+Secret Key: 
+2FA Secret: 

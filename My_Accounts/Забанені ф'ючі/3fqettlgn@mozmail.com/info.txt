@@ -1,0 +1,6 @@
+Email: 3fqettlgn@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl8e8rW1VJD76M
+Secret Key: 449366527d984954bbf47cb91bdefd11
+2FA Secret: 7P2LMWGCMVVKVWWK

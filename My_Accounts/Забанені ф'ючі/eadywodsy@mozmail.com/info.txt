@@ -1,0 +1,6 @@
+Email: eadywodsy@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglscjNPK3HLLvb
+Secret Key: 04463698030a4d9da0884d369d142c68
+2FA Secret: KAMKFATBSFHLYUB3

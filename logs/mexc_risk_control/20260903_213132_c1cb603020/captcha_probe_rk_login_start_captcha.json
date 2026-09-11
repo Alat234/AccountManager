@@ -1,0 +1,227 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input-clear-icon",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 26,
+        "width": 16,
+        "x": 1465,
+        "y": 291
+      },
+      "role": "button",
+      "tag": "SPAN",
+      "text": "",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg _buttonWrapperBtn_1qy87_12 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 1134,
+        "y": 344
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue",
+      "type": "submit",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block _otherLoginItem_vrfeh_53 _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 1134,
+        "y": 442
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Log in with Passkey",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg _wrapper_1oaud_9 _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 1134,
+        "y": 502
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue with Google",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block _otherLoginItem_vrfeh_53 _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 1134,
+        "y": 562
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue with Apple",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block ant-dropdown-trigger _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 1134,
+        "y": 622
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "More Options",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 1855,
+        "y": 759
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "geetest_close_7977b993 geetest_close",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 25,
+        "width": 25,
+        "x": 810,
+        "y": 621
+      },
+      "role": "button",
+      "tag": "BUTTON",
+      "text": "Close",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "geetest_refresh_7977b993 geetest_refresh",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 25,
+        "width": 25,
+        "x": 845,
+        "y": 621
+      },
+      "role": "button",
+      "tag": "BUTTON",
+      "text": "Refresh",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "geetest_feedback_7977b993 geetest_feedback",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 25,
+        "width": 25,
+        "x": 880,
+        "y": 621
+      },
+      "role": "button",
+      "tag": "A",
+      "text": "More info",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [
+    {
+      "className": "L5Fo6c-PQbLGe",
+      "id": "gsi_***CODE***_***CODE***",
+      "name": "",
+      "src": "https://accounts.google.com/gsi/button?theme=outline&size=large&width=600px&height=48px&click_listener=function()%7Bfor(var%20r%3D%5B%5D%2Ct%3D0%3Bt%3Carguments.length%3Bt%2B%2B)r%5Bt%5D%3Darguments%5Bt%5D%3Breturn%20i.current.apply(this%2Cr)%7D&is_fedcm_supported=true&client_id=643629201101-rqafcu4qpoipfcstq29i8cd0gjbeea90.apps.googleusercontent.com&iframe_id=gsi_***CODE***_***CODE***&cas=B1dPHZk%2FjuET1Gi4cqA6ou2TIOboyzOhVjose7u7pwM",
+      "title": "Bouton \"Se connecter avec Google\""
+    }
+  ],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "mx_sign_account_mixed_input",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 46,
+        "width": 310,
+        "x": 1147,
+        "y": 281
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 27
+    }
+  ],
+  "referral": [],
+  "title": "MEXC Login | Secure Access to Buy, Trade, and Explore Crypto",
+  "url": "https://www.mexc.com/login?previous=%2Fsupport%2Fapply-risk-account-protection%2Fform&handleDefaultLocale=keep"
+}

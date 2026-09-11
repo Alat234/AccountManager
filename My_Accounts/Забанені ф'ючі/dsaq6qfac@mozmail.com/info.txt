@@ -1,0 +1,6 @@
+Email: dsaq6qfac@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglwC26LpDsSFxP
+Secret Key: 43b3295637a04426b078e1aca20e8c62
+2FA Secret: 2UUSOONRDEVNETLX

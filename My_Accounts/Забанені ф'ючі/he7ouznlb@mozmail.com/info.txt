@@ -1,0 +1,6 @@
+Email: he7ouznlb@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgllfWlvWBNAMTx
+Secret Key: 9a08c234e152463ea40e1158d73bb0f9
+2FA Secret: 2L4QUOKACLD6EZS3

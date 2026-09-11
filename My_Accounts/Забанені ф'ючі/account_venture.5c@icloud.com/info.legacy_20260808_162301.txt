@@ -1,0 +1,6 @@
+Email: account_venture.5c@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglQD0iHd0T7iLI
+Secret Key: 8e1257acd47644f38376a8dfbd79fe60
+2FA Secret: ECOCJAB6IWG2IDJV

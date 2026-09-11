@@ -1,0 +1,6 @@
+Email: wid6dj6tv@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglAnNyzfgPGEZ4
+Secret Key: c9cd90c32800466c81c0e6b89f8c6e65
+2FA Secret: COVDJNGNMAZVYOMW

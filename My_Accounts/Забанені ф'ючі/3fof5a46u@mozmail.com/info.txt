@@ -1,0 +1,6 @@
+Email: 3fof5a46u@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgli9MX6TosCldZ
+Secret Key: 10a95f72331a4d3ebfd1152a642769ff
+2FA Secret: FTXDYMOIBYTNI2FK

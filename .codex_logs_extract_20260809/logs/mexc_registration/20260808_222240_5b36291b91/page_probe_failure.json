@@ -1,0 +1,181 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-text ant-btn-v2-md _editText_198rq_65",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 20,
+        "width": 225,
+        "x": 299,
+        "y": 338
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "s***w@icloud.com",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-primary ant-btn-v2-lg ant-btn-v2-block _primaryButtonTopGap_1xjdb_114 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 299,
+        "y": 486
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Resend code",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 893,
+        "y": 758
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri LankaMEXC Khmer CommunityMEXC Burmese Community",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-0",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 299,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-1",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 360,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-2",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 421,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-3",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 482,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-4",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 543,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "461c6f00-662f-4f34-80a8-90f347cbb850-5",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 55,
+        "width": 55,
+        "x": 604,
+        "y": 399
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "number",
+      "valueLength": 0
+    }
+  ],
+  "referral": [],
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC",
+  "url": "https://www.mexc.com/register"
+}

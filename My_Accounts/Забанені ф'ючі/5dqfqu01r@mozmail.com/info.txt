@@ -1,0 +1,6 @@
+Email: 5dqfqu01r@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglldLYjaJljAGa
+Secret Key: e60c0a65c9f14ca3901443affe6453c6
+2FA Secret: RL36PIR3UWKNAM45

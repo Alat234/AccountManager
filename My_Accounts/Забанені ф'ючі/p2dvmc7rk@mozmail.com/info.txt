@@ -1,0 +1,6 @@
+Email: p2dvmc7rk@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl7oBA5wygAGhT
+Secret Key: e3632f9594be4991b98f576826034474
+2FA Secret: KBYCFEXUMFTUPRBH

@@ -1,0 +1,6 @@
+Email: 0bofjocan@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglBP9N9b20LoiS
+Secret Key: 1a6b0f8c25b346ba989ef116b5831666
+2FA Secret: E5PDRA46EML3FGUN

@@ -1,0 +1,6 @@
+Email: j13kovgsf@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglBTH6iUYYGjqL
+Secret Key: 896841e09e8142c6b388a7cca3971067
+2FA Secret: 3SXRKPXOAIMSOADQ

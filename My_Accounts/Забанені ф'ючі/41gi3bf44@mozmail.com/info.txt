@@ -1,0 +1,6 @@
+Email: 41gi3bf44@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglcZC5i0Ilevxv
+Secret Key: ee97f34b76d246ceb6a6c7762ace9e30
+2FA Secret: WBMUPD7JOAEMCVO4

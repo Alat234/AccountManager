@@ -1,0 +1,6 @@
+Email: ykrowc6yg@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl4KUlz2UG50aq
+Secret Key: d78045d6d6444e20b6bf65246d2d407b
+2FA Secret: RRQ22FWOTAMC4L5T

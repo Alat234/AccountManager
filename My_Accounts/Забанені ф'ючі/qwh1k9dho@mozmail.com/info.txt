@@ -1,0 +1,6 @@
+Email: qwh1k9dho@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgltPXmBLut8wSu
+Secret Key: db5a500752c847ebb44467a65f7e2f25
+2FA Secret: WB62W3U3PXZLQ3GI

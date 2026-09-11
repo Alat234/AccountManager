@@ -1,0 +1,6 @@
+Email: a714yzg7m@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglHBclrsMsXLBm
+Secret Key: ab348617d275460ba97446763cbe6791
+2FA Secret: ZZ6CNIUBXPVEZDUJ

@@ -1,0 +1,6 @@
+Email: p6cel8ozm@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglXqDV8lmZENOo
+Secret Key: bd2a4054d5e14d2fba39e66fb7dc3773
+2FA Secret: I23AXV66TQC4KBNC

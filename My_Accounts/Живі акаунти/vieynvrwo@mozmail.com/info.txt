@@ -1,0 +1,6 @@
+Email: vieynvrwo@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglKmVeVL8Ttppz
+Secret Key: e0edbb7b8d4a47858ea27d9a5d8fb75a
+2FA Secret: U4IYHYLKTZTKAULS

@@ -1,0 +1,6 @@
+Email: gim6p2rzr@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglGmeekqC4aFr0
+Secret Key: c9c37325390c43a5b1403d2194087842
+2FA Secret: V2JUWHUQVQXRST75

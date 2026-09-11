@@ -1,0 +1,6 @@
+Email: sp3iz6y0v@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglLs9S3kZAKGQw
+Secret Key: ac9f521665c349afbbc33fc1273d8d6c
+2FA Secret: ZVSUE3ZB55XC53E3

@@ -1,0 +1,6 @@
+Email: c8afl2n5q@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl1sIYsTahlYJg
+Secret Key: f60db0943aa64f67bfe87ee869b849bb
+2FA Secret: DV3GU7AOXZL6LERW

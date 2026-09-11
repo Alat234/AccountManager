@@ -1,0 +1,6 @@
+Email: s13xqx0x3@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglJ0KzbCP6QoqD
+Secret Key: 1705aec104cb4e51a895d43a805f2f9e
+2FA Secret: ICPP7IBHXZZPO5JH

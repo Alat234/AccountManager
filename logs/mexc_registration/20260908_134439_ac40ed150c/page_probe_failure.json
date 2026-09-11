@@ -1,0 +1,372 @@
+{
+  "buttons": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg _wrapper_1oaud_9 _pressedButton_vrfeh_39 _blackButton_vrfeh_44 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 285,
+        "y": 237
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Se connecter avec Google\nContinue with Google",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "nsm7Bb-HzV7m-LgbsSe  TzA9Ye-LgbsSe hJDwNd-SxQuSe i5vt6e-Ia7Qfc uaxL4e-RbRzK",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 480,
+        "x": 268,
+        "y": 232
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "Se connecter avec Google",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block _otherLoginItem_vrfeh_53 _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 285,
+        "y": 297
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue with Apple",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg ant-btn-v2-block ant-dropdown-trigger _pressedButton_vrfeh_39 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 285,
+        "y": 357
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "More Options",
+      "type": "button",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-input-clear-icon",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 26,
+        "width": 16,
+        "x": 616,
+        "y": 466
+      },
+      "role": "button",
+      "tag": "SPAN",
+      "text": "",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-btn-v2 ant-btn-v2-secondary ant-btn-v2-lg _buttonWrapperBtn_83t58_1 _signUpWebButton_cxert_51 ant-btn-v2-motion-btn",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 360,
+        "x": 285,
+        "y": 553
+      },
+      "role": "",
+      "tag": "BUTTON",
+      "text": "Continue",
+      "type": "submit",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "draggable-wrapper",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 48,
+        "width": 48,
+        "x": 864,
+        "y": 731
+      },
+      "role": "button",
+      "tag": "DIV",
+      "text": "MEXC OfficialMEXC ListingMEXC AnnouncementsMEXC Oceania CommunityMEXC BengaliMexc PakistanMEXC PlayroomMEXC GameBox-Mini AppSri Lanka",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "iframes": [],
+  "inputs": [
+    {
+      "ariaExpanded": "",
+      "className": "ant-input ant-input-lg",
+      "forAttr": "",
+      "id": "mx_sign_account_mixed_input",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 46,
+        "width": 310,
+        "x": 298,
+        "y": 456
+      },
+      "role": "",
+      "tag": "INPUT",
+      "text": "",
+      "type": "text",
+      "valueLength": 29
+    }
+  ],
+  "referral": [
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 857,
+        "width": 929,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "index-module-scss-module__ZpoVbW__signPageContainer",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 857,
+        "width": 929,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "index-module-scss-module__ZpoVbW__signBox index-module-scss-module__ZpoVbW__signBoxNotForm index-module-scss-module__ZpoVbW__signPageBox",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 857,
+        "width": 929,
+        "x": 0,
+        "y": 48
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_signComponent_mk4i0_1 global_componentsSignComponent global_componentsSignComponentHasForm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 656,
+        "width": 488,
+        "x": 221,
+        "y": 125
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_signForm_mk4i0_15 global_componentsSignForm _signFormSignUpAccount_mk4i0_23",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 624,
+        "width": 440,
+        "x": 245,
+        "y": 133
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_form_cxert_1 global_componentsForm",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 544,
+        "width": 360,
+        "x": 285,
+        "y": 173
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Sign up to earn rewards\nSe connecter avec Google\nContinue with Google\nContinue with Apple\nMore Options\nor\nEnter your email/phone number\nReferral Code (Optional)\nContinue\nAlready ha",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-form-item global__inviteCodeInput _inviteCodeInput_ia9k4_1 _inviteCodeInputHide_ia9k4_58 _inviteCodeInputZ_ia9k4_4 ant-form-item-has-success",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 285,
+        "y": 515
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-row ant-form-item-row",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 285,
+        "y": 515
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "ant-col ant-form-item-label",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 360,
+        "x": 285,
+        "y": 515
+      },
+      "role": "",
+      "tag": "DIV",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "",
+      "forAttr": "full-sign-up-account-form_inviteCode",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 173,
+        "x": 285,
+        "y": 515
+      },
+      "role": "",
+      "tag": "LABEL",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    },
+    {
+      "ariaExpanded": "",
+      "className": "_inviteCodeCheckLabel_ia9k4_15 _inviteCodeToggle_ia9k4_89",
+      "forAttr": "",
+      "id": "",
+      "name": "",
+      "placeholder": "",
+      "rect": {
+        "height": 22,
+        "width": 173,
+        "x": 285,
+        "y": 515
+      },
+      "role": "",
+      "tag": "SPAN",
+      "text": "Referral Code (Optional)",
+      "type": "",
+      "valueLength": 0
+    }
+  ],
+  "title": "The World's No. 1 Crypto Exchange in Token Selections, Fees, and More | Sign Up Today | MEXC",
+  "url": "https://www.mexc.com/register"
+}

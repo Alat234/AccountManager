@@ -1,0 +1,6 @@
+Email: dmdirplbj@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglhuVu2eBsBr5M
+Secret Key: 4f8a7d0b0a3240b8aeebe5c800c4df6f
+2FA Secret: A74TELLDBKLZPT2U

@@ -1,0 +1,6 @@
+Email: azamaxals@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglEUXzvGK1tQja
+Secret Key: 5f1ce31c6b4f46ac866c026dc1c87ae9
+2FA Secret: I5IPRG5DVTQULUYO

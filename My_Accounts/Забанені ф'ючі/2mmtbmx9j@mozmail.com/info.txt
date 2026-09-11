@@ -1,0 +1,6 @@
+Email: 2mmtbmx9j@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglSXcAlzzTl8TL
+Secret Key: 32cc9707084544d5ac50c48e3c213b2d
+2FA Secret: CADYL33VDZGRRTFP

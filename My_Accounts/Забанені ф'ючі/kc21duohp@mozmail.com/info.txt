@@ -1,0 +1,6 @@
+Email: kc21duohp@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglKhkAOa2vZGMJ
+Secret Key: 8ccb16756ba3425dab7770a90b982561
+2FA Secret: UZPYG77SWMZO4K7E

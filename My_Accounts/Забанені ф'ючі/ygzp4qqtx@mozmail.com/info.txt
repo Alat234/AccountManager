@@ -1,0 +1,6 @@
+Email: ygzp4qqtx@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgltqKHBv8NDpkT
+Secret Key: d4acc2ae8ff645fcbb429b2221e5684a
+2FA Secret: TU5EM2KDLHRODB2R

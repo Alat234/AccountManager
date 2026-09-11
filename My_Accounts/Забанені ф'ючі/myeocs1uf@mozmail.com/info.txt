@@ -1,0 +1,6 @@
+Email: myeocs1uf@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglBZ4fXQivPaRD
+Secret Key: 76e57b54daec42699b1362e772974d3b
+2FA Secret: 4UDWNOZ72X2RYHQR

@@ -1,0 +1,6 @@
+Email: i8uve7hdu@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglPXtrR6gylbAG
+Secret Key: 1a0dca1c656a4b2d9f1c887a2acc0ec8
+2FA Secret: 4Y4T4GXQ5SLGCC5H

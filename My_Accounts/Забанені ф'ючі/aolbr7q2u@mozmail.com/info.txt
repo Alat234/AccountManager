@@ -1,0 +1,6 @@
+Email: aolbr7q2u@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglfeQ7TCaKecFE
+Secret Key: 15a525202af14545b053fac4091b1804
+2FA Secret: EN477IS6B7SVQPSP

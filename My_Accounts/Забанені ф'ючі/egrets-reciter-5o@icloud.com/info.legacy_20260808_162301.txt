@@ -1,0 +1,6 @@
+Email: egrets-reciter-5o@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglwRTzRXInTFc2
+Secret Key: 041294f11704482593789486c075cfbc
+2FA Secret: 6L774UVJYYYOVEOE

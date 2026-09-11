@@ -1,0 +1,6 @@
+Email: v3bfa71bo@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl6DWuz9hqr3Pl
+Secret Key: 1a48aca9eb764ced94b59aac04afbf2b
+2FA Secret: JHSIBHPG6FYIYCZB

@@ -1,0 +1,6 @@
+Email: prod_pigeon1c@icloud.com
+Old Email: 
+Password: 
+API Key: mx0vglNfVL4pZrCl3Y
+Secret Key: 73a777daad474a25a6ef8e834c123546
+2FA Secret: XHBGERJBRNJYRBOD

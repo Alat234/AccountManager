@@ -1,0 +1,6 @@
+Email: j9l1p2stz@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglIKlyyEEtzF3m
+Secret Key: 6d75928238d849b2bd9f23f85a529387
+2FA Secret: 5HGVE6SRABA5AMFM

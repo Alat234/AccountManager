@@ -1,0 +1,6 @@
+Email: l9guc7plo@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglDNxLisyI2qpJ
+Secret Key: 235cc419584e4e319150c82227a099b3
+2FA Secret: CUFEEYEGFNUKE7TM

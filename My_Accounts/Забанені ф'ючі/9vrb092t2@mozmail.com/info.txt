@@ -1,0 +1,6 @@
+Email: 9vrb092t2@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglyoQyCoJH4Ate
+Secret Key: a26c08e6aea74fd896b1718d020b35e6
+2FA Secret: PRU42KHKBJPJ6DF4

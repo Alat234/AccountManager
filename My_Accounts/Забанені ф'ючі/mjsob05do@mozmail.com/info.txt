@@ -1,0 +1,6 @@
+Email: mjsob05do@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vglZrzwjMO5P6TC
+Secret Key: 803baa00ab5a4a0a8dbd43220e8e0ec9
+2FA Secret: WNLGUUN3OO2577QS

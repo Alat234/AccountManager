@@ -1,0 +1,6 @@
+Email: 6tsce258b@mozmail.com
+Old Email: 
+Password: 
+API Key: mx0vgl7AeWBYCH6GMC
+Secret Key: f4e9d35aef2a47c9be987d2e948400ba
+2FA Secret: 4PYHSBMMXVEKNUQP
